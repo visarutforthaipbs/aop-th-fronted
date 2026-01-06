@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FileText } from "lucide-react";
 
 export default function Articles() {
@@ -66,7 +67,7 @@ export default function Articles() {
                     <div className="md:flex items-stretch">
                       {article.featured_image ? (
                         <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
-                          <img
+                          <Image
                             src={article.featured_image}
                             alt={
                               article.title?.rendered?.replace(
@@ -74,7 +75,8 @@ export default function Articles() {
                                 ""
                               ) || article.title
                             }
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute inset-0 bg-brand-black/10 group-hover:bg-transparent transition-colors"></div>
                         </div>
@@ -97,9 +99,8 @@ export default function Articles() {
                       )}
 
                       <div
-                        className={`p-8 md:p-10 flex flex-col justify-center ${
-                          article.featured_image ? "md:w-3/5" : "w-full"
-                        }`}
+                        className={`p-8 md:p-10 flex flex-col justify-center ${article.featured_image ? "md:w-3/5" : "w-full"
+                          }`}
                       >
                         <div className="flex items-center mb-4">
                           {article.date && (

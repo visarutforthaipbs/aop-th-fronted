@@ -44,12 +44,30 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the website.
 
-### Build for Production
-
 ```bash
 npm run build
 npm start
 ```
+
+## Deployment on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
+
+### Environment Variables on Vercel
+
+When deploying to Vercel, you must add the following environment variables in your project settings:
+
+-   `WP_USER`: Your WordPress username.
+-   `WP_PASS`: Your WordPress application password.
+-   `NEXT_PUBLIC_API_URL`: `https://assemblyofthepoor.org/wp-json`
+
+### Deployment Steps
+
+1.  Push your code to GitHub.
+2.  Import your repository into Vercel.
+3.  Configure the environment variables mentioned above.
+4.  Click **Deploy**.
+
 
 ## Project Structure
 

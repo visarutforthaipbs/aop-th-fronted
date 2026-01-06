@@ -30,14 +30,14 @@ export default function About() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-brand-green-dark">
-              จาก "ประชาคมเขื่อนถิ่น" สู่ "สมัชชาคนจน"
+              จาก &quot;ประชาคมเขื่อนถิ่น&quot; สู่ &quot;สมัชชาคนจน&quot;
             </h2>
             <div className="w-24 h-1.5 bg-brand-yellow mx-auto rounded-full"></div>
           </div>
 
           <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed space-y-6">
             <p className="first-letter:text-5xl first-letter:font-bold first-letter:text-brand-green-dark first-letter:mr-3 first-letter:float-left">
-              “สมัชชาคนจน” เป็นเครือข่ายชาวบ้านคนจนจากชุมชนท้องถิ่นต่างๆ
+              &ldquo;สมัชชาคนจน&rdquo; เป็นเครือข่ายชาวบ้านคนจนจากชุมชนท้องถิ่นต่างๆ
               ที่ได้รับผลกระทบจากการพัฒนาของรัฐ
               ที่เกิดขึ้นท่ามกลางการแย่งชิงทรัพยากรธรรมชาติ อาทิ ดิน น้ำ ป่า
               ระหว่างภาครัฐและเอกชนกับชาวบ้านที่อยู่ในชุมชนท้องถิ่นทั้งในชนบทและในเมือง
@@ -47,14 +47,14 @@ export default function About() {
             </p>
             <div className="bg-gray-50 p-8 rounded-2xl border-l-4 border-brand-red my-8 italic text-gray-700">
               <p className="mb-0">
-                "สมัชชาคนจนก่อตั้งขึ้นอย่างเป็นทางการ เมื่อวันที่ 10 ธันวาคม
-                2538 (วันสิทธิมนุษยชนสากล) ที่มหาวิทยาลัยธรรมศาสตร์"
+                &quot;สมัชชาคนจนก่อตั้งขึ้นอย่างเป็นทางการ เมื่อวันที่ 10 ธันวาคม
+                2538 (วันสิทธิมนุษยชนสากล) ที่มหาวิทยาลัยธรรมศาสตร์&quot;
               </p>
             </div>
             <p>
               โดยมีตัวแทนชุมชนท้องถิ่นต่างๆ ที่ได้รับผลกระทบจากการพัฒนา
               ทั้งในประเทศ และอีก 10 ประเทศในทวีปเอเชียได้เข้าร่วมกันก่อตั้ง
-              หลังจากนั้นได้ร่วมกันร่าง “คำประกาศลำน้ำมูน” หรือ “ปฏิญญาปากมูน”
+              หลังจากนั้นได้ร่วมกันร่าง &ldquo;คำประกาศลำน้ำมูน&rdquo; หรือ &ldquo;ปฏิญญาปากมูน&rdquo;
               ขึ้นในระหว่างวันที่ 11-14 ธันวาคม 2538 ณ อ.โขงเจียม จ.อุบลราชธานี
             </p>
             <p>

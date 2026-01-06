@@ -30,7 +30,7 @@ export default function TimelineSection() {
                                 การก่อตั้ง
                             </h3>
                             <p className="text-gray-600 leading-relaxed">
-                                จากประชาคมท้องถิ่น สู่ "สมัชชาคนจน"
+                                จากประชาคมท้องถิ่น สู่ &quot;สมัชชาคนจน&quot;
                                 การรวมตัวครั้งสำคัญของเครือข่ายผู้ได้รับผลกระทบจากการพัฒนา
                             </p>
                         </div>
@@ -51,7 +51,7 @@ export default function TimelineSection() {
                             </h3>
                             <p className="text-gray-600 leading-relaxed">
                                 การชุมนุมยืดเยื้อ 99 วัน หน้าทำเนียบรัฐบาล และการประกาศ
-                                "เขื่อนถิ่น" อันเป็นตำนาน
+                                &quot;เขื่อนถิ่น&quot; อันเป็นตำนาน
                             </p>
                         </div>
                     </div>
