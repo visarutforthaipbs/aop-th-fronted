@@ -65,7 +65,8 @@ export async function fetchFromApi(endpoint, token = null) {
 
 // Fetch all campaigns
 export async function getAllCampaigns(token) {
-  return fetchFromApi("/wp/v2/campaigns?per_page=100", token);
+  const result = await fetchFromApi("/wp/v2/campaigns?per_page=100", token);
+  return result || [];
 }
 
 // Fetch single campaign by slug
@@ -79,7 +80,8 @@ export async function getCampaignBySlug(slug, token) {
 
 // Fetch all articles
 export async function getAllArticles(token) {
-  return fetchFromApi("/wp/v2/articles?per_page=100&_embed", token);
+  const result = await fetchFromApi("/wp/v2/articles?per_page=100&_embed", token);
+  return result || [];
 }
 
 // Fetch single article by slug
@@ -93,7 +95,8 @@ export async function getArticleBySlug(slug, token) {
 
 // Fetch all news posts
 export async function getAllNews(page = 1, perPage = 10) {
-  return fetchFromApi(`/wp/v2/posts?page=${page}&per_page=${perPage}`);
+  const result = await fetchFromApi(`/wp/v2/posts?page=${page}&per_page=${perPage}`);
+  return result || [];
 }
 
 // Fetch single news post by slug
@@ -114,7 +117,8 @@ export async function getPageBySlug(slug) {
 
 // Fetch media items
 export async function getAllMedia(token, page = 1, perPage = 20) {
-  return fetchFromApi(`/wp/v2/media?page=${page}&per_page=${perPage}`, token);
+  const result = await fetchFromApi(`/wp/v2/media?page=${page}&per_page=${perPage}`, token);
+  return result || [];
 }
 
 // Fetch featured media by ID
@@ -124,7 +128,8 @@ export async function getMediaById(id) {
 
 // Search across all content
 export async function searchContent(query, page = 1) {
-  return fetchFromApi(
+  const result = await fetchFromApi(
     `/wp/v2/search?search=${encodeURIComponent(query)}&page=${page}`
   );
+  return result || [];
 }

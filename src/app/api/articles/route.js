@@ -6,6 +6,10 @@ export async function GET() {
     const token = await getAuthToken();
     const articles = await getAllArticles(token);
 
+    if (!articles || !Array.isArray(articles)) {
+      return NextResponse.json([]);
+    }
+
     const articlesWithImages = articles.map((article) => ({
       ...article,
       featured_image:
