@@ -78,16 +78,26 @@ export async function getCampaignBySlug(slug, token) {
   return campaigns && campaigns.length > 0 ? campaigns[0] : null;
 }
 
-// Fetch all articles
-export async function getAllArticles(token) {
-  const result = await fetchFromApi("/wp/v2/articles?per_page=100&_embed", token);
+// Fetch all articles (optionally filtered by category)
+export async function getAllArticles(token, categoryId = null) {
+  let endpoint = "/wp/v2/articles?per_page=100&_embed";
+  if (categoryId) {
+    endpoint += `&categories=${categoryId}`;
+  }
+  const result = await fetchFromApi(endpoint, token);
+  return result || [];
+}
+
+// Fetch article categories (using standard WordPress categories)
+export async function getArticleCategories() {
+  const result = await fetchFromApi("/wp/v2/categories?per_page=100");
   return result || [];
 }
 
 // Fetch single article by slug
 export async function getArticleBySlug(slug, token) {
   const articles = await fetchFromApi(
-    `/wp/v2/articles?slug=${encodeURIComponent(slug)}`,
+    `/wp/v2/articles?slug=${encodeURIComponent(slug)}&_embed`,
     token
   );
   return articles && articles.length > 0 ? articles[0] : null;

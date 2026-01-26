@@ -1,14 +1,11 @@
-import {
-  getArticleBySlug,
-  getAllArticles,
-  getAuthToken,
-  getMediaById,
-} from "@/lib/api";
+import { getArticleBySlug, getAllArticles } from "@/lib/api";
 import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, Share2, Facebook, Twitter, Link as LinkIcon } from "lucide-react";
 
 export async function generateStaticParams() {
-  const token = await getAuthToken();
-  const articles = await getAllArticles(token);
+  const articles = await getAllArticles(null);
 
   if (!articles) return [];
 
@@ -19,133 +16,175 @@ export async function generateStaticParams() {
 
 export default async function ArticleDetail({ params }) {
   const { slug } = params;
-  const token = await getAuthToken();
-  const article = await getArticleBySlug(decodeURIComponent(slug), token);
+  const article = await getArticleBySlug(decodeURIComponent(slug), null);
 
   if (!article) {
     notFound();
   }
 
-  let featuredImage = null;
-  if (article.featured_media) {
-    featuredImage = await getMediaById(article.featured_media);
-  }
+  // Get featured image from embedded data or fallback
+  const featuredImage =
+    article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
+
+  // Get author name from embedded data or fallback
+  const authorName =
+    article._embedded?.author?.[0]?.name || "กองเลขาฯ สมัชชาคนจน";
+
+  // Format date
+  const date = new Date(article.date).toLocaleDateString("th-TH", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  // Fetch related articles (simulated by fetching latest 3 excluded current)
+  // Ideally this should be a real related query, but for now we pick latest 3
+  const allArticles = await getAllArticles(null);
+  const relatedArticles = allArticles
+    .filter((a) => a.id !== article.id)
+    .slice(0, 3)
+    .map(a => ({
+      ...a,
+      featured_image: a._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null
+    }));
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-sans text-gray-900">
+      {/* Scroll Progress Bar (Optional - standard detail page touch) */}
+
       {/* Hero Section */}
-      {featuredImage ? (
-        <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
-          <img
-            src={featuredImage.source_url}
-            alt={article.title.rendered}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-black/90 via-brand-black/40 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-full p-8 md:p-16">
-            <div className="max-w-4xl mx-auto">
-              <span className="inline-block py-1 px-3 rounded-full bg-brand-green-dark text-white text-sm font-bold tracking-wider mb-4 shadow-lg">
-                ARTICLE
-              </span>
-              <h1
-                className="text-4xl md:text-6xl font-bold text-white mb-4 leading-relaxed drop-shadow-lg"
-                dangerouslySetInnerHTML={{ __html: article.title.rendered }}
-              />
-              {article.date && (
-                <p className="text-gray-200 text-lg font-light flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  {new Date(article.date).toLocaleDateString("th-TH", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-              )}
+      <section className="relative w-full h-[60vh] md:h-[70vh] min-h-[500px]">
+        {featuredImage ? (
+          <>
+            <Image
+              src={featuredImage}
+              alt={article.title.rendered}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-brand-green-dark">
+            <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
+          </div>
+        )}
+
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-20 z-10">
+          <div className="max-w-4xl mx-auto">
+            <Link
+              href="/media"
+              className="inline-flex items-center text-white/80 hover:text-brand-yellow mb-6 transition-colors font-medium backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              กลับหน้าสื่อ
+            </Link>
+
+            <h1
+              className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 shadow-sm"
+              style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)", lineHeight: "1.3" }}
+              dangerouslySetInnerHTML={{ __html: article.title.rendered }}
+            />
+
+            <div className="flex flex-wrap items-center gap-6 text-white/90 text-sm md:text-base font-light">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center font-bold text-lg">
+                  {authorName.charAt(0)}
+                </div>
+                <span className="font-medium">{authorName}</span>
+              </div>
+              <span className="hidden md:inline w-1 h-1 bg-white/50 rounded-full"></span>
+              <span>{date}</span>
             </div>
           </div>
         </div>
-      ) : (
-        <div className="relative bg-brand-green-dark py-32 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-yellow/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-              ARTICLE
-            </span>
-            <h1
-              className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
-              dangerouslySetInnerHTML={{ __html: article.title.rendered }}
-            />
-            {article.date && (
-              <p className="text-gray-200 text-lg font-light flex items-center">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                {new Date(article.date).toLocaleDateString("th-TH", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+      </section>
 
-      {/* Article Content */}
-      <article className="py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="prose prose-lg md:prose-xl max-w-none prose-headings:font-bold prose-headings:text-brand-black prose-p:text-gray-700 prose-p:leading-loose prose-a:text-brand-green-dark prose-a:font-bold hover:prose-a:text-brand-red prose-img:rounded-3xl prose-img:shadow-lg [&>p]:mb-8"
+      {/* Content Container */}
+      <main className="max-w-4xl mx-auto px-6 md:px-8 py-16 -mt-10 relative z-20 bg-white rounded-t-3xl shadow-xl md:shadow-none md:bg-transparent md:rounded-none md:mt-0 lg:py-24">
+        <div className="md:bg-white md:p-12 md:rounded-3xl md:shadow-xl">
+
+          {/* Article Body */}
+          <article
+            className="prose prose-lg md:prose-xl max-w-none 
+              prose-headings:font-bold prose-headings:text-brand-black 
+              prose-p:text-gray-700 prose-p:leading-8 prose-p:font-light 
+              prose-a:text-brand-green-dark prose-a:font-bold hover:prose-a:text-brand-red prose-a:no-underline hover:prose-a:underline
+              prose-strong:font-bold prose-strong:text-brand-green-dark
+              prose-img:rounded-2xl prose-img:shadow-lg prose-img:my-10
+              prose-blockquote:border-l-4 prose-blockquote:border-brand-yellow prose-blockquote:pl-6 prose-blockquote:italic
+              [&>p]:mb-8 font-thai-sarabun"
             dangerouslySetInnerHTML={{ __html: article.content.rendered }}
           />
 
-          {/* Back Link */}
-          <div className="mt-20 pt-10 border-t border-gray-100 flex justify-center">
-            <a
-              href="/media/articles"
-              className="inline-flex items-center px-8 py-4 bg-gray-100 hover:bg-brand-green-dark text-brand-black hover:text-white rounded-full font-bold transition-all duration-300 group"
-            >
-              <svg
-                className="w-5 h-5 mr-3 group-hover:-translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              กลับไปยังบทความทั้งหมด
-            </a>
+          {/* Tags / Share */}
+          <div className="mt-16 pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex gap-2">
+              {/* Placeholder tags since API doesn't return them yet */}
+              <span className="px-3 py-1 bg-gray-100 text-gray-500 rounded-lg text-sm">#สมัชชาคนจน</span>
+              <span className="px-3 py-1 bg-gray-100 text-gray-500 rounded-lg text-sm">#บทความ</span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="text-gray-400 text-sm font-medium">Share:</span>
+              <button className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-colors">
+                <Facebook className="w-5 h-5" />
+              </button>
+              <button className="w-10 h-10 rounded-full bg-sky-50 text-sky-500 flex items-center justify-center hover:bg-sky-100 transition-colors">
+                <Twitter className="w-5 h-5" />
+              </button>
+              <button className="w-10 h-10 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-gray-100 transition-colors">
+                <LinkIcon className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
-      </article>
+      </main>
+
+      {/* Related Articles */}
+      <section className="bg-gray-50 py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold mb-10 text-brand-black flex items-center gap-3">
+            <span className="w-10 h-1 bg-brand-green-dark rounded-full"></span>
+            บทความที่น่าสนใจ
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedArticles.map((relArticle) => (
+              <Link key={relArticle.id} href={`/media/articles/${relArticle.slug}`} className="group">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                  <div className="h-48 relative overflow-hidden bg-gray-200">
+                    {relArticle.featured_image ? (
+                      <Image
+                        src={relArticle.featured_image}
+                        alt={relArticle.title.rendered}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
+                    )}
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center gap-2 mb-3 text-xs text-brand-green-dark font-semibold">
+                      <span className="bg-brand-green-light/20 px-2 py-1 rounded-md">
+                        {new Date(relArticle.date).toLocaleDateString("th-TH")}
+                      </span>
+                    </div>
+                    <h3
+                      className="text-lg font-bold mb-3 text-brand-black leading-tight group-hover:text-brand-green-dark transition-colors line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: relArticle.title?.rendered || relArticle.title || "Untitled" }}
+                    />
+                    <div className="text-gray-500 text-sm line-clamp-2 mt-auto" dangerouslySetInnerHTML={{ __html: relArticle.excerpt?.rendered || relArticle.excerpt || "" }}></div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

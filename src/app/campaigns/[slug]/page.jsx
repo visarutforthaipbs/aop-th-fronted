@@ -45,7 +45,7 @@ export default async function CampaignDetail({ params }) {
           <div className="absolute inset-0 bg-gradient-to-t from-brand-black/80 to-transparent"></div>
           <div className="absolute bottom-0 left-0 right-0 p-8">
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-bold text-brand-white mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-brand-white mb-4 leading-[1.8]">
                 {campaign.title.rendered}
               </h1>
             </div>
@@ -57,7 +57,7 @@ export default async function CampaignDetail({ params }) {
       <article className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {!featuredImage && (
-            <h1 className="text-4xl md:text-5xl font-bold text-brand-black mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-brand-black mb-8 leading-[1.8]">
               {campaign.title.rendered}
             </h1>
           )}

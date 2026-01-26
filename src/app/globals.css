@@ -36,8 +36,14 @@
   /* WordPress Gallery Styles - Scoped to prose to override typography defaults */
   .prose .wp-block-gallery,
   .prose .gallery {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-8 list-none p-0 !important;
-    display: grid !important; /* Force grid display */
+    @apply grid grid-cols-2 md:grid-cols-3 gap-6 my-12 list-none p-0 !important;
+    display: grid !important;
+  }
+  
+  /* Critical Fix: Single image in a gallery should take full width */
+  .prose .wp-block-gallery figure:last-child:first-child,
+  .prose .gallery .gallery-item:last-child:first-child {
+    grid-column: 1 / -1 !important;
   }
 
   /* Column overrides */
@@ -51,11 +57,11 @@
   }
   .prose .wp-block-gallery.columns-3,
   .prose .gallery.gallery-columns-3 {
-    @apply md:grid-cols-3 !important;
+    @apply grid-cols-2 md:grid-cols-3 !important;
   }
   .prose .wp-block-gallery.columns-4,
   .prose .gallery.gallery-columns-4 {
-    @apply md:grid-cols-2 lg:grid-cols-4 !important;
+    @apply grid-cols-2 md:grid-cols-4 !important;
   }
 
   /* Gallery Items */
@@ -69,18 +75,40 @@
   /* Images within gallery */
   .prose .wp-block-gallery img,
   .prose .gallery img {
-    @apply w-full h-64 object-cover rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 !m-0 !important;
-    margin: 0 !important;
+    @apply w-full h-full aspect-[4/3] object-cover rounded-2xl shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 !m-0 !important;
+  }
+
+  /* Standard Images & Alignment support */
+  .prose .alignleft {
+    @apply float-left mr-8 mb-6 max-w-[45%] md:max-w-[40%] !important;
+  }
+
+  .prose .alignright {
+    @apply float-right ml-8 mb-6 max-w-[45%] md:max-w-[40%] !important;
+  }
+
+  .prose .aligncenter {
+    @apply mx-auto my-10 block !important;
+  }
+  
+  /* Default standalone images: Full width & Centered */
+  .prose img:not(.emoji) {
+    @apply w-full h-auto object-cover rounded-3xl my-8 shadow-md transition-all duration-300 block mx-auto;
+  }
+
+  .prose figcaption {
+    @apply text-center text-gray-500 text-sm mt-3 font-light italic;
+  }
+
+  /* Clear floats */
+  .prose::after {
+    content: "";
+    display: table;
+    clear: both;
   }
 
   /* Remove prose default styling for gallery lists */
   .prose .wp-block-gallery li {
     @apply p-0 m-0 before:content-none !important;
-  }
-
-  /* Hide the first image in the article content if it's likely a duplicate of the featured image */
-  .prose > figure:first-child,
-  .prose > .wp-block-image:first-child {
-    display: none;
   }
 }

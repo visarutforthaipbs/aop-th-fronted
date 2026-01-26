@@ -1,24 +1,35 @@
 import { NextResponse } from "next/server";
-import { getAllArticles, getAuthToken } from "@/lib/api";
+import { getAllArticles, getArticleCategories } from "@/lib/api";
 
-export async function GET() {
+export async function GET(request) {
   try {
-    const token = await getAuthToken();
-    const articles = await getAllArticles(token);
+    const { searchParams } = new URL(request.url);
+    const categoryId = searchParams.get("category");
+
+    // Fetch articles (optionally filtered by category)
+    const articles = await getAllArticles(null, categoryId);
 
     if (!articles || !Array.isArray(articles)) {
-      return NextResponse.json([]);
+      return NextResponse.json({ articles: [], categories: [] });
     }
 
     const articlesWithImages = articles.map((article) => ({
       ...article,
       featured_image:
         article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
+      // Extract category info from embedded data
+      categories_info: article._embedded?.["wp:term"]?.[0] || [],
     }));
 
-    return NextResponse.json(articlesWithImages || []);
+    // Fetch all categories for the filter
+    const categories = await getArticleCategories();
+
+    return NextResponse.json({
+      articles: articlesWithImages || [],
+      categories: categories || [],
+    });
   } catch (error) {
     console.error("Error in articles API:", error);
-    return NextResponse.json([], { status: 500 });
+    return NextResponse.json({ articles: [], categories: [] }, { status: 500 });
   }
 }

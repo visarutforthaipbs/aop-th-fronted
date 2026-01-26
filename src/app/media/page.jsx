@@ -1,179 +1,232 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FileText, Camera, Video, Book, Film, BookOpen } from "lucide-react";
+import Image from "next/image";
 
 export default function Media() {
-  const mediaCategories = [
-    {
-      title: "บทความและข้อเขียน",
-      description:
-        "บทวิเคราะห์ บทความทางวิชาการ และข้อเขียนเกี่ยวกับการเคลื่อนไหว",
-      icon: <FileText className="w-16 h-16" />,
-      link: "/media/articles",
-      color: "bg-brand-green-dark",
-    },
-    {
-      title: "ภาพถ่ายและโปสเตอร์",
-      description: "ภาพถ่ายจากการชุมนุม กิจกรรม และโปสเตอร์รณรงค์",
-      icon: <Camera className="w-16 h-16" />,
-      link: "/media/gallery",
-      color: "bg-brand-green-medium",
-    },
-    {
-      title: "วิดีโอและสารคดี",
-      description: "วิดีโอบันทึกกิจกรรม สารคดี และคลิปสั้นจากโซเชียลมีเดีย",
-      icon: <Video className="w-16 h-16" />,
-      link: "/media/videos",
-      color: "bg-brand-red",
-    },
-    {
-      title: "หนังสือและรายงาน",
-      description: "หนังสือ รายงานการวิจัย และเอกสารสำคัญที่สามารถดาวน์โหลดได้",
-      icon: <Book className="w-16 h-16" />,
-      link: "/media/books",
-      color: "bg-brand-green-dark",
-    },
-  ];
+  const [articles, setArticles] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+
+  // Fetch categories on initial mount
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch("/api/articles");
+        const data = await response.json();
+        if (data.categories && data.categories.length > 0) {
+          setCategories(data.categories);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    }
+    fetchCategories();
+  }, []);
+
+  // Fetch articles when filter changes
+  useEffect(() => {
+    async function fetchArticles() {
+      setLoading(true);
+      try {
+        const url = filter === "all" 
+          ? "/api/articles" 
+          : `/api/articles?category=${filter}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        setArticles(data.articles || []);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchArticles();
+  }, [filter]);
+
+  // Get category name by ID for display
+  const getCategoryName = (article) => {
+    const categoryInfo = article.categories_info?.[0];
+    return categoryInfo?.name || "บทความ";
+  };
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-red/20 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-            MEDIA CENTER
-          </span>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            ห้องสื่อสมัชชาคนจน
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-100 font-light max-w-2xl mx-auto">
-            คลังความรู้ เอกสาร บทความ ภาพถ่าย วิดีโอ และสื่อต่างๆ
-            ที่บันทึกการต่อสู้ของเรา
-          </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-3xl">
+            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+              MEDIA CENTER
+            </span>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              ห้องสื่อสมัชชาคนจน
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-100 font-light leading-relaxed">
+              คลังความรู้ เอกสาร บทความ ภาพถ่าย วิดีโอ และสื่อต่างๆ
+              ที่บันทึกการต่อสู้ของเรา
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Media Categories Grid */}
-      <section className="py-20 -mt-10 relative z-20">
+      {/* Filters */}
+      <section className="py-8 bg-white border-b border-gray-100 sticky top-24 z-40 shadow-sm backdrop-blur-md bg-white/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {mediaCategories.map((category, index) => (
-              <Link key={index} href={category.link} className="group">
-                <div
-                  className={`${category.color} text-brand-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative h-full transform hover:-translate-y-2`}
-                >
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3 group-hover:bg-white/20 transition-colors"></div>
-
-                  <div className="p-10 relative z-10 flex flex-col h-full">
-                    <div className="mb-6 bg-white/10 w-24 h-24 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-inner">
-                      {category.icon}
-                    </div>
-                    <h2 className="text-3xl font-bold mb-4 group-hover:text-brand-yellow transition-colors">
-                      {category.title}
-                    </h2>
-                    <p className="text-lg mb-8 opacity-90 font-light leading-relaxed flex-grow">
-                      {category.description}
-                    </p>
-                    <span className="inline-flex items-center font-bold bg-white/20 py-3 px-6 rounded-full w-fit backdrop-blur-md group-hover:bg-white group-hover:text-brand-green-dark transition-all">
-                      เข้าชม
-                      <svg
-                        className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </Link>
+          <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+            {/* "All" button */}
+            <button
+              onClick={() => setFilter("all")}
+              className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${
+                filter === "all"
+                  ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
+                  : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
+              }`}
+            >
+              ทั้งหมด
+            </button>
+            
+            {/* Dynamic category buttons */}
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setFilter(category.id.toString())}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${
+                  filter === category.id.toString()
+                    ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
+                    : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
+                }`}
+              >
+                {category.name}
+              </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Content */}
-      <section className="py-20 bg-gray-50">
+      {/* Media Grid */}
+      <section className="py-16 bg-gray-50 min-h-[60vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-3xl font-bold text-brand-black">เนื้อหาเด่น</h2>
-            <Link
-              href="/media/all"
-              className="text-brand-green-dark font-bold hover:underline"
-            >
-              ดูทั้งหมด →
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:-translate-y-1">
-              <div className="h-56 bg-brand-green-light/30 flex items-center justify-center group-hover:bg-brand-green-light/50 transition-colors">
-                <FileText className="w-20 h-20 text-brand-green-dark transform group-hover:scale-110 transition-transform duration-300" />
-              </div>
-              <div className="p-8">
-                <h3 className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors">
-                  บทความล่าสุด
-                </h3>
-                <p className="text-gray-600 mb-6 font-light">
-                  อ่านบทวิเคราะห์และความคิดเห็นล่าสุดจากนักวิชาการและแกนนำ
-                </p>
-                <Link
-                  href="/media/articles"
-                  className="inline-block text-brand-green-dark font-bold border-b-2 border-brand-green-dark/20 hover:border-brand-green-dark transition-colors pb-1"
-                >
-                  อ่านเพิ่มเติม
-                </Link>
-              </div>
+          {loading ? (
+            <div className="text-center py-24">
+              <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-brand-green-dark"></div>
+              <p className="mt-6 text-gray-500 font-medium">
+                กำลังโหลดข้อมูล...
+              </p>
             </div>
-
-            <div className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:-translate-y-1">
-              <div className="h-56 bg-brand-red/10 flex items-center justify-center group-hover:bg-brand-red/20 transition-colors">
-                <Film className="w-20 h-20 text-brand-red transform group-hover:scale-110 transition-transform duration-300" />
-              </div>
-              <div className="p-8">
-                <h3 className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-red transition-colors">
-                  วิดีโอยอดนิยม
-                </h3>
-                <p className="text-gray-600 mb-6 font-light">
-                  ชมวิดีโอที่ได้รับความสนใจมากที่สุด บันทึกเหตุการณ์สำคัญ
-                </p>
+          ) : articles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {articles.map((item) => (
                 <Link
-                  href="/media/videos"
-                  className="inline-block text-brand-red font-bold border-b-2 border-brand-red/20 hover:border-brand-red transition-colors pb-1"
+                  key={item.id}
+                  href={`/media/articles/${item.slug}`} // Assuming all items link to article detail for now
+                  className="group"
                 >
-                  ชมวิดีโอ
-                </Link>
-              </div>
-            </div>
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                    {item.featured_image ? (
+                      <div className="h-56 overflow-hidden relative">
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
+                        <Image
+                          src={item.featured_image}
+                          alt={
+                            item.title?.rendered?.replace(/<[^>]+>/g, "") ||
+                            item.title
+                          }
+                          width={400}
+                          height={224}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-56 bg-brand-green-light/30 flex items-center justify-center text-brand-green-dark/30">
+                        <svg
+                          className="w-16 h-16"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1}
+                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                          />
+                        </svg>
+                      </div>
+                    )}
 
-            <div className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:-translate-y-1">
-              <div className="h-56 bg-brand-yellow/10 flex items-center justify-center group-hover:bg-brand-yellow/20 transition-colors">
-                <BookOpen className="w-20 h-20 text-brand-yellow-dark transform group-hover:scale-110 transition-transform duration-300" />
-              </div>
-              <div className="p-8">
-                <h3 className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-yellow-dark transition-colors">
-                  หนังสือแนะนำ
-                </h3>
-                <p className="text-gray-600 mb-6 font-light">
-                  ดาวน์โหลดหนังสือและรายงานสำคัญเพื่อการศึกษาค้นคว้า
-                </p>
-                <Link
-                  href="/media/books"
-                  className="inline-block text-brand-yellow-dark font-bold border-b-2 border-brand-yellow-dark/20 hover:border-brand-yellow-dark transition-colors pb-1"
-                >
-                  ดาวน์โหลด
+                    <div className="p-8 flex-1 flex flex-col">
+                      <div className="flex items-center mb-3 space-x-2">
+                        {item.date && (
+                          <span className="text-xs font-semibold text-brand-green-dark bg-brand-green-light/20 px-2 py-1 rounded-full">
+                            {new Date(item.date).toLocaleDateString("th-TH", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            })}
+                          </span>
+                        )}
+                        {/* Category badge */}
+                        <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                          {getCategoryName(item)}
+                        </span>
+                      </div>
+
+                      <h3
+                        className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight line-clamp-2"
+                        dangerouslySetInnerHTML={{
+                          __html: item.title?.rendered || item.title,
+                        }}
+                      />
+
+                      <div
+                        className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
+                        dangerouslySetInnerHTML={{
+                          __html: item.excerpt?.rendered || item.excerpt,
+                        }}
+                      />
+
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                        <span className="text-brand-green-dark font-bold text-sm flex items-center group-hover:translate-x-1 transition-transform">
+                          อ่านต่อ{" "}
+                          <svg
+                            className="w-4 h-4 ml-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 5l7 7-7 7"
+                            ></path>
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </Link>
-              </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-300">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                ไม่พบข้อมูลในหมวดหมู่นี้
+              </h3>
+              <p className="text-gray-500">
+                ยังไม่มีข้อมูลในหมวดหมู่ที่เลือก หรือกำลังอยู่ในระหว่างการปรับปรุง
+              </p>
+            </div>
+          )}
         </div>
       </section>
     </div>

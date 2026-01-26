@@ -1,15 +1,44 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getAllNews } from "@/lib/api";
+import Image from "next/image";
 
-export default async function News() {
-  let newsPosts = [];
+// Helper function to extract first image from HTML content
+function extractFirstImage(htmlContent) {
+  if (!htmlContent) return null;
+  const imgMatch = htmlContent.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return imgMatch ? imgMatch[1] : null;
+}
 
-  try {
-    const posts = await getAllNews(1, 20);
-    newsPosts = posts || [];
-  } catch (error) {
-    console.error("Error fetching news:", error);
-  }
+export default function News() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch posts on mount
+  useEffect(() => {
+    async function fetchPosts() {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/news");
+        const data = await response.json();
+
+        // Process posts to extract first image as featured image
+        const processedPosts = (data.posts || []).map((post) => ({
+          ...post,
+          featured_image:
+            post.featured_image || extractFirstImage(post.content?.rendered),
+        }));
+
+        setPosts(processedPosts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPosts();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -19,150 +48,134 @@ export default async function News() {
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-yellow/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-            NEWS & UPDATES
-          </span>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            ข่าวสาร
-            <br />
-            และความเคลื่อนไหว
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-100 font-light max-w-2xl">
-            ติดตามข่าวสาร แถลงการณ์ และกิจกรรมล่าสุดของสมัชชาคนจน
-            เพื่อไม่พลาดทุกการเคลื่อนไหว
-          </p>
+          <div className="max-w-3xl">
+            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+              NEWS & UPDATES
+            </span>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              ข่าวสาร
+              <br />
+              และความเคลื่อนไหว
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-100 font-light leading-relaxed">
+              ติดตามข่าวสาร แถลงการณ์ และกิจกรรมล่าสุดของสมัชชาคนจน
+              เพื่อไม่พลาดทุกการเคลื่อนไหว
+            </p>
+          </div>
         </div>
       </section>
 
       {/* News Grid */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 bg-gray-50 min-h-[60vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newsPosts.length > 0 ? (
-              newsPosts.map((post) => (
-                <div
+          {loading ? (
+            <div className="text-center py-24">
+              <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-brand-green-dark"></div>
+              <p className="mt-6 text-gray-500 font-medium">
+                กำลังโหลดข้อมูล...
+              </p>
+            </div>
+          ) : posts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {posts.map((post) => (
+                <Link
                   key={post.id}
-                  className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:-translate-y-1 flex flex-col h-full"
+                  href={`/news/${post.slug}`}
+                  className="group"
                 >
-                  <div className="p-8 flex flex-col h-full">
-                    {post.date && (
-                      <div className="flex items-center mb-4">
-                        <span className="bg-brand-green-light/20 text-brand-green-dark text-xs font-bold px-3 py-1 rounded-full">
-                          {new Date(post.date).toLocaleDateString("th-TH", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </span>
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                    {post.featured_image ? (
+                      <div className="h-56 overflow-hidden relative">
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
+                        <Image
+                          src={post.featured_image}
+                          alt={
+                            post.title?.rendered?.replace(/<[^>]+>/g, "") ||
+                            post.title
+                          }
+                          width={400}
+                          height={224}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-56 bg-brand-green-light/30 flex items-center justify-center text-brand-green-dark/30">
+                        <svg
+                          className="w-16 h-16"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1}
+                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                          />
+                        </svg>
                       </div>
                     )}
-                    <h3 className="text-xl font-bold mb-4 text-brand-black group-hover:text-brand-green-dark transition-colors line-clamp-2">
-                      {post.title?.rendered}
-                    </h3>
-                    <div
-                      className="text-gray-600 mb-6 line-clamp-3 font-light flex-grow"
-                      dangerouslySetInnerHTML={{
-                        __html: post.excerpt?.rendered,
-                      }}
-                    />
-                    <a
-                      href={`/news/${post.slug}`}
-                      className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-red transition-colors mt-auto"
-                    >
-                      อ่านเพิ่มเติม
-                      <svg
-                        className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </a>
+
+                    <div className="p-8 flex-1 flex flex-col">
+                      <div className="flex items-center mb-3">
+                        {post.date && (
+                          <span className="text-xs font-semibold text-brand-green-dark bg-brand-green-light/20 px-2 py-1 rounded-full">
+                            {new Date(post.date).toLocaleDateString("th-TH", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            })}
+                          </span>
+                        )}
+                      </div>
+
+                      <h3
+                        className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight line-clamp-2"
+                        style={{ lineHeight: "1.3" }}
+                        dangerouslySetInnerHTML={{
+                          __html: post.title?.rendered || post.title,
+                        }}
+                      />
+
+                      <div
+                        className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
+                        dangerouslySetInnerHTML={{
+                          __html: post.excerpt?.rendered || post.excerpt,
+                        }}
+                      />
+
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                        <span className="text-brand-green-dark font-bold text-sm flex items-center group-hover:translate-x-1 transition-transform">
+                          อ่านต่อ{" "}
+                          <svg
+                            className="w-4 h-4 ml-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 5l7 7-7 7"
+                            ></path>
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="col-span-3 text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div className="text-6xl mb-4">📰</div>
-                <h3 className="text-2xl font-bold text-gray-400 mb-2">
-                  ยังไม่มีข่าวสารในขณะนี้
-                </h3>
-                <p className="text-gray-500">โปรดติดตามการอัพเดทในเร็วๆ นี้</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12 text-brand-black text-center">
-            หมวดหมู่ข่าว
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="group bg-gray-50 p-10 rounded-3xl border border-gray-100 hover:shadow-xl hover:shadow-brand-green-light/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                📢
-              </div>
-              <h3 className="text-2xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors">
-                แถลงการณ์สื่อมวลชน
-              </h3>
-              <p className="text-gray-600 mb-6 font-light">
-                แถลงการณ์และข่าวประชาสัมพันธ์อย่างเป็นทางการจากสมัชชาคนจน
-              </p>
-              <span className="text-brand-red font-bold flex items-center group-hover:translate-x-2 transition-transform">
-                ดูทั้งหมด
-                <svg
-                  className="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </span>
+                </Link>
+              ))}
             </div>
-
-            <div className="group bg-gray-50 p-10 rounded-3xl border border-gray-100 hover:shadow-xl hover:shadow-brand-green-light/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                🗓️
-              </div>
-              <h3 className="text-2xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors">
-                ประกาศกิจกรรม
+          ) : (
+            <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-300">
+              <div className="text-6xl mb-4">📰</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                ยังไม่มีข่าวสารในขณะนี้
               </h3>
-              <p className="text-gray-600 mb-6 font-light">
-                ตารางกิจกรรม การชุมนุม และงานเสวนาที่จะเกิดขึ้นเร็วๆ นี้
-              </p>
-              <span className="text-brand-red font-bold flex items-center group-hover:translate-x-2 transition-transform">
-                ดูทั้งหมด
-                <svg
-                  className="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </span>
+              <p className="text-gray-500">โปรดติดตามการอัพเดทในเร็วๆ นี้</p>
             </div>
-          </div>
+          )}
         </div>
       </section>
     </div>

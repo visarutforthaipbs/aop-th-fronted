@@ -22,7 +22,7 @@ export default function HeroSection({ featuredCampaign }) {
                     <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
                         3 ทศวรรษแห่งการต่อสู้
                     </span>
-                    <h1 className="text-5xl md:text-7xl font-bold mb-8 text-white leading-tight drop-shadow-xl">
+                    <h1 className="text-3xl md:text-5xl font-bold mb-8 text-white leading-[1.8] drop-shadow-xl">
                         {featuredCampaign?.title?.rendered || "รัฐธรรมนูญคนจน"}
                     </h1>
                     <div
