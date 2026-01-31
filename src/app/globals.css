@@ -1,34 +1,21 @@
-@font-face {
-  font-family: "DB Helvethaica X";
-  src: url("/fonts/dbhelvethaicax-webfont.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "DB Helvethaica X";
-  src: url("/fonts/dbhelvethaicaxmed-webfont.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "DB Helvethaica X";
-  src: url("/fonts/dbhelvethaicaxbd-webfont.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * {
-    font-family: "DB Helvethaica X", sans-serif;
+  body {
+    font-family: var(--font-noto-sans-thai-looped), sans-serif;
+    font-weight: 400; /* Regular for paragraphs */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-noto-sans-thai-looped), sans-serif;
+    font-weight: 700; /* Bold for headings */
   }
 }
 

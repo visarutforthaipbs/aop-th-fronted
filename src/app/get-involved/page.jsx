@@ -32,7 +32,7 @@ export default function GetInvolved() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
+        <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
         <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -254,7 +254,7 @@ export default function GetInvolved() {
 
       {/* Donation Info */}
       <section className="py-20 bg-brand-black text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
+        <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-5"></div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-8">

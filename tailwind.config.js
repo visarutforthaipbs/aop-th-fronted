@@ -7,10 +7,16 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-noto-sans-thai-looped)", "sans-serif"],
+      },
       colors: {
         "brand-green-dark": "#009253",
         "brand-green-medium": "#67be6a",
         "brand-green-light": "#d9e8c5",
+        "brand-primary": "#009253", // Using existing green as primary base, or update if strict needed
+        "brand-secondary": "#FDF8C0", // Cream
+        "brand-accent": "#005F33", // Dark Green
         "brand-white": "#ffffff",
         "brand-black": "#231f20",
         "brand-red": "#803432",

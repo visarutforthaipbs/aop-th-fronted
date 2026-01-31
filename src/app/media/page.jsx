@@ -31,13 +31,13 @@ export default function Media() {
     async function fetchArticles() {
       setLoading(true);
       try {
-        const url = filter === "all" 
-          ? "/api/articles" 
+        const url = filter === "all"
+          ? "/api/articles"
           : `/api/articles?category=${filter}`;
-        
+
         const response = await fetch(url);
         const data = await response.json();
-        
+
         setArticles(data.articles || []);
       } catch (error) {
         console.error("Error fetching articles:", error);
@@ -58,7 +58,7 @@ export default function Media() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
+        <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -84,25 +84,23 @@ export default function Media() {
             {/* "All" button */}
             <button
               onClick={() => setFilter("all")}
-              className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${
-                filter === "all"
+              className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${filter === "all"
                   ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
                   : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
-              }`}
+                }`}
             >
               ทั้งหมด
             </button>
-            
+
             {/* Dynamic category buttons */}
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setFilter(category.id.toString())}
-                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${
-                  filter === category.id.toString()
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${filter === category.id.toString()
                     ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
                     : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
-                }`}
+                  }`}
               >
                 {category.name}
               </button>

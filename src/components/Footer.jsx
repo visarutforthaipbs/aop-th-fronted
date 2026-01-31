@@ -19,7 +19,7 @@ export default function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
                 aria-label="Facebook"
               >
                 <svg
@@ -34,7 +34,7 @@ export default function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
                 aria-label="X (Twitter)"
               >
                 <svg

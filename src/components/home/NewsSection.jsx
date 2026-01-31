@@ -76,7 +76,7 @@ export default function NewsSection({ latestNews }) {
                 <div className="text-center mt-12 md:hidden">
                     <Link
                         href="/news"
-                        className="inline-block bg-gray-100 hover:bg-gray-200 text-brand-black font-semibold px-8 py-3 rounded-full transition-colors"
+                        className="inline-block bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-3 rounded-full transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl"
                     >
                         ดูข่าวสารทั้งหมด
                     </Link>

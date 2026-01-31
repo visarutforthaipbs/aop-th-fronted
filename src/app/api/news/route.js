@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// Force dynamic rendering since we use request.url
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const category = searchParams.get("category");
@@ -11,7 +14,7 @@ export async function GET(request) {
   try {
     // Build the endpoint URL
     let endpoint = `${API_URL}/wp/v2/posts?page=${page}&per_page=${perPage}&_embed`;
-    
+
     if (category && category !== "all") {
       endpoint += `&categories=${category}`;
     }

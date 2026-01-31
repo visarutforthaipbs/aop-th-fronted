@@ -3,48 +3,56 @@ import Image from "next/image";
 
 export default function HeroSection({ featuredCampaign }) {
     return (
-        <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-            {/* Background Image */}
-            <div className="absolute inset-0 z-0">
-                <Image
-                    src="/hero-section-image.jpg"
-                    alt="สมัชชาคนจน"
-                    fill
-                    priority
-                    className="object-cover scale-105 animate-slow-zoom"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-brand-green-dark/90 via-brand-green-dark/60 to-brand-black/80"></div>
-            </div>
+        <section className="relative min-h-screen flex flex-col pt-24 bg-brand-primary overflow-hidden">
+            {/* Top Navigation / Content Container */}
+            <div className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col">
 
-            {/* Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div className="max-w-4xl mx-auto animate-fade-in-up">
-                    <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-                        3 ทศวรรษแห่งการต่อสู้
-                    </span>
-                    <h1 className="text-3xl md:text-5xl font-bold mb-8 text-white leading-[1.8] drop-shadow-xl">
-                        {featuredCampaign?.title?.rendered || "รัฐธรรมนูญคนจน"}
+                {/* Main English Title */}
+                <div className="w-full text-center mt-8">
+                    <h1 className="font-bold text-brand-secondary leading-[0.85] tracking-tight
+                        text-[12vw] xl:text-[200px] flex flex-col items-center justify-center">
+                        <span>ASSEMBLY</span>
+                        <span>OF THE POOR</span>
                     </h1>
-                    <div
-                        className="text-xl md:text-2xl mb-10 leading-relaxed text-gray-100 font-light max-w-3xl mx-auto drop-shadow-md"
-                        dangerouslySetInnerHTML={{
-                            __html:
-                                featuredCampaign?.excerpt?.rendered ||
-                                "องค์กรเครือข่ายประชาชนผู้ยากไร้ เพื่อการต่อสู้เพื่อความยุติธรรมและสิทธิขั้นพื้นฐาน",
-                        }}
-                    />
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            href="/campaigns"
-                            className="inline-flex items-center justify-center bg-brand-red hover:bg-red-700 text-white font-bold px-8 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-brand-red/50 hover:-translate-y-1 text-lg"
-                        >
-                            ดูงานรณรงค์ทั้งหมด
-                        </Link>
+                </div>
+
+                {/* Bottom Section Grid */}
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mt-[-5%] lg:mt-[-8%]">
+
+                    {/* Left: Thai Title */}
+                    <div className="lg:col-span-3 text-left self-end mb-32 lg:mb-56 pl-4 order-2 lg:order-1">
+                        <h2 className="text-[#004232] font-bold leading-[0.9] text-[20vw] lg:text-[140px]">
+                            สมัชชา<br />คนจน
+                        </h2>
+                    </div>
+
+                    {/* Center: Illustration */}
+                    <div className="lg:col-span-6 flex justify-center items-end relative z-20 order-1 lg:order-2">
+                        <div className="relative w-full max-w-[1000px] aspect-square">
+                            <Image
+                                src="/images/hero-img-home.svg"
+                                alt="Assembly of the Poor Illustration"
+                                fill
+                                className="object-contain object-bottom"
+                                priority
+                            />
+                        </div>
+                    </div>
+
+                    {/* Right: Description & Button */}
+                    <div className="lg:col-span-3 flex flex-col items-start gap-6 self-end mb-32 lg:mb-56 pr-4 order-3 lg:order-3">
+                        <p className="text-[#004232] text-sm md:text-base lg:text-sm font-medium leading-relaxed opacity-90">
+                            สมัชชาคนจน เป็นเครือข่ายชาวบ้านคนจนจากชุมชนท้องถิ่นต่างๆ
+                            ที่ได้รับผลกระทบจากการพัฒนาของรัฐ ที่เกิดขึ้นท่ามกลางการแย่งชิงทรัพยากรธรรมชาติ
+                            อาทิ ดิน น้ำ ป่า ระหว่างภาครัฐและเอกชนกับชาวบ้านที่อยู่ในชุมชนท้องถิ่นทั้งในชนบทและในเมือง
+                            อันเป็นนโยบาย โครงการพัฒนาของรัฐ กฎหมาย ฯลฯ ที่รุกรานวิถีชีวิต
+                            ละเมิดสิทธิในการจัดการทรัพยากรของชุมชนท้องถิ่นทำลายวัฒนธรรมที่แตกต่างหลากหลาย..
+                        </p>
                         <Link
                             href="/about"
-                            className="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 font-bold px-8 py-4 rounded-full transition-all duration-300 hover:-translate-y-1 text-lg"
+                            className="inline-flex items-center justify-center bg-brand-accent hover:bg-[#004a25] text-white text-sm font-bold px-6 py-2 rounded-full transition-all duration-300"
                         >
-                            รู้จักเราให้มากขึ้น
+                            อ่านต่อ
                         </Link>
                     </div>
                 </div>

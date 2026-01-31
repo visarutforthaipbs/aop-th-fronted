@@ -68,7 +68,7 @@ export default async function ArticleDetail({ params }) {
           </>
         ) : (
           <div className="absolute inset-0 bg-brand-green-dark">
-            <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
+            <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
           </div>
         )}
 

@@ -36,14 +36,14 @@ export default function Campaigns() {
     filter === "all"
       ? campaigns
       : campaigns.filter((c) =>
-          c.tags?.some((tag) => tag.toLowerCase().includes(filter))
-        );
+        c.tags?.some((tag) => tag.toLowerCase().includes(filter))
+      );
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
+        <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -70,11 +70,10 @@ export default function Campaigns() {
               <button
                 key={theme.id}
                 onClick={() => setFilter(theme.id)}
-                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${
-                  filter === theme.id
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${filter === theme.id
                     ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
                     : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
-                }`}
+                  }`}
               >
                 {theme.name}
               </button>

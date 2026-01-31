@@ -23,14 +23,14 @@ export async function generateStaticParams() {
 
 export default async function NewsDetail({ params }) {
   const { slug } = params;
-  
+
   // Fetch the post with embedded data
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const response = await fetch(
     `${API_URL}/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed`,
     { next: { revalidate: 0 } }
   );
-  
+
   const posts = await response.json();
   const post = posts && posts.length > 0 ? posts[0] : null;
 
@@ -39,9 +39,9 @@ export default async function NewsDetail({ params }) {
   }
 
   // Get featured image from embedded data OR extract first image from content
-  const featuredImage = 
-    post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || 
-    extractFirstImage(post.content?.rendered) || 
+  const featuredImage =
+    post._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+    extractFirstImage(post.content?.rendered) ||
     null;
 
   // Get author name from embedded data
@@ -81,7 +81,7 @@ export default async function NewsDetail({ params }) {
           </>
         ) : (
           <div className="absolute inset-0 bg-brand-green-dark">
-            <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
+            <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
           </div>
         )}
 

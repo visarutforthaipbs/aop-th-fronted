@@ -5,7 +5,10 @@ export default function QuickLinksSection() {
     return (
         <section className="py-24 bg-brand-black text-white relative overflow-hidden">
             {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div
+                className="absolute inset-0 opacity-10"
+                style={{ backgroundImage: "url('/pattern/pattern-green.svg')", backgroundRepeat: 'repeat' }}
+            ></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-16">

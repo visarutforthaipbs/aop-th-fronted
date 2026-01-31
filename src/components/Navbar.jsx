@@ -14,7 +14,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/images/logo.svg"
+              src="/logos/logo.svg"
               alt="สมัชชาคนจน"
               width={120}
               height={40}
@@ -27,37 +27,37 @@ export default function Navbar() {
           <div className="hidden md:flex space-x-8 items-center">
             <Link
               href="/about"
-              className="font-medium hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-brand-yellow transition-colors"
             >
               เกี่ยวกับเรา
             </Link>
             <Link
               href="/history"
-              className="font-medium hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-brand-yellow transition-colors"
             >
               ประวัติศาสตร์
             </Link>
             <Link
               href="/campaigns"
-              className="font-medium hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-brand-yellow transition-colors"
             >
               งานรณรงค์
             </Link>
             <Link
               href="/media"
-              className="font-medium hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-brand-yellow transition-colors"
             >
               ห้องสื่อ
             </Link>
             <Link
               href="/news"
-              className="font-medium hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-brand-yellow transition-colors"
             >
               ข่าวสาร
             </Link>
             <Link
               href="/get-involved"
-              className="font-medium hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-brand-yellow transition-colors"
             >
               ร่วมสนับสนุน
             </Link>
