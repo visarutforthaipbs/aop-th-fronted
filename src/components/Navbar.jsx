@@ -31,12 +31,7 @@ export default function Navbar() {
             >
               เกี่ยวกับเรา
             </Link>
-            <Link
-              href="/history"
-              className="font-bold hover:text-brand-yellow transition-colors"
-            >
-              ประวัติศาสตร์
-            </Link>
+
             <Link
               href="/campaigns"
               className="font-bold hover:text-brand-yellow transition-colors"
@@ -104,13 +99,7 @@ export default function Navbar() {
             >
               เกี่ยวกับเรา
             </Link>
-            <Link
-              href="/history"
-              className="block px-3 py-2 rounded-md hover:bg-brand-green-dark transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              ประวัติศาสตร์
-            </Link>
+
             <Link
               href="/campaigns"
               className="block px-3 py-2 rounded-md hover:bg-brand-green-dark transition-colors"
