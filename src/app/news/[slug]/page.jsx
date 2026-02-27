@@ -196,10 +196,12 @@ export default async function NewsDetail({ params }) {
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
                       {relatedImage ? (
                         <div className="h-48 overflow-hidden relative">
-                          <img
+                          <Image
                             src={relatedImage}
                             alt={relatedPost.title?.rendered || "Related news thumbnail"}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                            sizes="(max-width: 768px) 100vw, 33vw"
                           />
                         </div>
                       ) : (

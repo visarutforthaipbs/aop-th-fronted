@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Campaigns() {
   const [campaigns, setCampaigns] = useState([]);
@@ -114,10 +115,12 @@ export default function Campaigns() {
                     {campaign._embedded?.["wp:featuredmedia"]?.[0]?.source_url ? (
                       <div className="h-56 overflow-hidden relative">
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                        <img
+                        <Image
                           src={campaign._embedded["wp:featuredmedia"][0].source_url}
                           alt={campaign.title?.rendered || campaign.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                       </div>
                     ) : (

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { StaggerContainer, StaggerItem, SlideUpFadeIn } from "@/components/animations/ScrollAnim";
 
 // Helper function to extract first image from HTML content
@@ -39,10 +40,12 @@ export default function NewsSection({ latestNews }) {
                                 >
                                     {/* Thumbnail Image */}
                                     <div className="relative h-48 overflow-hidden">
-                                        <img
+                                        <Image
                                             src={featuredImage}
                                             alt={item.title?.rendered || "News thumbnail"}
-                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                            sizes="(max-width: 768px) 100vw, 33vw"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     </div>

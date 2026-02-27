@@ -3,6 +3,7 @@ import {
   getAllCampaigns,
 } from "@/lib/api";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 export async function generateStaticParams() {
   const campaigns = await getAllCampaigns();
@@ -35,10 +36,13 @@ export default async function CampaignDetail({ params }) {
       {/* Hero Section with Featured Image */}
       {featuredImage && (
         <section className="relative h-[50vh] min-h-[400px] md:min-h-[500px] lg:h-[600px] w-full overflow-hidden flex items-end">
-          <img
+          <Image
             src={featuredImage.source_url}
             alt={campaign.title.rendered}
-            className="absolute inset-0 w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/60 to-transparent"></div>
           <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-20">
