@@ -128,14 +128,14 @@ export default async function ArticleDetail({ params }) {
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-gray-400 text-sm font-medium">Share:</span>
-              <button className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-colors">
+              <span className="text-gray-400 text-sm font-medium">แชร์:</span>
+              <button className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300">
                 <Facebook className="w-5 h-5" />
               </button>
-              <button className="w-10 h-10 rounded-full bg-sky-50 text-sky-500 flex items-center justify-center hover:bg-sky-100 transition-colors">
+              <button className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300">
                 <Twitter className="w-5 h-5" />
               </button>
-              <button className="w-10 h-10 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-gray-100 transition-colors">
+              <button className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300">
                 <LinkIcon className="w-5 h-5" />
               </button>
             </div>

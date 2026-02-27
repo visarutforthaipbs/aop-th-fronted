@@ -23,32 +23,30 @@ export default function Campaigns() {
     fetchCampaigns();
   }, []);
 
+  // Generate unique tags from all campaigns dynamically
+  const uniqueTagsMap = new Map();
+  campaigns.forEach(c => {
+    if (c.tags_data) {
+      c.tags_data.forEach(t => {
+        uniqueTagsMap.set(t.id, { id: t.id.toString(), name: t.name, slug: t.slug });
+      });
+    }
+  });
+
   const themes = [
     { id: "all", name: "ทั้งหมด" },
-    { id: "land", name: "ที่ดิน" },
-    { id: "dam", name: "เขื่อน" },
-    { id: "forest", name: "ป่าชุมชน" },
-    { id: "food", name: "อาหาร" },
-    { id: "rights", name: "สิทธิ" },
+    ...Array.from(uniqueTagsMap.values())
   ];
 
   const filteredCampaigns =
     filter === "all"
       ? campaigns
       : campaigns.filter((c) => {
-        const theme = themes.find((t) => t.id === filter);
-        const keyword = theme ? theme.name : filter;
-        const title = c.title?.rendered || c.title || "";
-        const content = c.content?.rendered || c.content || "";
-        return title.includes(keyword) || content.includes(keyword);
+        return c.tags_data && c.tags_data.some(t => t.id.toString() === filter);
       });
 
   const getCampaignTags = (campaign) => {
-    const title = campaign.title?.rendered || campaign.title || "";
-    const content = campaign.content?.rendered || campaign.content || "";
-    return themes
-      .filter((t) => t.id !== "all" && (title.includes(t.name) || content.includes(t.name)))
-      .map((t) => t.name);
+    return (campaign.tags_data || []).map((t) => t.name);
   };
 
   return (
@@ -132,21 +130,33 @@ export default function Campaigns() {
                         {campaign.title?.rendered || campaign.title}
                       </h3>
                       <div
-                        className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed"
+                        className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
                         dangerouslySetInnerHTML={{
-                          __html:
-                            campaign.excerpt?.rendered || campaign.excerpt || campaign.content?.rendered || campaign.content || "",
+                          __html: (
+                            campaign.excerpt?.rendered ||
+                            campaign.excerpt ||
+                            campaign.content?.rendered ||
+                            campaign.content ||
+                            ""
+                          ).replace(/<[^>]+>/g, ""),
                         }}
                       />
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                         {getCampaignTags(campaign).length > 0 ? (
                           <div className="flex flex-wrap gap-2">
-                            {getCampaignTags(campaign).slice(0, 2).map((tag, index) => (
+                            {campaign.tags_data?.slice(0, 2).map((tag) => (
                               <span
-                                key={index}
-                                className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full"
+                                key={tag.id}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setFilter(tag.id.toString());
+                                }}
+                                className={`px-3 py-1 text-xs font-medium rounded-full cursor-pointer transition-colors ${filter === tag.id.toString()
+                                    ? "bg-brand-green-dark text-white"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                  }`}
                               >
-                                {tag}
+                                {tag.name}
                               </span>
                             ))}
                             {getCampaignTags(campaign).length > 2 && (

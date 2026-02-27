@@ -14,7 +14,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/logos/logo.svg"
+              src="/logos/logo-white.png"
               alt="สมัชชาคนจน"
               width={120}
               height={40}
@@ -24,7 +24,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8 items-center">
+          <div className="hidden lg:flex space-x-6 lg:space-x-8 items-center whitespace-nowrap">
             <Link
               href="/about"
               className="font-bold hover:text-white transition-colors"
@@ -67,7 +67,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden focus:outline-none"
+            className="lg:hidden focus:outline-none"
           >
             <svg
               className="h-6 w-6"
@@ -90,7 +90,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-brand-green-dark/95 backdrop-blur-md border-t border-white/10">
+        <div className="lg:hidden bg-brand-green-dark/95 backdrop-blur-md border-t border-white/10">
           <div className="px-4 pt-4 pb-6 space-y-2">
             <Link
               href="/about"

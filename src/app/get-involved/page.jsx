@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Handshake, Coins, Share2 } from "lucide-react";
+import { Handshake, Coins, Share2, Palette, ImageIcon, FileText } from "lucide-react";
 
 export default function GetInvolved() {
   const [formData, setFormData] = useState({
@@ -61,7 +61,7 @@ export default function GetInvolved() {
             <div className="w-24 h-1 bg-brand-black mx-auto rounded-full"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="group bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 text-center">
               <div className="w-20 h-20 bg-gray-100/30 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
                 <Handshake className="w-10 h-10 text-brand-green-dark" />
@@ -72,19 +72,6 @@ export default function GetInvolved() {
               <p className="text-gray-600 mb-6 leading-relaxed">
                 ร่วมงานกับเราในการจัดกิจกรรม การรณรงค์
                 และการสร้างเครือข่ายเพื่อขับเคลื่อนประเด็นทางสังคม
-              </p>
-            </div>
-
-            <div className="group bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 text-center">
-              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
-                <Coins className="w-10 h-10 text-white-dark" />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-white-dark transition-colors">
-                สนับสนุนทุนการต่อสู้
-              </h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                บริจาคเพื่อสนับสนุนกิจกรรม การเคลื่อนไหว
-                และการช่วยเหลือพี่น้องผู้ได้รับผลกระทบ
               </p>
             </div>
 
@@ -199,7 +186,6 @@ export default function GetInvolved() {
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none appearance-none"
                       >
                         <option value="volunteer">อาสาสมัคร</option>
-                        <option value="donation">บริจาคเงิน</option>
                         <option value="media">เผยแพร่ข้อมูล</option>
                         <option value="other">อื่นๆ</option>
                       </select>
@@ -252,49 +238,6 @@ export default function GetInvolved() {
         </div>
       </section>
 
-      {/* Donation Info */}
-      <section className="py-20 bg-brand-black text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-5"></div>
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">
-            สนับสนุนทุนการต่อสู้
-          </h2>
-          <p className="text-gray-300 mb-12 text-lg max-w-2xl mx-auto">
-            การบริจาคของคุณช่วยให้เราสามารถดำเนินกิจกรรม รณรงค์
-            และช่วยเหลือพี่น้องผู้ได้รับผลกระทบได้อย่างต่อเนื่อง
-          </p>
-
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/20 max-w-2xl mx-auto">
-            <h3 className="font-bold text-2xl mb-6 text-white">
-              ข้อมูลบัญชีธนาคาร
-            </h3>
-            <div className="space-y-4 text-left inline-block">
-              <p className="text-xl md:text-2xl">
-                <span className="text-gray-400 text-base block mb-1">
-                  ชื่อบัญชี
-                </span>
-                สมัชชาคนจน
-              </p>
-              <div className="h-px bg-white/10 w-full my-4"></div>
-              <p className="text-xl md:text-2xl">
-                <span className="text-gray-400 text-base block mb-1">
-                  ธนาคาร
-                </span>
-                (ข้อมูลจะถูกเพิ่มเติม)
-              </p>
-              <div className="h-px bg-white/10 w-full my-4"></div>
-              <p className="text-xl md:text-2xl font-mono tracking-wider text-white">
-                <span className="text-gray-400 text-base block mb-1 font-sans tracking-normal">
-                  เลขที่บัญชี
-                </span>
-                XXX-X-XXXXX-X
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Toolkit */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -312,24 +255,24 @@ export default function GetInvolved() {
               {
                 title: "โลโก้และแบรนด์",
                 desc: "ไฟล์โลโก้และแนวทางการใช้งาน",
-                icon: "🎨",
+                icon: <Palette className="w-8 h-8 text-brand-green-dark" />,
               },
               {
                 title: "โปสเตอร์รณรงค์",
                 desc: "โปสเตอร์และภาพประกอบสำหรับแชร์",
-                icon: "🖼️",
+                icon: <ImageIcon className="w-8 h-8 text-brand-green-dark" />
               },
               {
                 title: "เอกสารข้อมูล",
                 desc: "แผ่นพับและเอกสารประชาสัมพันธ์",
-                icon: "📄",
+                icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
               },
             ].map((item, idx) => (
               <div
                 key={idx}
                 className="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-1"
               >
-                <div className="text-4xl mb-4 bg-gray-50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="mb-4 bg-gray-50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   {item.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors">

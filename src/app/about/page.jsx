@@ -2,68 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MapPin, ScrollText, Scale, FileText, Star, Circle } from "lucide-react";
+import { MapPin, ScrollText, Scale, FileText, Star, Circle, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { timelineData as timeline } from "@/data/timeline";
 
 export default function About() {
   const [selectedYear, setSelectedYear] = useState(1995);
+  const [expandedCategories, setExpandedCategories] = useState([0]); // Open first by default
 
-  const timeline = [
-    {
-      year: 1995,
-      title: "การก่อตั้งสมัชชาคนจน",
-      description:
-        "เกิดจากการรวมตัวของประชาชนผู้ยากไร้ที่ได้รับผลกระทบจากโครงการพัฒนาของรัฐ โดยเฉพาะโครงการเขื่อนขนาดใหญ่ เป็นจุดเริ่มต้นของการต่อสู้เพื่อสิทธิและความยุติธรรม",
-      highlights: [
-        "การชุมนุมครั้งแรกของกลุ่มประชาชนผู้ได้รับผลกระทบ",
-        "การก่อตั้งเครือข่ายชุมชนระดับภูมิภาค",
-        "การเรียกร้องให้รัฐรับผิดชอบต่อผลกระทบ",
-      ],
-    },
-    {
-      year: 1997,
-      title: "ประกาศเขื่อนถิ่น",
-      description:
-        "การชุมนุมครั้งประวัติศาสตร์ที่กรุงเทพฯ นำไปสู่การประกาศเขื่อนถิ่น เป็นหนึ่งในเหตุการณ์สำคัญที่แสดงให้เห็นถึงพลังของการรวมตัวของประชาชน",
-      highlights: [
-        "การชุมนุมของประชาชนนับหมื่นคน",
-        "การเจรจากับรัฐบาลเพื่อหาทางออก",
-        "การประกาศเขื่อนถิ่นอย่างเป็นทางการ",
-      ],
-    },
-    {
-      year: 2000,
-      title: "การขยายเครือข่าย",
-      description:
-        "การขยายเครือข่ายไปยังประเด็นอื่นๆ นอกเหนือจากเขื่อน รวมถึงปัญหาที่ดิน ทรัพยากรธรรมชาติ และสิทธิชุมชน",
-      highlights: [
-        "การรวมกลุ่มประเด็นที่ดินทำกิน",
-        "การต่อสู้เรื่องป่าชุมชน",
-        "การสร้างเครือข่ายทั่วประเทศ",
-      ],
-    },
-    {
-      year: 2010,
-      title: "การต่อสู้ยังคงดำเนินต่อ",
-      description:
-        "แม้จะเผชิญกับอุปสรรคมากมาย แต่สมัชชาคนจนยังคงดำเนินการต่อสู้เพื่อความยุติธรรมและสิทธิของประชาชน",
-      highlights: [
-        "การรณรงค์เรื่องรัฐธรรมนูญคนจน",
-        "การเคลื่อนไหวด้านสิทธิที่ดิน",
-        "การสร้างความเข้มแข็งให้กับชุมชน",
-      ],
-    },
-    {
-      year: 2023,
-      title: "ปัจจุบัน",
-      description:
-        "สมัชชาคนจนยังคงเป็นเสียงของคนจนและผู้ด้อยโอกาส ต่อสู้เพื่อความยุติธรรมทางสังคม และสิทธิขั้นพื้นฐานของประชาชน",
-      highlights: [
-        "การรณรงค์ต่อเนื่องในประเด็นต่างๆ",
-        "การสร้างพลังประชาชนในระดับฐานราก",
-        "การเชื่อมโยงกับเครือข่ายระดับนานาชาติ",
-      ],
-    },
-  ];
+  const toggleCategory = (idx) => {
+    if (expandedCategories.includes(idx)) {
+      setExpandedCategories(expandedCategories.filter(i => i !== idx));
+    } else {
+      setExpandedCategories([...expandedCategories, idx]);
+    }
+  };
 
   const selectedTimeline = timeline.find((t) => t.year === selectedYear);
 
@@ -76,7 +28,7 @@ export default function About() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-white border border-brand-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+            <span className="inline-block py-1.5 px-4 rounded-full bg-brand-secondary text-brand-black border border-brand-yellow/50 text-sm font-bold uppercase tracking-wider mb-6">
               เกี่ยวกับเรา
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -94,10 +46,10 @@ export default function About() {
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-brand-green-dark">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-brand-green-dark">
               จาก &quot;121 กรณีปัญหา&quot; สู่ &quot;สมัชชาคนจน&quot;
             </h2>
-            <div className="w-24 h-1.5 bg-brand-white mx-auto rounded-full"></div>
+            <div className="w-24 h-1.5 bg-brand-green-dark mx-auto rounded-full"></div>
           </div>
 
           <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed space-y-6">
@@ -159,7 +111,7 @@ export default function About() {
                 key={item.year}
                 onClick={() => setSelectedYear(item.year)}
                 className={`px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 ${selectedYear === item.year
-                  ? "bg-brand-green-dark text-white shadow-lg shadow-brand-green-dark/30 scale-110"
+                  ? "bg-brand-green-dark text-white shadow-[0_10px_20px_rgba(0,146,83,0.3)] -translate-y-[2px]"
                   : "bg-white text-gray-500 hover:bg-gray-100 hover:text-brand-green-dark border border-gray-200"
                   }`}
               >
@@ -182,9 +134,20 @@ export default function About() {
                     <h3 className="text-3xl md:text-4xl font-bold text-brand-black mb-4">
                       {selectedTimeline.title}
                     </h3>
-                    <p className="text-xl text-gray-600 leading-relaxed font-light">
+                    <p className="text-xl text-gray-600 leading-relaxed font-light mb-6">
                       {selectedTimeline.description}
                     </p>
+                    {selectedTimeline.sourceUrl && (
+                      <a
+                        href={selectedTimeline.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center text-brand-green-dark font-bold hover:underline"
+                      >
+                        อ่านข้อมูลเพิ่มเติมจากแหล่งอ้างอิง
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </a>
+                    )}
                   </div>
                 </div>
 
@@ -217,45 +180,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Structure */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-brand-black">
-              เครือข่ายของประชาชน
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              สมัชชาคนจนประกอบด้วยเครือข่ายชุมชนและองค์กรประชาชนทั่วประเทศ
-              แบ่งออกเป็น 7 ภูมิภาค เพื่อการประสานงานที่เข้มแข็ง
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { name: "ภาคเหนือ", desc: "เครือข่ายชุมชนภาคเหนือ" },
-              { name: "ภาคตะวันออกเฉียงเหนือ", desc: "เครือข่ายชุมชนภาคอีสาน" },
-              { name: "ภาคกลาง", desc: "เครือข่ายชุมชนภาคกลาง" },
-              { name: "ภาคตะวันออก", desc: "เครือข่ายชุมชนภาคตะวันออก" },
-              { name: "ภาคตะวันตก", desc: "เครือข่ายชุมชนภาคตะวันตก" },
-              { name: "ภาคใต้", desc: "เครือข่ายชุมชนภาคใต้" },
-              { name: "กรุงเทพฯ และปริมณฑล", desc: "เครือข่ายชุมชนเมือง" },
-            ].map((region, index) => (
-              <div
-                key={index}
-                className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-1 group"
-              >
-                <div className="w-12 h-12 bg-brand-white rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-green-dark transition-colors">
-                  <MapPin className="w-6 h-6 text-brand-green-dark group-hover:text-white transition-colors" />
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-brand-black group-hover:text-brand-green-dark transition-colors">
-                  {region.name}
-                </h3>
-                <p className="text-gray-500">{region.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Declarations Section */}
       <section className="py-20 bg-gray-50">
@@ -274,48 +198,87 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: "ประกาศเขื่อนถิ่น",
-                desc: "เอกสารสำคัญจากการชุมนุมปี 2540",
+                title: "สมุดปกดำสมัชชาคนจน",
+                desc: "คู่มือประชาชนยุคไอเอ็มเอฟ (เอกสารสำคัญปี 2541 เกี่ยวกับวิกฤตเศรษฐกิจและข้อเรียกร้องของสมัชชาคนจน)",
                 icon: <ScrollText className="w-8 h-8 text-brand-green-dark" />,
+                links: [
+                  { label: "ดูเอกสาร (ตึกทะเบียน มธ.)", url: "https://digital.library.tu.ac.th/tu_dc/frontend/Info/item/dc:273986" }
+                ]
               },
               {
-                title: "รัฐธรรมนูญคนจน",
-                desc: "ข้อเรียกร้องและวิสัยทัศน์ของประชาชน",
+                title: "(ร่าง) รัฐธรรมนูญคนจน",
+                desc: "เอกสารข้อเสนอเชิงนโยบายจากสมัชชาคนจน ปี 2562 เกี่ยวกับประชาธิปไตยที่กินได้",
                 icon: <Scale className="w-8 h-8 text-brand-green-dark" />,
+                links: [
+                  { label: "ดาวน์โหลด PDF", url: "https://www.ilaw.or.th/articles/6326?download=6327" }
+                ]
               },
               {
-                title: "บันทึกการชุมนุม",
-                desc: "เอกสารบันทึกการชุมนุมครั้งสำคัญ",
+                title: "มติ ครม. และแนวทางแก้ไข",
+                desc: "มติคณะรัฐมนตรีและบันทึกการประชุมอย่างเป็นทางการเกี่ยวกับการแก้ปัญหาสมัชชาคนจน",
                 icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
+                links: [
+                  { label: "มติ ครม. ปี 2543 (ข้อเรียกร้อง)", url: "https://resolution.soc.go.th/PDF_UPLOAD/2543/P_142365_3.pdf" },
+                  { label: "มติ ครม. ปี 2554 (ปัญหาสำคัญ)", url: "https://www.soc.go.th/wp-content/uploads/slkupload/44v55.pdf" },
+                  { label: "บันทึกการประชุม ปี 2566", url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf" }
+                ]
               },
+              {
+                title: "ประวัติศาสตร์การชุมนุม",
+                desc: "เอกสารวิชาการประกอบการชุมนุมปี 2540 พัฒนาการ และยุทธศาสตร์ขจัดความยากจน",
+                icon: <ScrollText className="w-8 h-8 text-brand-green-dark" />,
+                links: [
+                  { label: "ยุทธศาสตร์ขจัดความยากจน ปี 2544", url: "https://tdri.or.th/wp-content/uploads/2013/07/YE2001_2_01.pdf" },
+                  { label: "บทที่ 3 ประวัติและการชุมนุม", url: "https://doi.nrct.go.th/admin/doc/doc_487962.pdf" }
+                ]
+              },
+              {
+                title: "เอกสารแต่งตั้งและวารสาร",
+                desc: "วารสารการแก้ปัญหาและคำสั่งแต่งตั้งคณะกรรมการแก้ไขปัญหาจากข้อเรียกร้อง",
+                icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
+                links: [
+                  { label: "วารสารเกี่ยวกับสมัชชาคนจน", url: "https://www.opm.go.th/multimedia/nam/OPMbyEEW/10Magazine/6journal1_05.pdf" },
+                  { label: "แต่งตั้ง กก. แก้ปัญหาเขื่อนปากมูล", url: "http://www.oic.go.th/FILEWEB/CABINFOCENTEROPM/DRAWER01/GENERAL/DATA0002/00002764.PDF" }
+                ]
+              }
             ].map((doc, idx) => (
               <div
                 key={idx}
-                className="group bg-gray-50 p-8 rounded-3xl border border-gray-100 hover:shadow-xl hover:shadow-brand-white/20 transition-all duration-300 hover:-translate-y-1"
+                className="group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
               >
-                <div className="mb-6 bg-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                <div className="mb-6 bg-gray-50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   {doc.icon}
                 </div>
                 <h3 className="text-2xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors">
                   {doc.title}
                 </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">{doc.desc}</p>
-                <button className="flex items-center text-brand-black font-bold group-hover:translate-x-2 transition-transform">
-                  ดาวน์โหลด PDF
-                  <svg
-                    className="w-5 h-5 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </button>
+                <p className="text-gray-600 mb-6 leading-relaxed flex-1">{doc.desc}</p>
+                <div className="space-y-4 mt-auto pt-6 border-t border-gray-100">
+                  {doc.links.map((link, lidx) => (
+                    <a
+                      key={lidx}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center text-brand-black font-bold hover:text-brand-green-dark hover:translate-x-2 transition-all"
+                    >
+                      <span className="truncate">{link.label}</span>
+                      <svg
+                        className="w-4 h-4 ml-2 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -339,77 +302,159 @@ export default function About() {
                 และงานวิจัยที่เกี่ยวข้องกับการเคลื่อนไหวของสมัชชาคนจน
                 เพื่อเป็นฐานข้อมูลสาธารณะ
               </p>
-              <button className="bg-brand-white text-brand-black px-8 py-3 rounded-full font-bold hover:bg-white transition-colors">
+              <button className="bg-brand-yellow text-brand-black px-8 py-3 rounded-full font-bold hover:bg-white hover:-translate-y-[2px] transition-all duration-300">
                 ดูคลังข้อมูลทั้งหมด
               </button>
             </div>
 
             <div className="lg:col-span-2">
               <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {[
                     {
-                      title: "รายงานการศึกษาผลกระทบจากโครงการเขื่อน",
-                      size: "2.5 MB",
-                      date: "2023",
+                      category: "รายงานการศึกษาผลกระทบจากโครงการเขื่อน",
+                      documents: [
+                        {
+                          title: "การต่อสู้และการฟื้นฟูวิถีชีวิตผู้ได้รับผลกระทบจากเขื่อนราษีไศล",
+                          size: "2 MB",
+                          date: "2018",
+                          url: "http://202.28.34.124/dspace/bitstream/123456789/173/1/56010181002.pdf"
+                        },
+                        {
+                          title: "กรณีศึกษา ชุมชนลุ่มน้ำที่ได้รับผลกระทบจากการก่อสร้างเขื่อนปากมูล",
+                          size: "8 MB",
+                          date: "2004",
+                          url: "https://elibrary.tsri.or.th/fullP/PDF4480089/PDF4480089_full.pdf"
+                        },
+                        {
+                          title: 'แม่มูน "การกลับมาของคนหาปลา"',
+                          size: "23 MB",
+                          date: "ไม่ระบุ",
+                          url: "https://www.livingriversiam.org/3river-thai/pm/tb_research/pmd_TBR-book.pdf"
+                        }
+                      ]
                     },
                     {
-                      title: "ประวัติศาสตร์การเคลื่อนไหวของสมัชชาคนจน",
-                      size: "4.1 MB",
-                      date: "2022",
+                      category: "ประวัติศาสตร์การเคลื่อนไหวของสมัชชาคนจน",
+                      documents: [
+                        {
+                          title: "ประวัติการเคลื่อนไหวของชาวนาไทยจากอดีต-ปัจจุบัน",
+                          size: "254 KB",
+                          date: "2550",
+                          url: "https://archive.lib.cmu.ac.th/full/T/2550/socde0350aw_bib.pdf"
+                        },
+                        {
+                          title: "การเมืองบนท้องถนน 99 วัน สมัชชาคนจน และประวัติศาสตร์การเดินขบวน",
+                          size: "1 MB",
+                          date: "2001",
+                          url: "https://tdri.or.th/wp-content/uploads/2013/07/YE2001_2_01.pdf"
+                        },
+                        {
+                          title: "บันทึกการประชุมและปัญหาสมัชชาคนจน (สำนักนายกฯ)",
+                          size: "5 MB",
+                          date: "2023",
+                          url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf"
+                        }
+                      ]
                     },
                     {
-                      title: "สิทธิชุมชนและการจัดการทรัพยากร",
-                      size: "1.8 MB",
-                      date: "2023",
-                    },
-                  ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-colors border-b border-white/5 last:border-0"
-                    >
-                      <div className="flex items-start">
-                        <div className="bg-brand-black/20 p-3 rounded-lg mr-4 text-brand-black">
-                          <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-lg mb-1 text-gray-100">
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-gray-400">
-                            PDF • {item.size} • อัพเดทล่าสุด: {item.date}
-                          </p>
-                        </div>
-                      </div>
-                      <button className="p-2 text-gray-400 hover:text-white transition-colors">
-                        <svg
-                          className="w-6 h-6"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                      category: "สิทธิชุมชนและการจัดการทรัพยากร",
+                      documents: [
+                        {
+                          title: "(ร่าง) รัฐธรรมนูญคนจน",
+                          size: "ไม่ระบุ",
+                          date: "2562-2564",
+                          url: "https://www.ilaw.or.th/articles/6326?download=6327"
+                        },
+                        {
+                          title: "สิทธิชุมชนในการจัดการทรัพยากรธรรมชาติและสิ่งแวดล้อม",
+                          size: "3 MB",
+                          date: "2018",
+                          url: "http://ethesisarchive.library.tu.ac.th/thesis/2018/TU_2018_5901034727_9606_10156.pdf"
+                        },
+                        {
+                          title: "สิทธิชุมชนและการจัดการทรัพยากร (ฉบับสมบูรณ์)",
+                          size: "1 MB",
+                          date: "ไม่ระบุ",
+                          url: "https://elibrary.tsri.or.th/fullP/RDG4210012/RDG4210012V6/RDG4210012V6_s01.pdf"
+                        }
+                      ]
+                    }
+                  ].map((cat, idx) => {
+                    const isExpanded = expandedCategories.includes(idx);
+                    return (
+                      <div key={idx} className="mb-4 bg-brand-black/40 rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
+                        <button
+                          onClick={() => toggleCategory(idx)}
+                          className="w-full flex items-center justify-between p-5 hover:bg-white/5 transition-colors text-left"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
+                          <h3 className={`text-lg sm:text-xl font-bold pr-4 transition-colors ${isExpanded ? "text-white" : "text-gray-300"}`}>
+                            {cat.category}
+                          </h3>
+                          {isExpanded ? (
+                            <ChevronUp className="w-6 h-6 text-brand-green-dark flex-shrink-0" />
+                          ) : (
+                            <ChevronDown className="w-6 h-6 text-gray-500 flex-shrink-0" />
+                          )}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="space-y-2 px-5 pb-5 animate-fade-in-up">
+                            {cat.documents.map((item, docIdx) => (
+                              <a
+                                key={docIdx}
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all border border-transparent hover:border-white/10 group"
+                              >
+                                <div className="flex items-start mb-2 sm:mb-0">
+                                  <div className="bg-brand-black/40 p-3 rounded-lg mr-4 text-gray-500 group-hover:text-brand-green-dark transition-colors">
+                                    <svg
+                                      className="w-6 h-6"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                                      />
+                                    </svg>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-bold text-lg mb-1 text-gray-100 group-hover:text-white transition-colors line-clamp-2">
+                                      {item.title}
+                                    </h4>
+                                    <p className="text-sm text-gray-400">
+                                      PDF • {item.size} • ปี: {item.date}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="p-2 text-gray-500 group-hover:text-brand-green-dark transition-colors sm:ml-4 shrink-0">
+                                  <svg
+                                    className="w-6 h-6"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                    />
+                                  </svg>
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -422,7 +467,7 @@ export default function About() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Link href="/about/faq" className="group">
-              <div className="bg-brand-green-dark text-brand-white p-10 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col justify-between relative overflow-hidden">
+              <div className="bg-brand-green-dark text-brand-white p-10 rounded-3xl shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 h-full flex flex-col justify-between relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
                 <div>
                   <h3 className="text-3xl font-bold mb-4 group-hover:text-brand-white transition-colors">
@@ -468,6 +513,7 @@ export default function About() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

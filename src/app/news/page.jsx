@@ -140,7 +140,7 @@ export default function News() {
                       <div
                         className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
                         dangerouslySetInnerHTML={{
-                          __html: post.excerpt?.rendered || post.excerpt,
+                          __html: (post.excerpt?.rendered || post.excerpt || "").replace(/<[^>]+>/g, ""),
                         }}
                       />
 

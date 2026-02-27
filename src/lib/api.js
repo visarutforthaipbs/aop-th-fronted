@@ -49,6 +49,7 @@ export async function fetchFromApi(endpoint, token = null) {
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
       headers,
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {
@@ -62,10 +63,23 @@ export async function fetchFromApi(endpoint, token = null) {
   }
 }
 
+// Helper to extract tags from campaign
+const extractTags = (campaign) => {
+  let tags_data = [];
+  if (campaign._embedded && campaign._embedded['wp:term']) {
+    const allTerms = campaign._embedded['wp:term'].flat();
+    tags_data = allTerms
+      .filter(t => t.taxonomy === 'post_tag')
+      .map(t => ({ id: t.id, name: t.name, slug: t.slug }));
+  }
+  return { ...campaign, tags_data };
+};
+
 // Fetch all campaigns
 export async function getAllCampaigns() {
   const result = await fetchFromApi("/wp/v2/campaigns?per_page=100&_embed");
-  return result || [];
+  if (!result) return [];
+  return result.map(extractTags);
 }
 
 // Fetch single campaign by slug
@@ -73,7 +87,7 @@ export async function getCampaignBySlug(slug) {
   const campaigns = await fetchFromApi(
     `/wp/v2/campaigns?slug=${encodeURIComponent(slug)}&_embed`
   );
-  return campaigns && campaigns.length > 0 ? campaigns[0] : null;
+  return campaigns && campaigns.length > 0 ? extractTags(campaigns[0]) : null;
 }
 
 // Fetch all articles (optionally filtered by category)
@@ -103,8 +117,15 @@ export async function getArticleBySlug(slug, token) {
 
 // Fetch all news posts
 export async function getAllNews(page = 1, perPage = 10) {
-  const result = await fetchFromApi(`/wp/v2/posts?page=${page}&per_page=${perPage}`);
-  return result || [];
+  const result = await fetchFromApi(`/wp/v2/posts?page=${page}&per_page=${perPage}&_embed`);
+
+  if (!result) return [];
+
+  // Transform to include featured_image at root
+  return result.map(post => ({
+    ...post,
+    featured_image: post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null
+  }));
 }
 
 // Fetch single news post by slug

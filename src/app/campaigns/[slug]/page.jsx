@@ -42,9 +42,16 @@ export default async function CampaignDetail({ params }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/60 to-transparent"></div>
           <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-20">
-            <span className="inline-block py-1.5 px-4 rounded-full bg-brand-green-dark border border-brand-green-dark/50 text-brand-white text-sm font-bold tracking-wider mb-6">
-              แคมเปญรณรงค์
-            </span>
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="inline-block py-1.5 px-4 rounded-full bg-brand-green-dark border border-brand-green-dark/50 text-brand-white text-sm font-bold tracking-wider">
+                แคมเปญรณรงค์
+              </span>
+              {campaign.tags_data?.map((tag) => (
+                <span key={tag.id} className="inline-block py-1.5 px-4 rounded-full bg-white/20 border border-white/30 text-brand-white text-sm font-medium tracking-wider backdrop-blur-sm">
+                  {tag.name}
+                </span>
+              ))}
+            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-brand-white leading-tight">
               {campaign.title.rendered}
             </h1>
@@ -57,9 +64,16 @@ export default async function CampaignDetail({ params }) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {!featuredImage && (
             <div className="mb-12">
-              <span className="inline-block py-1.5 px-4 rounded-full bg-brand-white text-brand-green-dark text-sm font-bold tracking-wider mb-6">
-                แคมเปญรณรงค์
-              </span>
+              <div className="flex flex-wrap gap-2 mb-6">
+                <span className="inline-block py-1.5 px-4 rounded-full bg-brand-green-dark text-brand-white text-sm font-bold tracking-wider">
+                  แคมเปญรณรงค์
+                </span>
+                {campaign.tags_data?.map((tag) => (
+                  <span key={tag.id} className="inline-block py-1.5 px-4 rounded-full bg-gray-100 border border-gray-200 text-brand-black text-sm font-medium tracking-wider">
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-brand-black leading-tight">
                 {campaign.title.rendered}
               </h1>

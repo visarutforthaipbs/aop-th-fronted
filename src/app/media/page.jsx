@@ -187,7 +187,7 @@ export default function Media() {
                       <div
                         className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
                         dangerouslySetInnerHTML={{
-                          __html: item.excerpt?.rendered || item.excerpt,
+                          __html: (item.excerpt?.rendered || item.excerpt || "").replace(/<[^>]+>/g, ""),
                         }}
                       />
 
