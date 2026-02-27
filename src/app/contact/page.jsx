@@ -32,10 +32,10 @@ export default function Contact() {
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
-        <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-brand-green-medium/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-brand-green-dark/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-white border border-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
             ติดต่อสอบถาม
           </span>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -167,7 +167,7 @@ export default function Contact() {
 
               {/* Address */}
               <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow flex items-start">
-                <div className="bg-brand-green-light/30 p-3 rounded-full mr-6 text-brand-green-dark">
+                <div className="bg-gray-100/30 p-3 rounded-full mr-6 text-brand-green-dark">
                   <svg
                     className="w-8 h-8"
                     fill="none"
@@ -206,7 +206,7 @@ export default function Contact() {
 
               {/* Phone & Email */}
               <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow flex items-start">
-                <div className="bg-brand-green-light/30 p-3 rounded-full mr-6 text-brand-green-dark">
+                <div className="bg-gray-100/30 p-3 rounded-full mr-6 text-brand-green-dark">
                   <svg
                     className="w-8 h-8"
                     fill="none"

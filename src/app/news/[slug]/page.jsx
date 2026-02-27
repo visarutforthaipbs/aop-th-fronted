@@ -89,7 +89,7 @@ export default async function NewsDetail({ params }) {
           <div className="max-w-4xl mx-auto">
             <Link
               href="/news"
-              className="inline-flex items-center text-white/80 hover:text-brand-yellow mb-6 transition-colors font-medium backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full"
+              className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors font-medium backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               กลับหน้าข่าว
@@ -101,7 +101,7 @@ export default async function NewsDetail({ params }) {
                 {categories.map((cat) => (
                   <span
                     key={cat.id}
-                    className="px-3 py-1 bg-brand-yellow/90 text-brand-black text-xs font-bold rounded-full"
+                    className="px-3 py-1 bg-white/90 text-brand-black text-xs font-bold rounded-full"
                   >
                     {cat.name}
                   </span>
@@ -117,7 +117,7 @@ export default async function NewsDetail({ params }) {
 
             <div className="flex flex-wrap items-center gap-6 text-white/90 text-sm md:text-base font-light">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center font-bold text-lg">
+                <div className="w-10 h-10 rounded-full bg-white text-brand-black flex items-center justify-center font-bold text-lg">
                   {authorName.charAt(0)}
                 </div>
                 <span className="font-medium">{authorName}</span>
@@ -137,10 +137,10 @@ export default async function NewsDetail({ params }) {
             className="prose prose-lg md:prose-xl max-w-none 
               prose-headings:font-bold prose-headings:text-brand-black 
               prose-p:text-gray-700 prose-p:leading-8 prose-p:font-light 
-              prose-a:text-brand-green-dark prose-a:font-bold hover:prose-a:text-brand-red prose-a:no-underline hover:prose-a:underline
+              prose-a:text-brand-green-dark prose-a:font-bold hover:prose-a:text-brand-black prose-a:no-underline hover:prose-a:underline
               prose-strong:font-bold prose-strong:text-brand-green-dark
               prose-img:rounded-2xl prose-img:shadow-lg prose-img:my-10
-              prose-blockquote:border-l-4 prose-blockquote:border-brand-yellow prose-blockquote:pl-6 prose-blockquote:italic
+              prose-blockquote:border-l-4 prose-blockquote:border-white prose-blockquote:pl-6 prose-blockquote:italic
               [&>p]:mb-8 font-thai-sarabun"
             dangerouslySetInnerHTML={{ __html: post.content.rendered }}
           />
@@ -191,7 +191,7 @@ export default async function NewsDetail({ params }) {
                   className="group"
                 >
                   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
-                    <div className="h-48 bg-brand-green-light/30 flex items-center justify-center text-brand-green-dark/30">
+                    <div className="h-48 bg-gray-100/30 flex items-center justify-center text-brand-green-dark/30">
                       <svg
                         className="w-12 h-12"
                         fill="none"
@@ -208,7 +208,7 @@ export default async function NewsDetail({ params }) {
                     </div>
 
                     <div className="p-6 flex-1 flex flex-col">
-                      <span className="text-xs font-semibold text-brand-green-dark bg-brand-green-light/20 px-2 py-1 rounded-full w-fit mb-3">
+                      <span className="text-xs font-semibold text-brand-green-dark bg-gray-100/20 px-2 py-1 rounded-full w-fit mb-3">
                         {new Date(relatedPost.date).toLocaleDateString("th-TH", {
                           year: "numeric",
                           month: "short",

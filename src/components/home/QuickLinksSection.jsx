@@ -34,7 +34,7 @@ export default function QuickLinksSection() {
                         </div>
                     </Link>
                     <Link href="/campaigns" className="group">
-                        <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-10 rounded-2xl hover:bg-brand-red transition-all duration-300 text-center h-full hover:-translate-y-2 flex flex-col items-center">
+                        <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-10 rounded-2xl hover:bg-brand-black transition-all duration-300 text-center h-full hover:-translate-y-2 flex flex-col items-center">
                             <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 p-4 bg-white/10 rounded-full">
                                 <Megaphone className="w-12 h-12 text-white" />
                             </div>
@@ -47,7 +47,7 @@ export default function QuickLinksSection() {
                         </div>
                     </Link>
                     <Link href="/media" className="group">
-                        <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-10 rounded-2xl hover:bg-brand-yellow hover:text-brand-black transition-all duration-300 text-center h-full hover:-translate-y-2 flex flex-col items-center">
+                        <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-10 rounded-2xl hover:bg-white hover:text-brand-black transition-all duration-300 text-center h-full hover:-translate-y-2 flex flex-col items-center">
                             <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 p-4 bg-white/10 rounded-full">
                                 <Newspaper className="w-12 h-12 text-white group-hover:text-brand-black" />
                             </div>

@@ -49,7 +49,6 @@ export async function fetchFromApi(endpoint, token = null) {
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
       headers,
-      next: { revalidate: 0 }, // Disable cache to see updates immediately
     });
 
     if (!response.ok) {
@@ -58,22 +57,21 @@ export async function fetchFromApi(endpoint, token = null) {
 
     return await response.json();
   } catch (error) {
-    console.error("Error fetching from API:", error);
+    console.error("Error fetching from API:", `${API_URL}${endpoint}`, error);
     return null;
   }
 }
 
 // Fetch all campaigns
-export async function getAllCampaigns(token) {
-  const result = await fetchFromApi("/wp/v2/campaigns?per_page=100", token);
+export async function getAllCampaigns() {
+  const result = await fetchFromApi("/wp/v2/campaigns?per_page=100&_embed");
   return result || [];
 }
 
 // Fetch single campaign by slug
-export async function getCampaignBySlug(slug, token) {
+export async function getCampaignBySlug(slug) {
   const campaigns = await fetchFromApi(
-    `/wp/v2/campaigns?slug=${encodeURIComponent(slug)}`,
-    token
+    `/wp/v2/campaigns?slug=${encodeURIComponent(slug)}&_embed`
   );
   return campaigns && campaigns.length > 0 ? campaigns[0] : null;
 }

@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* About Section */}
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-bold mb-6 text-brand-yellow">
+            <h3 className="text-2xl font-bold mb-6 text-white">
               สมัชชาคนจน
             </h3>
             <p className="text-gray-400 leading-relaxed mb-6 max-w-md">
@@ -49,7 +49,7 @@ export default function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-black hover:text-white transition-all duration-300"
                 aria-label="Instagram"
               >
                 <svg
@@ -72,7 +72,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="hover:text-brand-yellow transition-colors flex items-center"
+                  className="hover:text-white transition-colors flex items-center"
                 >
                   <span className="mr-2">›</span> เกี่ยวกับเรา
                 </Link>
@@ -80,7 +80,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/campaigns"
-                  className="hover:text-brand-yellow transition-colors flex items-center"
+                  className="hover:text-white transition-colors flex items-center"
                 >
                   <span className="mr-2">›</span> งานรณรงค์
                 </Link>
@@ -88,7 +88,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/media"
-                  className="hover:text-brand-yellow transition-colors flex items-center"
+                  className="hover:text-white transition-colors flex items-center"
                 >
                   <span className="mr-2">›</span> ห้องสื่อ
                 </Link>
@@ -96,7 +96,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/get-involved"
-                  className="hover:text-brand-yellow transition-colors flex items-center"
+                  className="hover:text-white transition-colors flex items-center"
                 >
                   <span className="mr-2">›</span> ร่วมสนับสนุน
                 </Link>
@@ -112,7 +112,7 @@ export default function Footer() {
             <div className="text-gray-400 space-y-4">
               <p className="flex items-start">
                 <svg
-                  className="w-5 h-5 mr-3 mt-1 text-brand-green-medium"
+                  className="w-5 h-5 mr-3 mt-1 text-brand-green-dark"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -140,7 +140,7 @@ export default function Footer() {
               </p>
               <p className="flex items-center">
                 <svg
-                  className="w-5 h-5 mr-3 text-brand-green-medium"
+                  className="w-5 h-5 mr-3 text-brand-green-dark"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -154,7 +154,7 @@ export default function Footer() {
                 </svg>
                 <a
                   href="mailto:contact@assemblyofthepoor.org"
-                  className="hover:text-brand-yellow transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   contact@assemblyofthepoor.org
                 </a>

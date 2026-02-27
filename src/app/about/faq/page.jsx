@@ -64,7 +64,7 @@ export default function FAQ() {
       </section>
 
       {/* Contact CTA */}
-      <section className="py-16 bg-brand-green-light">
+      <section className="py-16 bg-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl font-bold mb-4 text-brand-black">
             ยังมีคำถามอื่นๆ อีกหรือไม่?

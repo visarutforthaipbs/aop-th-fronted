@@ -59,11 +59,11 @@ export default function Media() {
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-white/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-white border border-brand-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
               MEDIA CENTER
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -85,8 +85,8 @@ export default function Media() {
             <button
               onClick={() => setFilter("all")}
               className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${filter === "all"
-                  ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
-                  : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
+                ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
+                : "bg-gray-100 text-gray-600 hover:bg-brand-white hover:text-brand-green-dark"
                 }`}
             >
               ทั้งหมด
@@ -98,8 +98,8 @@ export default function Media() {
                 key={category.id}
                 onClick={() => setFilter(category.id.toString())}
                 className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${filter === category.id.toString()
-                    ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
-                    : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
+                  ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
+                  : "bg-gray-100 text-gray-600 hover:bg-brand-white hover:text-brand-green-dark"
                   }`}
               >
                 {category.name}
@@ -127,7 +127,7 @@ export default function Media() {
                   href={`/media/articles/${item.slug}`} // Assuming all items link to article detail for now
                   className="group"
                 >
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                  <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
                     {item.featured_image ? (
                       <div className="h-56 overflow-hidden relative">
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
@@ -143,7 +143,7 @@ export default function Media() {
                         />
                       </div>
                     ) : (
-                      <div className="h-56 bg-brand-green-light/30 flex items-center justify-center text-brand-green-dark/30">
+                      <div className="h-56 bg-brand-white/30 flex items-center justify-center text-brand-green-dark/30">
                         <svg
                           className="w-16 h-16"
                           fill="none"
@@ -163,7 +163,7 @@ export default function Media() {
                     <div className="p-8 flex-1 flex flex-col">
                       <div className="flex items-center mb-3 space-x-2">
                         {item.date && (
-                          <span className="text-xs font-semibold text-brand-green-dark bg-brand-green-light/20 px-2 py-1 rounded-full">
+                          <span className="text-xs font-semibold text-brand-green-dark bg-brand-white/20 px-2 py-1 rounded-full">
                             {new Date(item.date).toLocaleDateString("th-TH", {
                               year: "numeric",
                               month: "short",

@@ -35,20 +35,32 @@ export default function Campaigns() {
   const filteredCampaigns =
     filter === "all"
       ? campaigns
-      : campaigns.filter((c) =>
-        c.tags?.some((tag) => tag.toLowerCase().includes(filter))
-      );
+      : campaigns.filter((c) => {
+        const theme = themes.find((t) => t.id === filter);
+        const keyword = theme ? theme.name : filter;
+        const title = c.title?.rendered || c.title || "";
+        const content = c.content?.rendered || c.content || "";
+        return title.includes(keyword) || content.includes(keyword);
+      });
+
+  const getCampaignTags = (campaign) => {
+    const title = campaign.title?.rendered || campaign.title || "";
+    const content = campaign.content?.rendered || campaign.content || "";
+    return themes
+      .filter((t) => t.id !== "all" && (title.includes(t.name) || content.includes(t.name)))
+      .map((t) => t.name);
+  };
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-white/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-white border border-brand-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
               การเคลื่อนไหว
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -71,8 +83,8 @@ export default function Campaigns() {
                 key={theme.id}
                 onClick={() => setFilter(theme.id)}
                 className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${filter === theme.id
-                    ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
-                    : "bg-gray-100 text-gray-600 hover:bg-brand-green-light hover:text-brand-green-dark"
+                  ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
+                  : "bg-gray-100 text-gray-600 hover:bg-brand-white hover:text-brand-green-dark"
                   }`}
               >
                 {theme.name}
@@ -100,18 +112,18 @@ export default function Campaigns() {
                   href={`/campaigns/${campaign.slug}`}
                   className="group"
                 >
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
-                    {campaign.featured_image ? (
+                  <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                    {campaign._embedded?.["wp:featuredmedia"]?.[0]?.source_url ? (
                       <div className="h-56 overflow-hidden relative">
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
                         <img
-                          src={campaign.featured_image}
-                          alt={campaign.title}
+                          src={campaign._embedded["wp:featuredmedia"][0].source_url}
+                          alt={campaign.title?.rendered || campaign.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                       </div>
                     ) : (
-                      <div className="h-56 bg-brand-green-light/30 flex items-center justify-center">
+                      <div className="h-56 bg-brand-white/30 flex items-center justify-center">
                         <span className="text-4xl">📢</span>
                       </div>
                     )}
@@ -123,13 +135,13 @@ export default function Campaigns() {
                         className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed"
                         dangerouslySetInnerHTML={{
                           __html:
-                            campaign.excerpt?.rendered || campaign.excerpt,
+                            campaign.excerpt?.rendered || campaign.excerpt || campaign.content?.rendered || campaign.content || "",
                         }}
                       />
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                        {campaign.tags && campaign.tags.length > 0 ? (
+                        {getCampaignTags(campaign).length > 0 ? (
                           <div className="flex flex-wrap gap-2">
-                            {campaign.tags.slice(0, 2).map((tag, index) => (
+                            {getCampaignTags(campaign).slice(0, 2).map((tag, index) => (
                               <span
                                 key={index}
                                 className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full"
@@ -137,9 +149,9 @@ export default function Campaigns() {
                                 {tag}
                               </span>
                             ))}
-                            {campaign.tags.length > 2 && (
+                            {getCampaignTags(campaign).length > 2 && (
                               <span className="px-2 py-1 text-gray-400 text-xs">
-                                +{campaign.tags.length - 2}
+                                +{getCampaignTags(campaign).length - 2}
                               </span>
                             )}
                           </div>
@@ -196,7 +208,7 @@ export default function Campaigns() {
           </p>
           <Link
             href="/get-involved"
-            className="inline-block bg-brand-yellow hover:bg-white text-brand-black font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-brand-yellow/50 hover:-translate-y-1 text-lg"
+            className="inline-block bg-brand-white hover:bg-white text-brand-black font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-brand-white/50 hover:-translate-y-1 text-lg"
           >
             ร่วมสนับสนุนเรา
           </Link>

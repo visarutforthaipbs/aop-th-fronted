@@ -9,7 +9,7 @@ export default function HeroSection({ featuredCampaign }) {
 
                 {/* Main English Title */}
                 <div className="w-full text-center mt-8">
-                    <h1 className="font-bold text-brand-secondary leading-[0.85] tracking-tight
+                    <h1 className="font-bold text-gray-100 leading-[0.85] tracking-tight
                         text-[12vw] xl:text-[200px] flex flex-col items-center justify-center">
                         <span>ASSEMBLY</span>
                         <span>OF THE POOR</span>
@@ -50,7 +50,7 @@ export default function HeroSection({ featuredCampaign }) {
                         </p>
                         <Link
                             href="/about"
-                            className="inline-flex items-center justify-center bg-brand-accent hover:bg-[#004a25] text-white text-sm font-bold px-6 py-2 rounded-full transition-all duration-300"
+                            className="inline-flex items-center justify-center bg-brand-green-dark hover:bg-[#004a25] text-white text-sm font-bold px-6 py-2 rounded-full transition-all duration-300"
                         >
                             อ่านต่อ
                         </Link>

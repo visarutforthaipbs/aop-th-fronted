@@ -62,7 +62,7 @@
   /* Images within gallery */
   .prose .wp-block-gallery img,
   .prose .gallery img {
-    @apply w-full h-full aspect-[4/3] object-cover rounded-2xl shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 !m-0 !important;
+    @apply w-full h-full aspect-[4/3] object-cover rounded-3xl shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 !m-0 !important;
   }
 
   /* Standard Images & Alignment support */

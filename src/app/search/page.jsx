@@ -79,7 +79,7 @@ function SearchContent() {
                   className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
                 >
                   <Link href={result.url} className="block">
-                    <h3 className="text-xl font-semibold mb-2 text-brand-green-dark hover:text-brand-red">
+                    <h3 className="text-xl font-semibold mb-2 text-brand-green-dark hover:text-brand-black">
                       {result.title}
                     </h3>
                     <p className="text-gray-600 mb-2 line-clamp-2">

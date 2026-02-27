@@ -76,7 +76,7 @@ export default async function ArticleDetail({ params }) {
           <div className="max-w-4xl mx-auto">
             <Link
               href="/media"
-              className="inline-flex items-center text-white/80 hover:text-brand-yellow mb-6 transition-colors font-medium backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full"
+              className="inline-flex items-center text-white/80 hover:text-brand-white mb-6 transition-colors font-medium backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               กลับหน้าสื่อ
@@ -90,7 +90,7 @@ export default async function ArticleDetail({ params }) {
 
             <div className="flex flex-wrap items-center gap-6 text-white/90 text-sm md:text-base font-light">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center font-bold text-lg">
+                <div className="w-10 h-10 rounded-full bg-brand-white text-brand-black flex items-center justify-center font-bold text-lg">
                   {authorName.charAt(0)}
                 </div>
                 <span className="font-medium">{authorName}</span>
@@ -111,10 +111,10 @@ export default async function ArticleDetail({ params }) {
             className="prose prose-lg md:prose-xl max-w-none 
               prose-headings:font-bold prose-headings:text-brand-black 
               prose-p:text-gray-700 prose-p:leading-8 prose-p:font-light 
-              prose-a:text-brand-green-dark prose-a:font-bold hover:prose-a:text-brand-red prose-a:no-underline hover:prose-a:underline
+              prose-a:text-brand-green-dark prose-a:font-bold hover:prose-a:text-brand-black prose-a:no-underline hover:prose-a:underline
               prose-strong:font-bold prose-strong:text-brand-green-dark
-              prose-img:rounded-2xl prose-img:shadow-lg prose-img:my-10
-              prose-blockquote:border-l-4 prose-blockquote:border-brand-yellow prose-blockquote:pl-6 prose-blockquote:italic
+              prose-img:rounded-3xl prose-img:shadow-lg prose-img:my-10
+              prose-blockquote:border-l-4 prose-blockquote:border-brand-white prose-blockquote:pl-6 prose-blockquote:italic
               [&>p]:mb-8 font-thai-sarabun"
             dangerouslySetInnerHTML={{ __html: article.content.rendered }}
           />
@@ -154,7 +154,7 @@ export default async function ArticleDetail({ params }) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {relatedArticles.map((relArticle) => (
               <Link key={relArticle.id} href={`/media/articles/${relArticle.slug}`} className="group">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
                   <div className="h-48 relative overflow-hidden bg-gray-200">
                     {relArticle.featured_image ? (
                       <Image
@@ -169,7 +169,7 @@ export default async function ArticleDetail({ params }) {
                   </div>
                   <div className="p-6 flex flex-col flex-1">
                     <div className="flex items-center gap-2 mb-3 text-xs text-brand-green-dark font-semibold">
-                      <span className="bg-brand-green-light/20 px-2 py-1 rounded-md">
+                      <span className="bg-brand-white/20 px-2 py-1 rounded-md">
                         {new Date(relArticle.date).toLocaleDateString("th-TH")}
                       </span>
                     </div>

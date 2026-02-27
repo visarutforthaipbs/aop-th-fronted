@@ -27,38 +27,38 @@ export default function Navbar() {
           <div className="hidden md:flex space-x-8 items-center">
             <Link
               href="/about"
-              className="font-bold hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-white transition-colors"
             >
               เกี่ยวกับเรา
             </Link>
 
             <Link
               href="/campaigns"
-              className="font-bold hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-white transition-colors"
             >
               งานรณรงค์
             </Link>
             <Link
               href="/media"
-              className="font-bold hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-white transition-colors"
             >
               ห้องสื่อ
             </Link>
             <Link
               href="/news"
-              className="font-bold hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-white transition-colors"
             >
               ข่าวสาร
             </Link>
             <Link
               href="/get-involved"
-              className="font-bold hover:text-brand-yellow transition-colors"
+              className="font-bold hover:text-white transition-colors"
             >
               ร่วมสนับสนุน
             </Link>
             <Link
               href="/contact"
-              className="px-5 py-2 bg-brand-yellow text-brand-green-dark rounded-full font-bold hover:bg-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              className="px-5 py-2 bg-white text-brand-green-dark rounded-full font-bold hover:bg-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
               ติดต่อเรา
             </Link>

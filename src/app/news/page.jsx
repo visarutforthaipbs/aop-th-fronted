@@ -45,11 +45,11 @@ export default function News() {
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-yellow/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-white border border-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
               NEWS & UPDATES
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -99,7 +99,7 @@ export default function News() {
                         />
                       </div>
                     ) : (
-                      <div className="h-56 bg-brand-green-light/30 flex items-center justify-center text-brand-green-dark/30">
+                      <div className="h-56 bg-gray-100/30 flex items-center justify-center text-brand-green-dark/30">
                         <svg
                           className="w-16 h-16"
                           fill="none"
@@ -119,7 +119,7 @@ export default function News() {
                     <div className="p-8 flex-1 flex flex-col">
                       <div className="flex items-center mb-3">
                         {post.date && (
-                          <span className="text-xs font-semibold text-brand-green-dark bg-brand-green-light/20 px-2 py-1 rounded-full">
+                          <span className="text-xs font-semibold text-brand-green-dark bg-gray-100/20 px-2 py-1 rounded-full">
                             {new Date(post.date).toLocaleDateString("th-TH", {
                               year: "numeric",
                               month: "short",

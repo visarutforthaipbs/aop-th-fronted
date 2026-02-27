@@ -33,10 +33,10 @@ export default function GetInvolved() {
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
-        <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-white border border-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
             GET INVOLVED
           </span>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -58,12 +58,12 @@ export default function GetInvolved() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-brand-black">
               วิธีการสนับสนุน
             </h2>
-            <div className="w-24 h-1 bg-brand-red mx-auto rounded-full"></div>
+            <div className="w-24 h-1 bg-brand-black mx-auto rounded-full"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="group bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 text-center">
-              <div className="w-20 h-20 bg-brand-green-light/30 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 bg-gray-100/30 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
                 <Handshake className="w-10 h-10 text-brand-green-dark" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-green-dark transition-colors">
@@ -76,10 +76,10 @@ export default function GetInvolved() {
             </div>
 
             <div className="group bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 text-center">
-              <div className="w-20 h-20 bg-brand-yellow/20 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
-                <Coins className="w-10 h-10 text-brand-yellow-dark" />
+              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <Coins className="w-10 h-10 text-white-dark" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-yellow-dark transition-colors">
+              <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-white-dark transition-colors">
                 สนับสนุนทุนการต่อสู้
               </h3>
               <p className="text-gray-600 mb-6 leading-relaxed">
@@ -89,10 +89,10 @@ export default function GetInvolved() {
             </div>
 
             <div className="group bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 text-center">
-              <div className="w-20 h-20 bg-brand-red/20 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
-                <Share2 className="w-10 h-10 text-brand-red" />
+              <div className="w-20 h-20 bg-brand-black/20 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <Share2 className="w-10 h-10 text-brand-black" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-red transition-colors">
+              <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-black transition-colors">
                 เผยแพร่ข้อมูล
               </h3>
               <p className="text-gray-600 mb-6 leading-relaxed">
@@ -106,7 +106,7 @@ export default function GetInvolved() {
 
       {/* Volunteer Form */}
       <section className="py-20 bg-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-green-light/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gray-100/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100">
@@ -266,7 +266,7 @@ export default function GetInvolved() {
           </p>
 
           <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/20 max-w-2xl mx-auto">
-            <h3 className="font-bold text-2xl mb-6 text-brand-yellow">
+            <h3 className="font-bold text-2xl mb-6 text-white">
               ข้อมูลบัญชีธนาคาร
             </h3>
             <div className="space-y-4 text-left inline-block">
@@ -284,7 +284,7 @@ export default function GetInvolved() {
                 (ข้อมูลจะถูกเพิ่มเติม)
               </p>
               <div className="h-px bg-white/10 w-full my-4"></div>
-              <p className="text-xl md:text-2xl font-mono tracking-wider text-brand-yellow">
+              <p className="text-xl md:text-2xl font-mono tracking-wider text-white">
                 <span className="text-gray-400 text-base block mb-1 font-sans tracking-normal">
                   เลขที่บัญชี
                 </span>
@@ -336,7 +336,7 @@ export default function GetInvolved() {
                   {item.title}
                 </h3>
                 <p className="text-gray-600 mb-6 font-light">{item.desc}</p>
-                <button className="flex items-center text-brand-red font-bold group-hover:translate-x-2 transition-transform">
+                <button className="flex items-center text-brand-black font-bold group-hover:translate-x-2 transition-transform">
                   ดาวน์โหลด
                   <svg
                     className="w-5 h-5 ml-2"

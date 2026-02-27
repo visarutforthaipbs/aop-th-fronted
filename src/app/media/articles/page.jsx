@@ -29,10 +29,10 @@ export default function Articles() {
       {/* Hero Section */}
       <section className="relative bg-brand-green-dark text-brand-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/pattern/pattern-green.svg')] opacity-25"></div>
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-brand-yellow/10 rounded-full blur-3xl -translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-white/10 rounded-full blur-3xl -translate-x-1/3 -translate-y-1/3"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-yellow border border-brand-yellow/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
+          <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-white border border-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
             ARTICLES
           </span>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -81,7 +81,7 @@ export default function Articles() {
                           <div className="absolute inset-0 bg-brand-black/10 group-hover:bg-transparent transition-colors"></div>
                         </div>
                       ) : (
-                        <div className="md:w-2/5 h-64 md:h-auto bg-brand-green-light/20 flex items-center justify-center text-brand-green-dark/30">
+                        <div className="md:w-2/5 h-64 md:h-auto bg-gray-100/20 flex items-center justify-center text-brand-green-dark/30">
                           <svg
                             className="w-24 h-24"
                             fill="none"
@@ -104,7 +104,7 @@ export default function Articles() {
                       >
                         <div className="flex items-center mb-4">
                           {article.date && (
-                            <span className="bg-brand-green-light/20 text-brand-green-dark text-sm font-bold px-3 py-1 rounded-full">
+                            <span className="bg-gray-100/20 text-brand-green-dark text-sm font-bold px-3 py-1 rounded-full">
                               {new Date(article.date).toLocaleDateString(
                                 "th-TH",
                                 {
@@ -132,7 +132,7 @@ export default function Articles() {
                           }}
                         />
 
-                        <span className="inline-flex items-center text-brand-green-dark font-bold group-hover:text-brand-red transition-colors mt-auto">
+                        <span className="inline-flex items-center text-brand-green-dark font-bold group-hover:text-brand-black transition-colors mt-auto">
                           อ่านบทความเต็ม
                           <svg
                             className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"

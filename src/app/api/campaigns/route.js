@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { getAllCampaigns, getAuthToken } from "@/lib/api";
+import { getAllCampaigns } from "@/lib/api";
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const token = await getAuthToken();
-    const campaigns = await getAllCampaigns(token);
-
+    const campaigns = await getAllCampaigns();
     return NextResponse.json(campaigns || []);
   } catch (error) {
     console.error("Error in campaigns API:", error);

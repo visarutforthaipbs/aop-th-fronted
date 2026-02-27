@@ -13,7 +13,7 @@ export default function NewsSection({ latestNews }) {
                     </div>
                     <Link
                         href="/news"
-                        className="hidden md:inline-flex items-center text-brand-green-dark font-bold hover:text-brand-red transition-colors"
+                        className="hidden md:inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors"
                     >
                         ดูทั้งหมด <span className="ml-2">→</span>
                     </Link>
@@ -47,7 +47,7 @@ export default function NewsSection({ latestNews }) {
                                     />
                                     <Link
                                         href={`/news/${item.slug}`}
-                                        className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-red transition-colors mt-auto"
+                                        className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors mt-auto"
                                     >
                                         อ่านต่อ{" "}
                                         <svg

@@ -45,59 +45,17 @@ The Assembly of the Poor (สมัชชาคนจน) represents a network o
 - **Usage**: Primary backgrounds, main CTAs, headers, key brand elements
 - **Accessibility**: Use with white text (AAA compliant)
 
-#### 2. **Secondary Green** (Supporting)
-- **Hex**: `#11A35D` (equivalent to `brand-green-medium`)
-- **RGB**: `17, 163, 93`
-- **Usage**: Accents, hover states, secondary buttons
-- **Note**: Slightly lighter than primary, provides depth
+#### 2. **Neutral Colors**
 
-#### 3. **Accent Green** (Highlights)
-- **Hex**: `#67BE6A`
-- **RGB**: `103, 190, 106`
-- **Usage**: Interactive elements, icons, subtle backgrounds
-
-#### 4. **Light Green** (Backgrounds)
-- **Hex**: `#D9E8C5`
-- **RGB**: `217, 232, 197`
-- **Usage**: Soft backgrounds, section dividers, cards
-- **Accessibility**: Use with dark text
-
-### Secondary Colors
-
-#### 5. **Dark Green** (Deep Accent)
-- **Hex**: `#005F33` (equivalent to `brand-accent`)
-- **RGB**: `0, 95, 51`
-- **Usage**: Dark CTAs, footer, navigation hover states
-- **Note**: Darker than primary, provides strong contrast
-
-#### 6. **Cream/Yellow** (Highlight)
-- **Hex**: `#FDF8C0` (equivalent to `brand-secondary`)
-- **RGB**: `253, 248, 192`
-- **Usage**: Badges, labels, highlights, accent elements
-- **Pairing**: Excellent with all green shades
-
-#### 7. **Mustard Yellow** (Call-to-Action)
-- **Hex**: `#FAF4A6` (equivalent to `brand-yellow`)
-- **RGB**: `250, 244, 166`
-- **Usage**: Important CTAs, tags, attention-grabbing elements
-- **Note**: Warmer than cream, more energetic
-
-### Neutral Colors
-
-#### 8. **Black/Charcoal**
+##### **Black/Charcoal**
 - **Hex**: `#231F20` (equivalent to `brand-black`)
 - **RGB**: `35, 31, 32`
 - **Usage**: Body text, headings, footer backgrounds
 - **Note**: Slightly warmer than pure black
 
-#### 9. **White**
+##### **White / Light Tone**
 - **Hex**: `#FFFFFF` (equivalent to `brand-white`)
 - **Usage**: Backgrounds, text on dark surfaces, cards
-
-#### 10. **Red Accent** (Tertiary)
-- **Hex**: `#803432` (equivalent to `brand-red`)
-- **RGB**: `128, 52, 50`
-- **Usage**: Critical actions, error states, specific accents
 - **Note**: Use sparingly, only for emphasis
 
 ### Grayscale (Supporting)
