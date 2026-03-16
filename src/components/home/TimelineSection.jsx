@@ -1,12 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { StaggerContainer, StaggerItem, SlideUpFadeIn } from "@/components/animations/ScrollAnim";
 import { timelineData } from "@/data/timeline";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 export default function TimelineSection() {
+    const { lang } = useLanguage();
+    const t = lang === "en" ? en : th;
+
     // Select specific years to feature on the homepage
     const featuredYears = [1995, 1997, 2023];
     const featuredEvents = featuredYears.map(year => timelineData.find(item => item.year === year));
-    const labels = ["จุดเริ่มต้น", "ประวัติศาสตร์", "ปัจจุบัน"];
 
     return (
         <section className="py-24 bg-gray-50 relative overflow-hidden">
@@ -17,7 +24,7 @@ export default function TimelineSection() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <SlideUpFadeIn className="text-center mb-16">
                     <h2 className="text-4xl font-bold text-[#004232] mb-4">
-                        3 ทศวรรษแห่งการต่อสู้
+                        {t.timeline.heading}
                     </h2>
                     <div className="w-20 h-1.5 bg-brand-green-dark mx-auto rounded-full"></div>
                 </SlideUpFadeIn>
@@ -31,13 +38,13 @@ export default function TimelineSection() {
                             </div>
                             <div className="relative z-10 mt-8">
                                 <span className="inline-block px-3 py-1 bg-white text-brand-black border border-white/50 rounded-full text-sm font-bold mb-4 uppercase tracking-wide">
-                                    {labels[index]}
+                                    {t.timeline.labels[index]}
                                 </span>
                                 <h3 className="text-2xl font-bold mb-3 text-white">
-                                    {event.title}
+                                    {lang === "en" && event.titleEn ? event.titleEn : event.title}
                                 </h3>
                                 <p className="text-white/80 leading-relaxed line-clamp-4">
-                                    {event.description}
+                                    {lang === "en" && event.descriptionEn ? event.descriptionEn : event.description}
                                 </p>
                             </div>
                         </StaggerItem>
@@ -49,7 +56,7 @@ export default function TimelineSection() {
                         href="/campaigns"
                         className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors text-lg group"
                     >
-                        ดูเส้นทางประวัติศาสตร์ทั้งหมด
+                        {t.timeline.cta}
                         <svg
                             className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
                             fill="none"

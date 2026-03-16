@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 import { Handshake, Coins, Share2, Palette, ImageIcon, FileText } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 export default function GetInvolved() {
+  const { lang } = useLanguage();
+  const t = lang === "en" ? en : th;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -37,16 +42,13 @@ export default function GetInvolved() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-white border border-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-            GET INVOLVED
+            {t.getInvolved.badge}
           </span>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            ร่วมสนับสนุน
-            <br />
-            สมัชชาคนจน
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight whitespace-pre-line">
+            {t.getInvolved.heroTitle}
           </h1>
           <p className="text-xl md:text-2xl text-gray-100 font-light max-w-2xl mx-auto">
-            พลังของคุณสำคัญต่อการต่อสู้เพื่อความยุติธรรม
-            ร่วมเป็นส่วนหนึ่งในการเปลี่ยนแปลงสังคม
+            {t.getInvolved.heroSubtitle}
           </p>
         </div>
       </section>
@@ -56,7 +58,7 @@ export default function GetInvolved() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-brand-black">
-              วิธีการสนับสนุน
+              {t.getInvolved.waysTitle}
             </h2>
             <div className="w-24 h-1 bg-brand-black mx-auto rounded-full"></div>
           </div>
@@ -67,11 +69,10 @@ export default function GetInvolved() {
                 <Handshake className="w-10 h-10 text-brand-green-dark" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-green-dark transition-colors">
-                ร่วมเป็นอาสาสมัคร
+                {t.getInvolved.volunteer}
               </h3>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                ร่วมงานกับเราในการจัดกิจกรรม การรณรงค์
-                และการสร้างเครือข่ายเพื่อขับเคลื่อนประเด็นทางสังคม
+                {t.getInvolved.volunteerDesc}
               </p>
             </div>
 
@@ -80,11 +81,10 @@ export default function GetInvolved() {
                 <Share2 className="w-10 h-10 text-brand-black" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-black transition-colors">
-                เผยแพร่ข้อมูล
+                {t.getInvolved.spread}
               </h3>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                ช่วยกันแชร์ข่าวสาร สร้างความตระหนักรู้
-                และเป็นกระบอกเสียงให้กับผู้ที่ถูกละเมิดสิทธิ
+                {t.getInvolved.spreadDesc}
               </p>
             </div>
           </div>
@@ -98,17 +98,17 @@ export default function GetInvolved() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100">
             <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center text-brand-black">
-              ร่วมเป็นส่วนหนึ่งของเรา
+              {t.getInvolved.formTitle}
             </h2>
 
             {submitted ? (
               <div className="p-8 bg-green-50 text-brand-green-dark rounded-2xl border border-green-100 text-center animate-fade-in-up">
                 <div className="text-6xl mb-4">✅</div>
                 <h3 className="text-2xl font-bold mb-2">
-                  ขอบคุณสำหรับความสนใจ!
+                  {t.getInvolved.successTitle}
                 </h3>
                 <p className="text-lg">
-                  เราได้รับข้อมูลของคุณแล้ว และจะติดต่อกลับโดยเร็วที่สุด
+                  {t.getInvolved.successDesc}
                 </p>
               </div>
             ) : (
@@ -119,7 +119,7 @@ export default function GetInvolved() {
                       htmlFor="name"
                       className="block text-sm font-bold text-gray-700 mb-2"
                     >
-                      ชื่อ-นามสกุล <span className="text-red-500">*</span>
+                      {t.getInvolved.name} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -129,7 +129,7 @@ export default function GetInvolved() {
                       value={formData.name}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
-                      placeholder="ระบุชื่อของคุณ"
+                      placeholder={t.getInvolved.namePlaceholder}
                     />
                   </div>
                   <div>
@@ -137,7 +137,7 @@ export default function GetInvolved() {
                       htmlFor="email"
                       className="block text-sm font-bold text-gray-700 mb-2"
                     >
-                      อีเมล <span className="text-red-500">*</span>
+                      {t.getInvolved.email} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -158,7 +158,7 @@ export default function GetInvolved() {
                       htmlFor="phone"
                       className="block text-sm font-bold text-gray-700 mb-2"
                     >
-                      เบอร์โทรศัพท์
+                      {t.getInvolved.phone}
                     </label>
                     <input
                       type="tel"
@@ -167,7 +167,7 @@ export default function GetInvolved() {
                       value={formData.phone}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
-                      placeholder="08x-xxx-xxxx"
+                      placeholder={t.getInvolved.phonePlaceholder}
                     />
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export default function GetInvolved() {
                       htmlFor="interest"
                       className="block text-sm font-bold text-gray-700 mb-2"
                     >
-                      สนใจสนับสนุนในรูปแบบ
+                      {t.getInvolved.interest}
                     </label>
                     <div className="relative">
                       <select
@@ -185,9 +185,9 @@ export default function GetInvolved() {
                         onChange={handleChange}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none appearance-none"
                       >
-                        <option value="volunteer">อาสาสมัคร</option>
-                        <option value="media">เผยแพร่ข้อมูล</option>
-                        <option value="other">อื่นๆ</option>
+                        <option value="volunteer">{t.getInvolved.volunteerOption}</option>
+                        <option value="media">{t.getInvolved.mediaOption}</option>
+                        <option value="other">{t.getInvolved.otherOption}</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
                         <svg
@@ -213,7 +213,7 @@ export default function GetInvolved() {
                     htmlFor="message"
                     className="block text-sm font-bold text-gray-700 mb-2"
                   >
-                    ข้อความเพิ่มเติม
+                    {t.getInvolved.additionalMsg}
                   </label>
                   <textarea
                     id="message"
@@ -222,7 +222,7 @@ export default function GetInvolved() {
                     value={formData.message}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none resize-none"
-                    placeholder="บอกเราว่าคุณต้องการช่วยเหลืออย่างไร หรือมีความเชี่ยวชาญด้านไหนเป็นพิเศษ..."
+                    placeholder={t.getInvolved.additionalPlaceholder}
                   />
                 </div>
 
@@ -230,7 +230,7 @@ export default function GetInvolved() {
                   type="submit"
                   className="w-full bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-brand-green-dark/30 hover:-translate-y-1 text-lg"
                 >
-                  ส่งข้อมูลสมัคร
+                  {t.getInvolved.submitForm}
                 </button>
               </form>
             )}
@@ -243,28 +243,28 @@ export default function GetInvolved() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 text-brand-black">
-              เครื่องมือรณรงค์
+              {t.getInvolved.toolkitTitle}
             </h2>
             <p className="text-gray-600 text-lg">
-              ดาวน์โหลดโลโก้ โปสเตอร์ และสื่อต่างๆ เพื่อช่วยเผยแพร่
+              {t.getInvolved.toolkitSubtitle}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "โลโก้และแบรนด์",
-                desc: "ไฟล์โลโก้และแนวทางการใช้งาน",
+                title: t.getInvolved.toolkitLogo,
+                desc: t.getInvolved.toolkitLogoDesc,
                 icon: <Palette className="w-8 h-8 text-brand-green-dark" />,
               },
               {
-                title: "โปสเตอร์รณรงค์",
-                desc: "โปสเตอร์และภาพประกอบสำหรับแชร์",
+                title: t.getInvolved.toolkitPoster,
+                desc: t.getInvolved.toolkitPosterDesc,
                 icon: <ImageIcon className="w-8 h-8 text-brand-green-dark" />
               },
               {
-                title: "เอกสารข้อมูล",
-                desc: "แผ่นพับและเอกสารประชาสัมพันธ์",
+                title: t.getInvolved.toolkitDocs,
+                desc: t.getInvolved.toolkitDocsDesc,
                 icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
               },
             ].map((item, idx) => (
@@ -280,7 +280,7 @@ export default function GetInvolved() {
                 </h3>
                 <p className="text-gray-600 mb-6 font-light">{item.desc}</p>
                 <button className="flex items-center text-brand-black font-bold group-hover:translate-x-2 transition-transform">
-                  ดาวน์โหลด
+                  {t.getInvolved.toolkitDownload}
                   <svg
                     className="w-5 h-5 ml-2"
                     fill="none"

@@ -3,11 +3,18 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
+import { getTitle, getExcerpt } from "@/lib/acf";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 export default function Campaigns() {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const { lang } = useLanguage();
+  const t = lang === "en" ? en : th;
+
 
   useEffect(() => {
     async function fetchCampaigns() {
@@ -35,7 +42,7 @@ export default function Campaigns() {
   });
 
   const themes = [
-    { id: "all", name: "ทั้งหมด" },
+    { id: "all", name: t.campaigns.all },
     ...Array.from(uniqueTagsMap.values())
   ];
 
@@ -60,14 +67,13 @@ export default function Campaigns() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
             <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-white border border-brand-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-              การเคลื่อนไหว
+              {t.campaigns.badge}
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              งานรณรงค์
+              {t.campaigns.hero.title}
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 font-light leading-relaxed">
-              รวมพลังขับเคลื่อนสังคม
-              ติดตามประเด็นปัญหาและการต่อสู้เพื่อความยุติธรรม
+              {t.campaigns.hero.subtitle}
             </p>
           </div>
         </div>
@@ -86,7 +92,7 @@ export default function Campaigns() {
                   : "bg-gray-100 text-gray-600 hover:bg-brand-white hover:text-brand-green-dark"
                   }`}
               >
-                {theme.name}
+                {t.campaigns.tagMap?.[theme.name] || theme.name}
               </button>
             ))}
           </div>
@@ -100,7 +106,7 @@ export default function Campaigns() {
             <div className="text-center py-24">
               <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-brand-green-dark"></div>
               <p className="mt-6 text-gray-500 font-medium">
-                กำลังโหลดข้อมูล...
+                {t.campaigns.loading}
               </p>
             </div>
           ) : filteredCampaigns.length > 0 ? (
@@ -130,20 +136,12 @@ export default function Campaigns() {
                     )}
                     <div className="p-8 flex-1 flex flex-col">
                       <h3 className="text-2xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight">
-                        {campaign.title?.rendered || campaign.title}
+                        {getTitle(campaign, lang)}
                       </h3>
-                      <div
-                        className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
-                        dangerouslySetInnerHTML={{
-                          __html: (
-                            campaign.excerpt?.rendered ||
-                            campaign.excerpt ||
-                            campaign.content?.rendered ||
-                            campaign.content ||
-                            ""
-                          ).replace(/<[^>]+>/g, ""),
-                        }}
-                      />
+                      <p className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm">
+                        {getExcerpt(campaign, lang) ||
+                          (campaign.content?.rendered || campaign.content || "").replace(/<[^>]+>/g, "").slice(0, 160) + "…"}
+                      </p>
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                         {getCampaignTags(campaign).length > 0 ? (
                           <div className="flex flex-wrap gap-2">
@@ -155,11 +153,11 @@ export default function Campaigns() {
                                   setFilter(tag.id.toString());
                                 }}
                                 className={`px-3 py-1 text-xs font-medium rounded-full cursor-pointer transition-colors ${filter === tag.id.toString()
-                                    ? "bg-brand-green-dark text-white"
-                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                  ? "bg-brand-green-dark text-white"
+                                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                   }`}
                               >
-                                {tag.name}
+                                {t.campaigns.tagMap?.[tag.name] || tag.name}
                               </span>
                             ))}
                             {getCampaignTags(campaign).length > 2 && (
@@ -172,7 +170,7 @@ export default function Campaigns() {
                           <div></div>
                         )}
                         <span className="text-brand-green-dark font-bold text-sm flex items-center group-hover:translate-x-1 transition-transform">
-                          อ่านต่อ{" "}
+                          {t.campaigns.readMore}{" "}
                           <svg
                             className="w-4 h-4 ml-1"
                             fill="none"
@@ -197,10 +195,10 @@ export default function Campaigns() {
             <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-300">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
-                ไม่พบข้อมูล
+                {t.campaigns.empty.title}
               </h3>
               <p className="text-gray-500">
-                ไม่พบงานรณรงค์ในหมวดหมู่นี้ ลองเลือกหมวดหมู่ใหม่
+                {t.campaigns.empty.subtitle}
               </p>
             </div>
           )}
@@ -213,17 +211,16 @@ export default function Campaigns() {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            ร่วมเป็นส่วนหนึ่งของการเปลี่ยนแปลง
+            {t.campaigns.cta.heading}
           </h2>
           <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            พลังของคุณสำคัญต่อการต่อสู้เพื่อความยุติธรรม
-            ไม่ว่าจะด้วยการลงชื่อสนับสนุน การบริจาค หรือการเป็นอาสาสมัคร
+            {t.campaigns.cta.body}
           </p>
           <Link
             href="/get-involved"
             className="inline-block bg-brand-white hover:bg-white text-brand-black font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-brand-white/50 hover:-translate-y-1 text-lg"
           >
-            ร่วมสนับสนุนเรา
+            {t.campaigns.cta.button}
           </Link>
         </div>
       </section>

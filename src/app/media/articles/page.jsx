@@ -4,8 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FileText } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 export default function Articles() {
+  const { lang } = useLanguage();
+  const t = lang === "en" ? en : th;
+
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,16 +39,13 @@ export default function Articles() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-white border border-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-            ARTICLES
+            {t.articles.badge}
           </span>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            บทความ
-            <br />
-            และข้อเขียน
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight whitespace-pre-line">
+            {t.articles.heroTitle}
           </h1>
           <p className="text-xl md:text-2xl text-gray-100 font-light max-w-2xl mx-auto">
-            บทวิเคราะห์ บทความทางวิชาการ และข้อเขียนเกี่ยวกับการเคลื่อนไหว
-            เพื่อสร้างความเข้าใจในประเด็นสังคม
+            {t.articles.heroSubtitle}
           </p>
         </div>
       </section>
@@ -53,7 +56,7 @@ export default function Articles() {
           {loading ? (
             <div className="text-center py-20">
               <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-brand-green-dark"></div>
-              <p className="mt-6 text-gray-500 text-lg">กำลังโหลดบทความ...</p>
+              <p className="mt-6 text-gray-500 text-lg">{t.articles.loading}</p>
             </div>
           ) : articles.length > 0 ? (
             <div className="space-y-12">
@@ -106,7 +109,7 @@ export default function Articles() {
                           {article.date && (
                             <span className="bg-gray-100/20 text-brand-green-dark text-sm font-bold px-3 py-1 rounded-full">
                               {new Date(article.date).toLocaleDateString(
-                                "th-TH",
+                                lang === "en" ? "en-US" : "th-TH",
                                 {
                                   year: "numeric",
                                   month: "long",
@@ -133,7 +136,7 @@ export default function Articles() {
                         />
 
                         <span className="inline-flex items-center text-brand-green-dark font-bold group-hover:text-brand-black transition-colors mt-auto">
-                          อ่านบทความเต็ม
+                          {t.articles.readFull}
                           <svg
                             className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
                             fill="none"
@@ -160,9 +163,9 @@ export default function Articles() {
                 <FileText className="w-16 h-16 text-gray-400" />
               </div>
               <h3 className="text-2xl font-bold text-gray-400 mb-2">
-                ยังไม่มีบทความในขณะนี้
+                {t.articles.empty.title}
               </h3>
-              <p className="text-gray-500">โปรดติดตามการอัพเดทในเร็วๆ นี้</p>
+              <p className="text-gray-500">{t.articles.empty.subtitle}</p>
             </div>
           )}
         </div>

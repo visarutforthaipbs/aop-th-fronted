@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { StaggerContainer, StaggerItem, SlideUpFadeIn } from "@/components/animations/ScrollAnim";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 // Helper function to extract first image from HTML content
 function extractFirstImage(htmlContent) {
@@ -10,21 +15,24 @@ function extractFirstImage(htmlContent) {
 }
 
 export default function NewsSection({ latestNews }) {
+    const { lang } = useLanguage();
+    const t = lang === "en" ? en : th;
+
     return (
         <section className="py-24 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <SlideUpFadeIn className="flex justify-between items-end mb-12">
                     <div>
                         <h2 className="text-4xl font-bold text-brand-black mb-2">
-                            ข่าวสารและความเคลื่อนไหว
+                            {t.homeNews.heading}
                         </h2>
-                        <p className="text-gray-500">ติดตามสถานการณ์ล่าสุดจากพื้นที่</p>
+                        <p className="text-gray-500">{t.homeNews.subtitle}</p>
                     </div>
                     <Link
                         href="/news"
                         className="hidden md:inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors"
                     >
-                        ดูทั้งหมด <span className="ml-2">→</span>
+                        {t.homeNews.viewAll} <span className="ml-2">→</span>
                     </Link>
                 </SlideUpFadeIn>
 
@@ -53,7 +61,7 @@ export default function NewsSection({ latestNews }) {
                                     <div className="p-8 flex-1 flex flex-col">
                                         <div className="text-sm text-gray-400 mb-4 font-medium">
                                             {item.date
-                                                ? new Date(item.date).toLocaleDateString("th-TH", {
+                                                ? new Date(item.date).toLocaleDateString(lang === "en" ? "en-US" : "th-TH", {
                                                     year: "numeric",
                                                     month: "long",
                                                     day: "numeric",
@@ -73,7 +81,7 @@ export default function NewsSection({ latestNews }) {
                                             href={`/news/${item.slug}`}
                                             className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors mt-auto"
                                         >
-                                            อ่านต่อ{" "}
+                                            {t.homeNews.readMore}{" "}
                                             <svg
                                                 className="w-4 h-4 ml-1"
                                                 fill="none"
@@ -94,7 +102,7 @@ export default function NewsSection({ latestNews }) {
                         })
                     ) : (
                         <div className="col-span-3 text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                            <p className="text-gray-500">กำลังโหลดข่าวสาร...</p>
+                            <p className="text-gray-500">{t.homeNews.loading}</p>
                         </div>
                     )}
                 </StaggerContainer>
@@ -103,7 +111,7 @@ export default function NewsSection({ latestNews }) {
                         href="/news"
                         className="inline-block bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-3 rounded-full transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl"
                     >
-                        ดูข่าวสารทั้งหมด
+                        {t.homeNews.viewAllMobile}
                     </Link>
                 </SlideUpFadeIn>
             </div>

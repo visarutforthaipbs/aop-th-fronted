@@ -3,8 +3,14 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 export default function Media() {
+  const { lang } = useLanguage();
+  const t = lang === "en" ? en : th;
+
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +57,8 @@ export default function Media() {
   // Get category name by ID for display
   const getCategoryName = (article) => {
     const categoryInfo = article.categories_info?.[0];
-    return categoryInfo?.name || "บทความ";
+    const name = categoryInfo?.name || t.media.article;
+    return t.media.categoryMap?.[name] || name;
   };
 
   return (
@@ -64,14 +71,13 @@ export default function Media() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
             <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-brand-white border border-brand-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-              MEDIA CENTER
+              {t.media.badge}
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              ห้องสื่อสมัชชาคนจน
+              {t.media.heroTitle}
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 font-light leading-relaxed">
-              คลังความรู้ เอกสาร บทความ ภาพถ่าย วิดีโอ และสื่อต่างๆ
-              ที่บันทึกการต่อสู้ของเรา
+              {t.media.heroSubtitle}
             </p>
           </div>
         </div>
@@ -89,7 +95,7 @@ export default function Media() {
                 : "bg-gray-100 text-gray-600 hover:bg-brand-white hover:text-brand-green-dark"
                 }`}
             >
-              ทั้งหมด
+              {t.media.all}
             </button>
 
             {/* Dynamic category buttons */}
@@ -102,7 +108,7 @@ export default function Media() {
                   : "bg-gray-100 text-gray-600 hover:bg-brand-white hover:text-brand-green-dark"
                   }`}
               >
-                {category.name}
+                {t.media.categoryMap?.[category.name] || category.name}
               </button>
             ))}
           </div>
@@ -116,7 +122,7 @@ export default function Media() {
             <div className="text-center py-24">
               <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-brand-green-dark"></div>
               <p className="mt-6 text-gray-500 font-medium">
-                กำลังโหลดข้อมูล...
+                {t.media.loading}
               </p>
             </div>
           ) : articles.length > 0 ? (
@@ -164,7 +170,7 @@ export default function Media() {
                       <div className="flex items-center mb-3 space-x-2">
                         {item.date && (
                           <span className="text-xs font-semibold text-brand-green-dark bg-brand-white/20 px-2 py-1 rounded-full">
-                            {new Date(item.date).toLocaleDateString("th-TH", {
+                            {new Date(item.date).toLocaleDateString(lang === "en" ? "en-US" : "th-TH", {
                               year: "numeric",
                               month: "short",
                               day: "numeric",
@@ -193,7 +199,7 @@ export default function Media() {
 
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                         <span className="text-brand-green-dark font-bold text-sm flex items-center group-hover:translate-x-1 transition-transform">
-                          อ่านต่อ{" "}
+                          {t.media.readMore}{" "}
                           <svg
                             className="w-4 h-4 ml-1"
                             fill="none"
@@ -218,10 +224,10 @@ export default function Media() {
             <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-300">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
-                ไม่พบข้อมูลในหมวดหมู่นี้
+                {t.media.noCategoryTitle}
               </h3>
               <p className="text-gray-500">
-                ยังไม่มีข้อมูลในหมวดหมู่ที่เลือก หรือกำลังอยู่ในระหว่างการปรับปรุง
+                {t.media.noCategoryDesc}
               </p>
             </div>
           )}

@@ -1,13 +1,14 @@
-import { Noto_Sans_Thai_Looped } from "next/font/google"; // [NEW] Import font
+import { Noto_Sans_Thai_Looped } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { LanguageProvider } from "@/context/LanguageContext";
+import LangSync from "@/components/LangSync";
 
-// [NEW] Configure font
 const notoSansThaiLooped = Noto_Sans_Thai_Looped({
   subsets: ["thai", "latin"],
-  weight: ["400", "700"], // Regular and Bold
-  variable: "--font-noto-sans-thai-looped", // Define CSS variable
+  weight: ["400", "700"],
+  variable: "--font-noto-sans-thai-looped",
   display: "swap",
 });
 
@@ -26,9 +27,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${notoSansThaiLooped.variable} font-sans bg-brand-white text-brand-black`}
       >
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <LanguageProvider>
+          <LangSync />
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

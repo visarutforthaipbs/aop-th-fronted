@@ -1,8 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import { Users, Megaphone, Newspaper } from "lucide-react";
 import { StaggerContainer, StaggerItem, SlideUpFadeIn } from "@/components/animations/ScrollAnim";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 export default function QuickLinksSection() {
+    const { lang } = useLanguage();
+    const t = lang === "en" ? en : th;
+
     return (
         <section className="py-24 bg-brand-black text-white relative overflow-hidden">
             {/* Background pattern */}
@@ -13,10 +21,9 @@ export default function QuickLinksSection() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <SlideUpFadeIn className="text-center mb-16">
-                    <h2 className="text-4xl font-bold mb-4">ร่วมขับเคลื่อนสังคม</h2>
+                    <h2 className="text-4xl font-bold mb-4">{t.quickLinksHome.heading}</h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        พลังของประชาชนคือหัวใจของการเปลี่ยนแปลง
-                        ร่วมเป็นส่วนหนึ่งในการสร้างสังคมที่เป็นธรรม
+                        {t.quickLinksHome.subtitle}
                     </p>
                 </SlideUpFadeIn>
 
@@ -28,10 +35,10 @@ export default function QuickLinksSection() {
                                     <Users className="w-12 h-12 text-white" />
                                 </div>
                                 <h3 className="text-2xl font-bold mb-3 text-white">
-                                    รู้จักเรา
+                                    {t.quickLinksHome.about}
                                 </h3>
                                 <p className="text-gray-400 group-hover:text-white/90 transition-colors leading-relaxed">
-                                    เรียนรู้เกี่ยวกับประวัติ โครงสร้าง และอุดมการณ์ของสมัชชาคนจน
+                                    {t.quickLinksHome.aboutDesc}
                                 </p>
                             </div>
                         </Link>
@@ -44,10 +51,10 @@ export default function QuickLinksSection() {
                                     <Megaphone className="w-12 h-12 text-white" />
                                 </div>
                                 <h3 className="text-2xl font-bold mb-3 text-white">
-                                    งานรณรงค์
+                                    {t.quickLinksHome.campaigns}
                                 </h3>
                                 <p className="text-gray-400 group-hover:text-white/90 transition-colors leading-relaxed">
-                                    ติดตามการเคลื่อนไหว ข้อเรียกร้อง และการต่อสู้ในประเด็นต่างๆ
+                                    {t.quickLinksHome.campaignsDesc}
                                 </p>
                             </div>
                         </Link>
@@ -60,10 +67,10 @@ export default function QuickLinksSection() {
                                     <Newspaper className="w-12 h-12 text-white group-hover:text-brand-black" />
                                 </div>
                                 <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-brand-black">
-                                    ห้องสื่อ
+                                    {t.quickLinksHome.media}
                                 </h3>
                                 <p className="text-gray-400 group-hover:text-brand-black/80 transition-colors leading-relaxed">
-                                    คลังความรู้ บทความ ภาพถ่าย และวิดีโอเพื่อการเผยแพร่
+                                    {t.quickLinksHome.mediaDesc}
                                 </p>
                             </div>
                         </Link>

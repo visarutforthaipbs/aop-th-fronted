@@ -3,12 +3,17 @@
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { lang } = useLanguage();
+  const t = lang === "en" ? en : th;
 
   useEffect(() => {
     if (query) {
@@ -36,8 +41,8 @@ function SearchContent() {
       {/* Hero Section */}
       <section className="bg-brand-green-dark text-brand-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-[1.8]">ค้นหา</h1>
-          {query && <p className="text-xl">ผลการค้นหาสำหรับ: &quot;{query}&quot;</p>}
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-[1.8]">{t.search.title}</h1>
+          {query && <p className="text-xl">{t.search.resultsFor}: &quot;{query}&quot;</p>}
         </div>
       </section>
 
@@ -49,14 +54,14 @@ function SearchContent() {
               type="text"
               name="q"
               defaultValue={query}
-              placeholder="ค้นหาข้อมูล..."
+              placeholder={t.search.placeholder}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green-dark focus:border-transparent"
             />
             <button
               type="submit"
               className="bg-brand-green-dark hover:bg-brand-black text-brand-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
-              ค้นหา
+              {t.search.button}
             </button>
           </form>
         </div>
@@ -68,11 +73,11 @@ function SearchContent() {
           {loading ? (
             <div className="text-center py-12">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-brand-green-dark"></div>
-              <p className="mt-4 text-gray-600">กำลังค้นหา...</p>
+              <p className="mt-4 text-gray-600">{t.search.searching}</p>
             </div>
           ) : results.length > 0 ? (
             <div className="space-y-6">
-              <p className="text-gray-600">พบ {results.length} ผลลัพธ์</p>
+              <p className="text-gray-600">{t.search.found} {results.length} {t.search.results}</p>
               {results.map((result, index) => (
                 <div
                   key={index}
@@ -93,16 +98,16 @@ function SearchContent() {
           ) : query ? (
             <div className="text-center py-12">
               <p className="text-gray-600 text-lg">
-                ไม่พบผลลัพธ์สำหรับ &quot;{query}&quot;
+                {t.search.noResults} &quot;{query}&quot;
               </p>
               <p className="text-gray-500 mt-2">
-                ลองใช้คำค้นหาอื่นหรือคำค้นหาที่สั้นกว่า
+                {t.search.noResultsTip}
               </p>
             </div>
           ) : (
             <div className="text-center py-12">
               <p className="text-gray-600 text-lg">
-                กรอกคำค้นหาเพื่อเริ่มค้นหา
+                {t.search.startSearch}
               </p>
             </div>
           )}
@@ -117,7 +122,7 @@ export default function Search() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center">
-          กำลังโหลด...
+          {t.search.loading}
         </div>
       }
     >

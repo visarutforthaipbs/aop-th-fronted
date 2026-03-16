@@ -2,8 +2,14 @@
 
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import th from "@/locales/th";
+import en from "@/locales/en";
 
 export default function Contact() {
+  const { lang } = useLanguage();
+  const t = lang === "en" ? en : th;
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,7 +20,7 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const mailtoLink = `mailto:aopthailand2538@gmail.com?subject=ติดต่อจาก ${encodeURIComponent(formData.name)}: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`ชื่อ: ${formData.name}\nอีเมล: ${formData.email}\n\nข้อความ:\n${formData.message}`)}`;
+    const mailtoLink = `mailto:aopthailand2538@gmail.com?subject=${lang === "en" ? "Contact from" : "ติดต่อจาก"} ${encodeURIComponent(formData.name)}: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`${lang === "en" ? "Name" : "ชื่อ"}: ${formData.name}\n${lang === "en" ? "Email" : "อีเมล"}: ${formData.email}\n\n${lang === "en" ? "Message" : "ข้อความ"}:\n${formData.message}`)}`;
     window.location.href = mailtoLink;
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
@@ -36,14 +42,13 @@ export default function Contact() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-white border border-white/30 text-sm font-bold tracking-wider mb-6 backdrop-blur-md">
-            ติดต่อสอบถาม
+            {t.contact.badge}
           </span>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            ติดต่อเรา
+            {t.contact.heroTitle}
           </h1>
           <p className="text-xl md:text-2xl text-gray-100 font-light max-w-2xl mx-auto">
-            ส่งข้อความถึงเรา เรายินดีรับฟังและตอบคำถามของคุณ
-            เพื่อร่วมกันขับเคลื่อนสังคม
+            {t.contact.heroSubtitle}
           </p>
         </div>
       </section>
@@ -55,7 +60,7 @@ export default function Contact() {
             {/* Contact Form */}
             <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
               <h2 className="text-3xl font-bold mb-8 text-brand-black">
-                ส่งข้อความถึงเรา
+                {t.contact.formTitle}
               </h2>
               {submitted ? (
                 <div className="p-8 bg-green-50 text-brand-green-dark rounded-2xl border border-green-100 text-center flex flex-col items-center">
@@ -63,9 +68,9 @@ export default function Contact() {
                     <CheckCircle className="w-16 h-16 text-brand-green-dark" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">
-                    ขอบคุณสำหรับข้อความ!
+                    {t.contact.successTitle}
                   </h3>
-                  <p>เราได้รับข้อมูลของคุณแล้ว และจะติดต่อกลับโดยเร็วที่สุด</p>
+                  <p>{t.contact.successDesc}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -75,7 +80,7 @@ export default function Contact() {
                         htmlFor="name"
                         className="block text-sm font-bold text-gray-700 mb-2"
                       >
-                        ชื่อ-นามสกุล <span className="text-red-500">*</span>
+                        {t.contact.name} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -85,7 +90,7 @@ export default function Contact() {
                         value={formData.name}
                         onChange={handleChange}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
-                        placeholder="ระบุชื่อของคุณ"
+                        placeholder={t.contact.namePlaceholder}
                       />
                     </div>
                     <div>
@@ -93,7 +98,7 @@ export default function Contact() {
                         htmlFor="email"
                         className="block text-sm font-bold text-gray-700 mb-2"
                       >
-                        อีเมล <span className="text-red-500">*</span>
+                        {t.contact.email} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="email"
@@ -112,7 +117,7 @@ export default function Contact() {
                       htmlFor="subject"
                       className="block text-sm font-bold text-gray-700 mb-2"
                     >
-                      หัวข้อ <span className="text-red-500">*</span>
+                      {t.contact.subject} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -122,7 +127,7 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
-                      placeholder="เรื่องที่ต้องการติดต่อ"
+                      placeholder={t.contact.subjectPlaceholder}
                     />
                   </div>
                   <div>
@@ -130,7 +135,7 @@ export default function Contact() {
                       htmlFor="message"
                       className="block text-sm font-bold text-gray-700 mb-2"
                     >
-                      ข้อความ <span className="text-red-500">*</span>
+                      {t.contact.message} <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       id="message"
@@ -140,14 +145,14 @@ export default function Contact() {
                       value={formData.message}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none resize-none"
-                      placeholder="เขียนข้อความของคุณที่นี่..."
+                      placeholder={t.contact.messagePlaceholder}
                     />
                   </div>
                   <button
                     type="submit"
                     className="w-full bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-brand-green-dark/30 hover:-translate-y-1"
                   >
-                    ส่งข้อความถึงเรา
+                    {t.contact.submit}
                   </button>
                 </form>
               )}
@@ -157,11 +162,10 @@ export default function Contact() {
             <div className="space-y-8">
               <div>
                 <h2 className="text-3xl font-bold mb-6 text-brand-black">
-                  ข้อมูลติดต่อ
+                  {t.contact.infoTitle}
                 </h2>
                 <p className="text-gray-600 mb-8 text-lg">
-                  หากมีข้อสงสัยหรือต้องการข้อมูลเพิ่มเติม
-                  สามารถติดต่อเราได้ตามช่องทางด้านล่าง
+                  {t.contact.infoSubtitle}
                 </p>
               </div>
 
@@ -190,14 +194,10 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold mb-2 text-brand-black">
-                    ที่อยู่
+                    {t.contact.address}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    สมาคมวิถีชนบท (สวช.)
-                    <br />
-                    666 ถนนเจริญนคร แขวงบางลำภูล่าง
-                    <br />
-                    เขตคลองสาน กรุงเทพมหานคร 10600
+                  <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                    {t.contact.addressValue}
                   </p>
                 </div>
               </div>
@@ -221,12 +221,12 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold mb-2 text-brand-black">
-                    ช่องทางติดต่อ
+                    {t.contact.channels}
                   </h3>
                   <div className="space-y-2">
                     <p className="text-gray-600">
                       <span className="font-semibold text-brand-black">
-                        อีเมล:
+                        {t.contact.emailLabel}
                       </span>{" "}
                       aopthailand2538@gmail.com
                     </p>
@@ -238,7 +238,7 @@ export default function Contact() {
               {/* Social Media */}
               <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow">
                 <h3 className="text-xl font-bold mb-6 text-brand-black">
-                  ติดตามเราบนโซเชียลมีเดีย
+                  {t.contact.socialTitle}
                 </h3>
                 <div className="flex space-x-4">
                   <a
@@ -308,7 +308,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gray-100 rounded-3xl overflow-hidden h-96 relative shadow-inner">
             <iframe
-              title="สมาคมวิถีชนบท (สวช.) Location"
+              title={lang === "en" ? "AOP Office Location" : "สมาคมวิถีชนบท (สวช.) Location"}
               src="https://maps.google.com/maps?q=13.716631479200355,100.50643457980348&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
