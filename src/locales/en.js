@@ -204,6 +204,7 @@ const en = {
             "บทความ": "Articles",
             "ภาพชุด": "Photo Gallery",
             "วิดีโอสั้น": "Short Videos",
+            "วีดีโอสั้น": "Short Videos",
             "หนังสือ": "Books",
             "หมายข่าว": "Press Releases",
             "แถลงการณ์": "Statements",
