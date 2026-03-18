@@ -54,7 +54,7 @@ export default function CampaignDetailClient({ campaign, featuredImage }) {
                             </span>
                             {campaign.tags_data?.map((tag) => (
                                 <span key={tag.id} className="inline-block py-1.5 px-4 rounded-full bg-white/20 border border-white/30 text-brand-white text-sm font-medium tracking-wider backdrop-blur-sm">
-                                    {tag.name}
+                                    {t.campaigns.tagMap?.[tag.name] || tag.name}
                                 </span>
                             ))}
                         </div>
@@ -76,7 +76,7 @@ export default function CampaignDetailClient({ campaign, featuredImage }) {
                                 </span>
                                 {campaign.tags_data?.map((tag) => (
                                     <span key={tag.id} className="inline-block py-1.5 px-4 rounded-full bg-gray-100 border border-gray-200 text-brand-black text-sm font-medium tracking-wider">
-                                        {tag.name}
+                                        {t.campaigns.tagMap?.[tag.name] || tag.name}
                                     </span>
                                 ))}
                             </div>
