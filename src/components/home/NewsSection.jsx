@@ -6,6 +6,7 @@ import { StaggerContainer, StaggerItem, SlideUpFadeIn } from "@/components/anima
 import { useLanguage } from "@/context/LanguageContext";
 import th from "@/locales/th";
 import en from "@/locales/en";
+import { getTitle, getExcerpt } from "@/lib/acf";
 
 // Helper function to extract first image from HTML content
 function extractFirstImage(htmlContent) {
@@ -69,14 +70,13 @@ export default function NewsSection({ latestNews }) {
                                                 : ""}
                                         </div>
                                         <h3 className="text-xl font-bold mb-4 text-brand-black group-hover:text-brand-green-dark transition-colors line-clamp-2">
-                                            {item.title?.rendered}
+                                            {getTitle(item, lang)}
                                         </h3>
                                         <div
                                             className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
-                                            dangerouslySetInnerHTML={{
-                                                __html: (item.excerpt?.rendered || "").replace(/<[^>]+>/g, ""),
-                                            }}
-                                        />
+                                        >
+                                            {getExcerpt(item, lang)}
+                                        </div>
                                         <Link
                                             href={`/news/${item.slug}`}
                                             className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors mt-auto"
