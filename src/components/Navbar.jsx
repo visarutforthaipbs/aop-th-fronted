@@ -149,9 +149,9 @@ export default function Navbar() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/30 hover:border-white/70 hover:bg-white/10 transition-all duration-200 text-sm font-bold tracking-wide"
               aria-label="Toggle language"
             >
-              <span className={lang === "th" ? "opacity-100" : "opacity-50"}>🇹🇭</span>
+              <span className={lang === "th" ? "opacity-100" : "opacity-50"}>TH</span>
               <span className="text-white/40">/</span>
-              <span className={lang === "en" ? "opacity-100" : "opacity-50"}>🇬🇧</span>
+              <span className={lang === "en" ? "opacity-100" : "opacity-50"}>EN</span>
             </button>
           </div>
 
@@ -171,9 +171,9 @@ export default function Navbar() {
               className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 text-sm font-bold"
               aria-label="Toggle language"
             >
-              <span className={lang === "th" ? "opacity-100" : "opacity-40"}>🇹🇭</span>
+              <span className={lang === "th" ? "opacity-100" : "opacity-40"}>TH</span>
               <span className="text-white/40 text-xs">/</span>
-              <span className={lang === "en" ? "opacity-100" : "opacity-40"}>🇬🇧</span>
+              <span className={lang === "en" ? "opacity-100" : "opacity-40"}>EN</span>
             </button>
             <button
               onClick={() => { setIsOpen(!isOpen); setSearchOpen(false); }}
