@@ -3,9 +3,12 @@
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import th from "@/locales/th";
 import en from "@/locales/en";
+
+const DEFAULT_SEARCH_IMAGE = "/images/mobile-version-hero.jpg";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -79,20 +82,37 @@ function SearchContent() {
             <div className="space-y-6">
               <p className="text-gray-600">{t.search.found} {results.length} {t.search.results}</p>
               {results.map((result, index) => (
-                <div
+                <Link
                   key={index}
-                  className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                  href={result.url}
+                  className="group block rounded-2xl border border-gray-200 bg-brand-white shadow-sm hover:shadow-lg hover:border-brand-green-dark/30 transition-all duration-300 overflow-hidden"
                 >
-                  <Link href={result.url} className="block">
-                    <h3 className="text-xl font-semibold mb-2 text-brand-green-dark hover:text-brand-black">
-                      {result.title}
-                    </h3>
-                    <p className="text-gray-600 mb-2 line-clamp-2">
-                      {result.excerpt}
-                    </p>
-                    <span className="text-sm text-gray-500">{result.type}</span>
-                  </Link>
-                </div>
+                  <article className="grid grid-cols-1 md:grid-cols-[280px_1fr]">
+                    <div className="relative h-52 md:h-full min-h-[180px] bg-gray-100">
+                      <Image
+                        src={result.featured_image || DEFAULT_SEARCH_IMAGE}
+                        alt={result.title || "Search result image"}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 280px"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <span className="absolute top-4 left-4 inline-flex items-center rounded-full bg-brand-green-dark/95 px-3 py-1 text-xs font-bold text-brand-white tracking-wide uppercase">
+                        {result.subtype || result.type}
+                      </span>
+                    </div>
+
+                    <div className="p-6 md:p-8 flex flex-col justify-between gap-4">
+                      <div>
+                        <h3 className="text-2xl font-bold leading-snug text-brand-green-dark group-hover:text-brand-black transition-colors">
+                          {result.title}
+                        </h3>
+                        <p className="mt-3 text-base leading-relaxed text-gray-600 line-clamp-3">
+                          {result.excerpt || (lang === "en" ? "Click to read this story on the website." : "คลิกเพื่ออ่านเนื้อหาฉบับเต็มบนเว็บไซต์")}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                </Link>
               ))}
             </div>
           ) : query ? (

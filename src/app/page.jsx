@@ -1,6 +1,6 @@
-import { getAllCampaigns, getAllNews, getAuthToken } from "@/lib/api";
+import { getAllCampaigns, getAllArticles, getArticlesByCategorySlug, getAuthToken } from "@/lib/api";
 import HeroSection from "@/components/home/HeroSection";
-import TimelineSection from "@/components/home/TimelineSection";
+import InFocusSection from "@/components/home/InFocusSection";
 import NewsSection from "@/components/home/NewsSection";
 import QuickLinksSection from "@/components/home/QuickLinksSection";
 
@@ -10,6 +10,7 @@ export default async function Home() {
   // Fetch data with error handling
   let featuredCampaign = null;
   let latestNews = [];
+  let inFocusArticles = [];
 
   try {
     const campaigns = await getAllCampaigns(token);
@@ -19,16 +20,29 @@ export default async function Home() {
   }
 
   try {
-    const news = await getAllNews(1, 3);
-    latestNews = news || [];
+    const articles = await getAllArticles(token, null, 6);
+    latestNews = (articles || []).map(article => ({
+      ...article,
+      featured_image: article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
+    }));
   } catch (error) {
-    console.error("Error fetching news:", error);
+    console.error("Error fetching articles:", error);
+  }
+
+  try {
+    const focusArticles = await getArticlesByCategorySlug("infocus", 6);
+    inFocusArticles = (focusArticles || []).map(article => ({
+      ...article,
+      featured_image: article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
+    }));
+  } catch (error) {
+    console.error("Error fetching in-focus articles:", error);
   }
 
   return (
     <div className="min-h-screen">
       <HeroSection featuredCampaign={featuredCampaign} />
-      <TimelineSection />
+      <InFocusSection articles={inFocusArticles} />
       <NewsSection latestNews={latestNews} />
       <QuickLinksSection />
     </div>

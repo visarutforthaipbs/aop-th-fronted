@@ -4,6 +4,13 @@ import { getAllArticles, getArticleCategories } from "@/lib/api";
 // Force dynamic rendering since we use request.url
 export const dynamic = 'force-dynamic';
 
+// Extract first image from HTML content as thumbnail fallback
+function extractFirstImage(htmlContent) {
+  if (!htmlContent) return null;
+  const imgMatch = htmlContent.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return imgMatch ? imgMatch[1] : null;
+}
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -19,7 +26,9 @@ export async function GET(request) {
     const articlesWithImages = articles.map((article) => ({
       ...article,
       featured_image:
-        article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null,
+        article._embedded?.["wp:featuredmedia"]?.[0]?.source_url
+        || extractFirstImage(article.content?.rendered)
+        || null,
       // Extract category info from embedded data
       categories_info: article._embedded?.["wp:term"]?.[0] || [],
     }));

@@ -30,14 +30,14 @@ export default function NewsSection({ latestNews }) {
                         <p className="text-gray-500">{t.homeNews.subtitle}</p>
                     </div>
                     <Link
-                        href="/news"
+                        href="/media"
                         className="hidden md:inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors"
                     >
                         {t.homeNews.viewAll} <span className="ml-2">→</span>
                     </Link>
                 </SlideUpFadeIn>
 
-                <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {latestNews.length > 0 ? (
                         latestNews.map((item) => {
                             const featuredImage = item.featured_image || extractFirstImage(item.content?.rendered) || '/hero-section-image.jpg';
@@ -78,7 +78,7 @@ export default function NewsSection({ latestNews }) {
                                             {getExcerpt(item, lang)}
                                         </div>
                                         <Link
-                                            href={`/news/${item.slug}`}
+                                            href={`/media/articles/${item.slug}`}
                                             className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors mt-auto"
                                         >
                                             {t.homeNews.readMore}{" "}
@@ -101,14 +101,14 @@ export default function NewsSection({ latestNews }) {
                             );
                         })
                     ) : (
-                        <div className="col-span-3 text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
+                        <div className="col-span-full text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
                             <p className="text-gray-500">{t.homeNews.loading}</p>
                         </div>
                     )}
                 </StaggerContainer>
                 <SlideUpFadeIn className="text-center mt-12 md:hidden">
                     <Link
-                        href="/news"
+                        href="/media"
                         className="inline-block bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-3 rounded-full transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl"
                     >
                         {t.homeNews.viewAllMobile}

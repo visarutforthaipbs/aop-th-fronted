@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Handshake, Coins, Share2, Palette, ImageIcon, FileText } from "lucide-react";
+import { Handshake, Coins, Share2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import th from "@/locales/th";
 import en from "@/locales/en";
@@ -238,68 +238,6 @@ export default function GetInvolved() {
         </div>
       </section>
 
-      {/* Toolkit */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-brand-black">
-              {t.getInvolved.toolkitTitle}
-            </h2>
-            <p className="text-gray-600 text-lg">
-              {t.getInvolved.toolkitSubtitle}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: t.getInvolved.toolkitLogo,
-                desc: t.getInvolved.toolkitLogoDesc,
-                icon: <Palette className="w-8 h-8 text-brand-green-dark" />,
-              },
-              {
-                title: t.getInvolved.toolkitPoster,
-                desc: t.getInvolved.toolkitPosterDesc,
-                icon: <ImageIcon className="w-8 h-8 text-brand-green-dark" />
-              },
-              {
-                title: t.getInvolved.toolkitDocs,
-                desc: t.getInvolved.toolkitDocsDesc,
-                icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
-              },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-1"
-              >
-                <div className="mb-4 bg-gray-50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  {item.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 mb-6 font-light">{item.desc}</p>
-                <button className="flex items-center text-brand-black font-bold group-hover:translate-x-2 transition-transform">
-                  {t.getInvolved.toolkitDownload}
-                  <svg
-                    className="w-5 h-5 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

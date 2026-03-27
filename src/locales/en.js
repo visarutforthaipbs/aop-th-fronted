@@ -1,8 +1,8 @@
 const en = {
     nav: {
         about: "About Us",
-        campaigns: "Campaigns",
-        media: "Media Room",
+        campaigns: "Our Work",
+        media: "Poor People's Media",
         news: "News",
         getInvolved: "Get Involved",
         contact: "Contact Us",
@@ -25,8 +25,8 @@ const en = {
         heading: "Quick Links",
         links: {
             about: "About Us",
-            campaigns: "Campaigns",
-            media: "Media Room",
+            campaigns: "Our Work",
+            media: "Poor People's Media",
             getInvolved: "Get Involved",
         },
         descriptions: {
@@ -40,10 +40,10 @@ const en = {
         badge: "About Us",
         hero: {
             title: "Assembly of the Poor",
-            subtitle: "A network of poor people's organizations fighting for justice and fundamental rights",
+            subtitle: "Poor in rights, poor in opportunity, poor in power, and made to be poor",
         },
         story: {
-            heading: 'From "121 Problem Cases" to the "Assembly of the Poor"',
+            heading: 'From 125 Problem Cases to the Assembly of the Poor',
         },
         timeline: {
             heading: "History of Struggle",
@@ -82,10 +82,13 @@ const en = {
         loading: "Loading...",
         readMore: "Read More",
         tagMap: {
-            "ประชาธิปไตยและสิทธิพลเมือง": "Democracy & Civil Rights",
-            "สิทธิที่ดินและทรัพยากร": "Land & Resource Rights",
-            "อธิปไตยทางอาหารและเศรษฐกิจ": "Food & Economic Sovereignty",
-            "พลังผู้หญิงและคนรุ่นใหม่": "Women's Power & Youth",
+            "ประชาธิปไตยและรัฐธรรมนูญ": "Democracy & Constitution",
+            "อธิปไตยทางอาหารและเกษตรนิเวศ": "Food Sovereignty & Agroecology",
+            "สิทธิเกษตรกร": "Farmers' Rights",
+            "ความเป็นธรรมด้านสภาพภูมิอากาศ": "Climate Justice",
+            "การปฏิรูปการเกษตรและนิคมสหกรณ์": "Agrarian Reform & Cooperative Settlements",
+            "ผู้หญิง คนรุ่นใหม่ และความหลากหลายทางเพศ": "Women, Youth & Gender Diversity",
+            "ตลาดบ้านป่าและเศรษฐกิจสมานฉันท์": "Forest Village Markets & Solidarity Economy",
         },
         empty: {
             title: "No results found",
@@ -93,12 +96,12 @@ const en = {
         },
         cta: {
             heading: "Be Part of the Change",
-            body: "Your support matters in the struggle for justice — whether through signing petitions, donating, or volunteering.",
+            body: "Fight for justice — whether through signing petitions, donating, or volunteering.",
             button: "Support Us",
         },
     },
     footer: {
-        description: "A network of poor people's organizations fighting for the justice and fundamental rights of the people. We believe in the power of ordinary people to change society.",
+        description: "Poor in rights, poor in opportunity, poor in power, and made to be poor.",
         menuHeading: "Main Menu",
         links: {
             about: "About Us",
@@ -123,14 +126,22 @@ const en = {
         loading: "Loading news...",
         viewAllMobile: "View All News",
     },
+    inFocus: {
+        heading: "In Focus",
+        subtitle: "Issues we are closely monitoring",
+        readMore: "Read More",
+        viewAll: "View All",
+        loading: "Loading...",
+        viewAllMobile: "View All",
+    },
     quickLinksHome: {
-        heading: "Drive Social Change",
-        subtitle: "The power of the people is the heart of change. Join us in building a just society.",
+        heading: "Drive the Poor People's Movement",
+        subtitle: "The power of the poor is the weapon of the oppressed. Join us in driving the poor people's movement to build a just and equal society.",
         about: "About Us",
         aboutDesc: "Learn about the history, structure, and ideals of the Assembly of the Poor.",
-        campaigns: "Campaigns",
+        campaigns: "Our Work",
         campaignsDesc: "Follow movements, demands, and the fight on various issues.",
-        media: "Media Room",
+        media: "Poor People's Media",
         mediaDesc: "Knowledge base, articles, photos, and videos for distribution.",
     },
     contact: {
@@ -206,9 +217,10 @@ const en = {
             "วิดีโอสั้น": "Short Videos",
             "วีดีโอสั้น": "Short Videos",
             "หนังสือ": "Books",
-            "หมายข่าว": "Press Releases",
+            "ข่าวสาร": "News",
             "แถลงการณ์": "Statements",
             "ไลฟ์สด": "Live Streams",
+            "สมัชชาปักหมุด": "In Focus",
         },
         empty: {
             title: "No articles available at this time",
@@ -261,28 +273,24 @@ const en = {
         heroSubtitle: "Answers to questions about the Assembly of the Poor",
         questions: [
             {
-                question: "What is the Assembly of the Poor?",
-                answer: "The Assembly of the Poor (AOP) is a social movement and grassroots network (NGO) officially founded on December 10, 1995 (International Human Rights Day) at Thammasat University. It was formed by villagers affected by large-scale state development projects such as the Pak Mun Dam, forest zone declarations, public land policies, and policies that caused loss of livelihoods and natural resources. It serves as a voice for the rural and urban poor in demanding justice and basic rights.",
+                question: "Who is the Assembly of the Poor?",
+                answer: "We are a network of villagers affected by state development projects. Poor in rights, poor in opportunity, poor in power, and made to be poor. We officially came together on December 10, 1995.",
             },
             {
-                question: "What are the main objectives of the Assembly of the Poor?",
-                answer: "To unite the poor and disadvantaged in demanding basic rights such as the right to farmland, natural resources (land, water, forests), participation in decision-making on policies affecting lives, and opposing development that ignores impacts on local communities. Key mottos include 'The poor must determine their own future' and 'Democracy that is edible, politics that sees the poor.'",
+                question: "How is the Assembly of the Poor structured?",
+                answer: "We are a villagers' organization with a structure that empowers local communities to own and govern themselves. Each area has the authority to make its own decisions, with representatives coming together to decide on shared issues.",
             },
             {
-                question: "Who can become a member or join the Assembly of the Poor?",
-                answer: "Any citizen who agrees with the goals and methods of peaceful struggle (such as rallies, negotiations, campaigns) can participate. Especially those directly affected by state policies such as small farmers, artisanal fishers, slum dwellers, factory workers, and those affected by dams/forests. There are no formal membership requirements, but participation is through community networks nationwide.",
+                question: "What does the Assembly of the Poor contribute to society?",
+                answer: "We create a political space for the poor, build collective power for the powerless, and give the poor a shared voice to demand policy participation and checks and balances on state authority. Our contribution to society is advancing rights, freedoms, equality, and human dignity — the true principles of democracy. Beyond this, the Assembly of the Poor is a strong member of La Via Campesina. We play a role at the East Asian and Southeast Asian regional level and globally, advocating for issues benefiting small farmers worldwide, such as food sovereignty, farmers' rights, agroecology, global climate justice, and opposition to free trade in food and agriculture.",
             },
             {
-                question: "How does the Assembly of the Poor operate?",
-                answer: "It operates through community networks in various regions (North, Northeast, Central, South) by organizing large rallies, marches, government negotiations, submitting demands (e.g., 35 cases in 2019), campaigning for law/constitution amendments, and strengthening local communities. For example, the 99-day encampment in 1997 or the latest 2023 rally to pressure the government to solve problems.",
+                question: "Why protest? Why not wait for the government to solve problems?",
+                answer: "As those directly affected by the problems, we have the right and legitimacy to participate in the problem-solving process on equal footing with the state, while also scrutinizing and checking the exercise of bureaucratic power, as citizens who are the sovereign authority.",
             },
             {
-                question: "How can I support or help the Assembly of the Poor?",
-                answer: "You can support in many ways: join activities/rallies, volunteer for campaigns or information dissemination, donate money or goods (through channels announced by the organization such as official Facebook), share news to raise awareness in society. The Assembly of the Poor is open for the general public to participate to expand the power of demands.",
-            },
-            {
-                question: "Where does the Assembly of the Poor's funding come from?",
-                answer: "As a non-profit organization, it relies on donations from the general public, network members, and NGOs/foundations that value the fight for social justice. It does not receive government budget directly and emphasizes transparency in using funds for movement activities.",
+                question: "What political side are you on? Is there a party behind you?",
+                answer: "We are a poor people's movement affected by state projects. Each member has the right and freedom to choose which political party to support. But at the Assembly of the Poor network level, we support democratic governance and do not take a stance in favor of any particular political party, according to our principle: \"Democracy that is edible, politics that sees the poor.\"",
             },
         ],
         ctaTitle: "Still have more questions?",

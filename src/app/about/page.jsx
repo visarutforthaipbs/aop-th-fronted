@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MapPin, ScrollText, Scale, FileText, Star, Circle, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { Star, Circle, ExternalLink } from "lucide-react";
 import { timelineData as timeline } from "@/data/timeline";
 import { useLanguage } from "@/context/LanguageContext";
 import th from "@/locales/th";
@@ -10,157 +10,13 @@ import en from "@/locales/en";
 
 export default function About() {
   const [selectedYear, setSelectedYear] = useState(1995);
-  const [expandedCategories, setExpandedCategories] = useState([0]);
 
   const { lang } = useLanguage();
   const t = lang === "en" ? en : th;
 
-  const toggleCategory = (idx) => {
-    if (expandedCategories.includes(idx)) {
-      setExpandedCategories(expandedCategories.filter(i => i !== idx));
-    } else {
-      setExpandedCategories([...expandedCategories, idx]);
-    }
-  };
-
   const selectedTimeline = timeline.find((t) => t.year === selectedYear);
 
-  // Bilingual document archive data
-  const declarations = lang === "en" ? [
-    {
-      title: "Assembly of the Poor Black Book",
-      desc: "A people's guide from the IMF era (1998 document on the economic crisis and AOP demands)",
-      icon: <ScrollText className="w-8 h-8 text-brand-green-dark" />,
-      links: [{ label: "View Document (TU Library)", url: "https://digital.library.tu.ac.th/tu_dc/frontend/Info/item/dc:273986" }]
-    },
-    {
-      title: "(Draft) Poor People's Constitution",
-      desc: "AOP policy proposal document (2019) on 'edible democracy'",
-      icon: <Scale className="w-8 h-8 text-brand-green-dark" />,
-      links: [{ label: "Download PDF", url: "https://www.ilaw.or.th/articles/6326?download=6327" }]
-    },
-    {
-      title: "Cabinet Resolutions & Solutions",
-      desc: "Official Cabinet resolutions and meeting records on resolving AOP grievances",
-      icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
-      links: [
-        { label: "Cabinet Resolution 2000", url: "https://resolution.soc.go.th/PDF_UPLOAD/2543/P_142365_3.pdf" },
-        { label: "Cabinet Resolution 2011", url: "https://www.soc.go.th/wp-content/uploads/slkupload/44v55.pdf" },
-        { label: "Meeting Record 2023", url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf" }
-      ]
-    },
-    {
-      title: "History of Protests",
-      desc: "Academic documents on the 1997 protests, development history, and poverty elimination strategies",
-      icon: <ScrollText className="w-8 h-8 text-brand-green-dark" />,
-      links: [
-        { label: "Poverty Elimination Strategy 2001", url: "https://tdri.or.th/wp-content/uploads/2013/07/YE2001_2_01.pdf" },
-        { label: "Chapter 3: History & Protests", url: "https://doi.nrct.go.th/admin/doc/doc_487962.pdf" }
-      ]
-    },
-    {
-      title: "Appointment Documents & Journals",
-      desc: "Journals and committee appointment orders related to AOP grievances",
-      icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
-      links: [
-        { label: "AOP-related Journal", url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf" },
-        { label: "Pak Mun Dam Committee Order", url: "http://www.oic.go.th/FILEWEB/CABINFOCENTEROPM/DRAWER01/GENERAL/DATA0002/00002764.PDF" }
-      ]
-    }
-  ] : [
-    {
-      title: "สมุดปกดำสมัชชาคนจน",
-      desc: "คู่มือประชาชนยุคไอเอ็มเอฟ (เอกสารสำคัญปี 2541 เกี่ยวกับวิกฤตเศรษฐกิจและข้อเรียกร้องของสมัชชาคนจน)",
-      icon: <ScrollText className="w-8 h-8 text-brand-green-dark" />,
-      links: [{ label: "ดูเอกสาร (ตึกทะเบียน มธ.)", url: "https://digital.library.tu.ac.th/tu_dc/frontend/Info/item/dc:273986" }]
-    },
-    {
-      title: "(ร่าง) รัฐธรรมนูญคนจน",
-      desc: "เอกสารข้อเสนอเชิงนโยบายจากสมัชชาคนจน ปี 2562 เกี่ยวกับประชาธิปไตยที่กินได้",
-      icon: <Scale className="w-8 h-8 text-brand-green-dark" />,
-      links: [{ label: "ดาวน์โหลด PDF", url: "https://www.ilaw.or.th/articles/6326?download=6327" }]
-    },
-    {
-      title: "มติ ครม. และแนวทางแก้ไข",
-      desc: "มติคณะรัฐมนตรีและบันทึกการประชุมอย่างเป็นทางการเกี่ยวกับการแก้ปัญหาสมัชชาคนจน",
-      icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
-      links: [
-        { label: "มติ ครม. ปี 2543 (ข้อเรียกร้อง)", url: "https://resolution.soc.go.th/PDF_UPLOAD/2543/P_142365_3.pdf" },
-        { label: "มติ ครม. ปี 2554 (ปัญหาสำคัญ)", url: "https://www.soc.go.th/wp-content/uploads/slkupload/44v55.pdf" },
-        { label: "บันทึกการประชุม ปี 2566", url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf" }
-      ]
-    },
-    {
-      title: "ประวัติศาสตร์การชุมนุม",
-      desc: "เอกสารวิชาการประกอบการชุมนุมปี 2540 พัฒนาการ และยุทธศาสตร์ขจัดความยากจน",
-      icon: <ScrollText className="w-8 h-8 text-brand-green-dark" />,
-      links: [
-        { label: "ยุทธศาสตร์ขจัดความยากจน ปี 2544", url: "https://tdri.or.th/wp-content/uploads/2013/07/YE2001_2_01.pdf" },
-        { label: "บทที่ 3 ประวัติและการชุมนุม", url: "https://doi.nrct.go.th/admin/doc/doc_487962.pdf" }
-      ]
-    },
-    {
-      title: "เอกสารแต่งตั้งและวารสาร",
-      desc: "วารสารการแก้ปัญหาและคำสั่งแต่งตั้งคณะกรรมการแก้ไขปัญหาจากข้อเรียกร้อง",
-      icon: <FileText className="w-8 h-8 text-brand-green-dark" />,
-      links: [
-        { label: "วารสารเกี่ยวกับสมัชชาคนจน", url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf" },
-        { label: "แต่งตั้ง กก. แก้ปัญหาเขื่อนปากมูล", url: "http://www.oic.go.th/FILEWEB/CABINFOCENTEROPM/DRAWER01/GENERAL/DATA0002/00002764.PDF" }
-      ]
-    }
-  ];
-
-  const archiveCategories = lang === "en" ? [
-    {
-      category: "Research on Dam Project Impacts",
-      documents: [
-        { title: "Struggle and Recovery of Rasi Salai Dam Affected Communities", size: "2 MB", date: "2018", url: "http://202.28.34.124/dspace/bitstream/123456789/173/1/56010181002.pdf" },
-        { title: "Case Study: Pak Mun Dam Affected River Communities", size: "8 MB", date: "2004", url: "https://elibrary.tsri.or.th/fullP/PDF4480089/PDF4480089_full.pdf" },
-        { title: 'Mae Mun: "Return of the Fishermen"', size: "23 MB", date: "N/A", url: "https://www.livingriversiam.org/3river-thai/pm/tb_research/pmd_TBR-book.pdf" }
-      ]
-    },
-    {
-      category: "History of the AOP Movement",
-      documents: [
-        { title: "History of Thai Farmers' Movements: Past to Present", size: "254 KB", date: "2007", url: "https://archive.lib.cmu.ac.th/full/T/2550/socde0350aw_bib.pdf" },
-        { title: "Street Politics: 99 Days and the AOP's March History", size: "1 MB", date: "2001", url: "https://tdri.or.th/wp-content/uploads/2013/07/YE2001_2_01.pdf" },
-        { title: "AOP Meeting Records and Issues (Office of PM)", size: "5 MB", date: "2023", url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf" }
-      ]
-    },
-    {
-      category: "Community Rights & Resource Management",
-      documents: [
-        { title: "(Draft) Poor People's Constitution", size: "N/A", date: "2019–2021", url: "https://www.ilaw.or.th/articles/6326?download=6327" },
-        { title: "Community Rights in Natural Resource & Environmental Management", size: "3 MB", date: "2018", url: "http://ethesisarchive.library.tu.ac.th/thesis/2018/TU_2018_5901034727_9606_10156.pdf" },
-        { title: "Community Rights and Resource Management (Full Edition)", size: "1 MB", date: "N/A", url: "https://elibrary.tsri.or.th/fullP/RDG4210012/RDG4210012V6/RDG4210012V6_s01.pdf" }
-      ]
-    }
-  ] : [
-    {
-      category: "รายงานการศึกษาผลกระทบจากโครงการเขื่อน",
-      documents: [
-        { title: "การต่อสู้และการฟื้นฟูวิถีชีวิตผู้ได้รับผลกระทบจากเขื่อนราษีไศล", size: "2 MB", date: "2018", url: "http://202.28.34.124/dspace/bitstream/123456789/173/1/56010181002.pdf" },
-        { title: "กรณีศึกษา ชุมชนลุ่มน้ำที่ได้รับผลกระทบจากการก่อสร้างเขื่อนปากมูล", size: "8 MB", date: "2004", url: "https://elibrary.tsri.or.th/fullP/PDF4480089/PDF4480089_full.pdf" },
-        { title: 'แม่มูน "การกลับมาของคนหาปลา"', size: "23 MB", date: "ไม่ระบุ", url: "https://www.livingriversiam.org/3river-thai/pm/tb_research/pmd_TBR-book.pdf" }
-      ]
-    },
-    {
-      category: "ประวัติศาสตร์การเคลื่อนไหวของสมัชชาคนจน",
-      documents: [
-        { title: "ประวัติการเคลื่อนไหวของชาวนาไทยจากอดีต-ปัจจุบัน", size: "254 KB", date: "2550", url: "https://archive.lib.cmu.ac.th/full/T/2550/socde0350aw_bib.pdf" },
-        { title: "การเมืองบนท้องถนน 99 วัน สมัชชาคนจน และประวัติศาสตร์การเดินขบวน", size: "1 MB", date: "2001", url: "https://tdri.or.th/wp-content/uploads/2013/07/YE2001_2_01.pdf" },
-        { title: "บันทึกการประชุมและปัญหาสมัชชาคนจน (สำนักนายกฯ)", size: "5 MB", date: "2023", url: "https://www.opm.go.th/opmportal/multimedia/phoobeas/FilePDF/Month2024/Month66-11.pdf" }
-      ]
-    },
-    {
-      category: "สิทธิชุมชนและการจัดการทรัพยากร",
-      documents: [
-        { title: "(ร่าง) รัฐธรรมนูญคนจน", size: "ไม่ระบุ", date: "2562-2564", url: "https://www.ilaw.or.th/articles/6326?download=6327" },
-        { title: "สิทธิชุมชนในการจัดการทรัพยากรธรรมชาติและสิ่งแวดล้อม", size: "3 MB", date: "2018", url: "http://ethesisarchive.library.tu.ac.th/thesis/2018/TU_2018_5901034727_9606_10156.pdf" },
-        { title: "สิทธิชุมชนและการจัดการทรัพยากร (ฉบับสมบูรณ์)", size: "1 MB", date: "ไม่ระบุ", url: "https://elibrary.tsri.or.th/fullP/RDG4210012/RDG4210012V6/RDG4210012V6_s01.pdf" }
-      ]
-    }
-  ];
+  const displayYear = (year) => lang === "th" ? year + 543 : year;
 
   return (
     <div className="min-h-screen">
@@ -241,33 +97,28 @@ export default function About() {
                   ละเมิดสิทธิในการจัดการทรัพยากรของชุมชนท้องถิ่น
                   ทำลายวัฒนธรรมที่แตกต่างหลากหลาย
                 </p>
-                <div className="bg-gray-50 p-8 rounded-2xl border-l-4 border-brand-black my-8 italic text-gray-700">
-                  <p className="mb-0">
-                    &quot;สมัชชาคนจนก่อตั้งขึ้นอย่างเป็นทางการ เมื่อวันที่ 10 ธันวาคม
-                    2538 (วันสิทธิมนุษยชนสากล) ที่มหาวิทยาลัยธรรมศาสตร์&quot;
-                  </p>
-                </div>
                 <p>
-                  โดยมีตัวแทนชุมชนท้องถิ่นต่างๆ ที่ได้รับผลกระทบจากการพัฒนา
+                  สมัชชาคนจนก่อตั้งขึ้นอย่างเป็นทางการ เมื่อวันที่ 10 ธันวาคม 2538 (วันสิทธิมนุษยชนสากล)
+                  ที่มหาวิทยาลัยธรรมศาสตร์ โดยมีตัวแทนชุมชนท้องถิ่นต่างๆ ที่ได้รับผลกระทบจากการพัฒนา
                   ทั้งในประเทศ และอีก 10 ประเทศในทวีปเอเชียได้เข้าร่วมกันก่อตั้ง
                   หลังจากนั้นได้ร่วมกันร่าง &ldquo;คำประกาศลำน้ำมูน&rdquo; หรือ &ldquo;ปฏิญญาปากมูน&rdquo;
                   ขึ้นในระหว่างวันที่ 11-14 ธันวาคม 2538 ณ อ.โขงเจียม จ.อุบลราชธานี
                 </p>
+                <div className="bg-gray-50 p-8 rounded-2xl border-l-4 border-brand-black my-8 italic text-gray-700">
+                  <p className="mb-2">
+                    &ldquo;...เรามีความเห็นร่วมกันว่า แนวความคิดที่สนับสนุนแต่เพียงการเติบโตทางเศรษฐกิจของรัฐและภาคธุรกิจเอกชน
+                    เป็นแนวคิดที่เป็นอันตรายต่อประชาชนและต่อการพัฒนาสังคม
+                    จึงถือเป็นความจำเป็นอย่างเร่งด่วนที่จะต้องได้รับการแก้ไขและเปลี่ยนแปลงทัศนะ
+                    ความคิด ยุทธศาสตร์ และการปฏิบัติในกระบวนการพัฒนาทั้งของรัฐและบริษัทเอกชนเสียใหม่
+                    ตามแนวทางที่จะมุ่งไปสู่ความก้าวหน้าของมวลมนุษยชาติที่ไร้พรมแดน…&rdquo;
+                  </p>
+                  <p className="text-right text-sm font-semibold not-italic">(คำประกาศลำน้ำมูล, 15 ธันวาคม 2538)</p>
+                </div>
                 <p>
-                  โดยผู้เข้าร่วมมีความเห็นร่วมกันว่าแนวคิดที่สนับสนุนแต่เพียงการเติบโตทางเศรษฐกิจของภาครัฐและภาคธุรกิจเอกชน
-                  เป็นแนวคิดที่เป็นอันตรายต่อประชาชนและต่อการพัฒนาสังคม
-                  จึงถือเป็นความจำเป็นอย่างเร่งด่วนที่จะต้องได้รับการแก้ไขและเปลี่ยนแปลงทัศนะ
-                  ความคิด ยุทธศาสตร์
-                  และการปฏิบัติในกระบวนการพัฒนาทั้งของรัฐและบริษัทเอกชนเสียใหม่
-                  ตามแนวทางที่จะมุ่งไปสู่ความก้าวหน้าของมวลมนุษยชาติที่ไร้พรมแดน
-                </p>
-                <p>
-                  ในการก่อตั้ง สมัชชาคนจน
-                  มีวัตถุประสงค์เพื่อเป็นขบวนการการเคลื่อนไหวของประชาชนที่รวบรวมพลังแห่งความร่วมมือ
+                  ในการก่อตั้ง สมัชชาคนจน จึงมีวัตถุประสงค์เพื่อเป็นขบวนการการเคลื่อนไหวของประชาชนที่รวบรวมพลังแห่งความร่วมมือ
                   แลกเปลี่ยนประสบการณ์ ประสานความช่วยเหลือซึ่งกันและกัน
-                  ในการผลักดันให้ตระหนักว่า
-                  รัฐต้องจัดสรรทรัพยากรต่างๆให้ประชาชนทุกคนอย่างเท่าเทียมและเป็นธรรม
-                  และให้ประชาชนมีส่วนร่วมในการกำหนดอนาคตของตนเองและประสานความร่วมมือซึ่งกันและกันเพื่อการแก้ไขปัญหาของกลุ่มสมาชิกสมัชชาคนจน
+                  ในการผลักดันให้ตระหนักว่า รัฐต้องจัดสรรทรัพยากรต่างๆให้ประชาชนทุกคนอย่างเท่าเทียมและเป็นธรรม
+                  และให้ประชาชนมีส่วนร่วมในการกำหนดอนาคตของตนเองและประสานความร่วมมือซึ่งกันและกัน
                 </p>
               </>
             )}
@@ -296,7 +147,7 @@ export default function About() {
                   : "bg-white text-gray-500 hover:bg-gray-100 hover:text-brand-green-dark border border-gray-200"
                   }`}
               >
-                {item.year}
+                {displayYear(item.year)}
               </button>
             ))}
           </div>
@@ -309,7 +160,7 @@ export default function About() {
               <div className="relative z-10">
                 <div className="flex flex-col md:flex-row md:items-center gap-8 mb-10">
                   <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-brand-green-dark to-brand-green-dark opacity-20 md:opacity-100">
-                    {selectedTimeline.year}
+                    {displayYear(selectedTimeline.year)}
                   </div>
                   <div className="flex-1">
                     <h3 className="text-3xl md:text-4xl font-bold text-brand-black mb-4">
@@ -362,177 +213,30 @@ export default function About() {
       </section>
 
 
-      {/* Declarations Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-brand-black">
-                {t.about.declarations.heading}
-              </h2>
-              <p className="text-gray-600 text-lg">
-                {t.about.declarations.subheading}
-              </p>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {declarations.map((doc, idx) => (
-              <div
-                key={idx}
-                className="group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
-              >
-                <div className="mb-6 bg-gray-50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  {doc.icon}
-                </div>
-                <h3 className="text-2xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors">
-                  {doc.title}
-                </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed flex-1">{doc.desc}</p>
-                <div className="space-y-4 mt-auto pt-6 border-t border-gray-100">
-                  {doc.links.map((link, lidx) => (
-                    <a
-                      key={lidx}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-brand-black font-bold hover:text-brand-green-dark hover:translate-x-2 transition-all"
-                    >
-                      <span className="truncate">{link.label}</span>
-                      <svg className="w-4 h-4 ml-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Archive Section */}
-      <section className="py-20 bg-brand-black text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/pattern/pattern-green.svg')] opacity-5"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-1">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                {t.about.archive.heading.split("\n").map((line, i) => (
-                  <span key={i}>{line}{i === 0 && <br />}</span>
-                ))}
-              </h2>
-              <p className="text-gray-400 mb-8 text-lg leading-relaxed">
-                {t.about.archive.subheading}
-              </p>
-              <button className="bg-brand-yellow text-brand-black px-8 py-3 rounded-full font-bold hover:bg-white hover:-translate-y-[2px] transition-all duration-300">
-                {t.about.archive.cta}
-              </button>
-            </div>
-
-            <div className="lg:col-span-2">
-              <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
-                <div className="space-y-8">
-                  {archiveCategories.map((cat, idx) => {
-                    const isExpanded = expandedCategories.includes(idx);
-                    return (
-                      <div key={idx} className="mb-4 bg-brand-black/40 rounded-2xl border border-white/5 overflow-hidden transition-all duration-300">
-                        <button
-                          onClick={() => toggleCategory(idx)}
-                          className="w-full flex items-center justify-between p-5 hover:bg-white/5 transition-colors text-left"
-                        >
-                          <h3 className={`text-lg sm:text-xl font-bold pr-4 transition-colors ${isExpanded ? "text-white" : "text-gray-300"}`}>
-                            {cat.category}
-                          </h3>
-                          {isExpanded ? (
-                            <ChevronUp className="w-6 h-6 text-brand-green-dark flex-shrink-0" />
-                          ) : (
-                            <ChevronDown className="w-6 h-6 text-gray-500 flex-shrink-0" />
-                          )}
-                        </button>
-
-                        {isExpanded && (
-                          <div className="space-y-2 px-5 pb-5 animate-fade-in-up">
-                            {cat.documents.map((item, docIdx) => (
-                              <a
-                                key={docIdx}
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all border border-transparent hover:border-white/10 group"
-                              >
-                                <div className="flex items-start mb-2 sm:mb-0">
-                                  <div className="bg-brand-black/40 p-3 rounded-lg mr-4 text-gray-500 group-hover:text-brand-green-dark transition-colors">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                    </svg>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-bold text-lg mb-1 text-gray-100 group-hover:text-white transition-colors line-clamp-2">
-                                      {item.title}
-                                    </h4>
-                                    <p className="text-sm text-gray-400">
-                                      {t.about.archive.pdfLabel} • {item.size} • {t.about.archive.yearLabel}: {item.date}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="p-2 text-gray-500 group-hover:text-brand-green-dark transition-colors sm:ml-4 shrink-0">
-                                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                  </svg>
-                                </div>
-                              </a>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Links to FAQ and Partners */}
+      {/* Link to FAQ */}
       <section className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Link href="/about/faq" className="group">
-              <div className="bg-brand-green-dark text-brand-white p-10 rounded-3xl shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 h-full flex flex-col justify-between relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
-                <div>
-                  <h3 className="text-3xl font-bold mb-4 group-hover:text-brand-white transition-colors">
-                    {t.about.faqCard.title}
-                  </h3>
-                  <p className="text-brand-white text-lg mb-8">
-                    {t.about.faqCard.desc}
-                  </p>
-                </div>
-                <span className="inline-flex items-center text-brand-white font-bold group-hover:translate-x-2 transition-transform">
-                  {t.about.faqCard.cta}{" "}
-                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                  </svg>
-                </span>
-              </div>
-            </Link>
-            <div className="bg-gray-50 text-brand-black p-10 rounded-3xl shadow-sm border border-gray-200 h-full flex flex-col justify-between">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link href="/about/faq" className="group">
+            <div className="bg-brand-green-dark text-brand-white p-10 rounded-3xl shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
               <div>
-                <h3 className="text-3xl font-bold mb-4 text-brand-green-dark">
-                  {t.about.partnersCard.title}
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-brand-white transition-colors">
+                  {t.about.faqCard.title}
                 </h3>
-                <p className="text-gray-600 text-lg mb-8">
-                  {t.about.partnersCard.desc}
+                <p className="text-brand-white text-lg mb-8">
+                  {t.about.faqCard.desc}
                 </p>
               </div>
-              <span className="inline-block text-gray-400 font-medium bg-gray-200 px-4 py-2 rounded-full self-start">
-                {t.about.partnersCard.placeholder}
+              <span className="inline-flex items-center text-brand-white font-bold group-hover:translate-x-2 transition-transform">
+                {t.about.faqCard.cta}{" "}
+                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
               </span>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 

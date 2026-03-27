@@ -169,39 +169,6 @@ export default function Contact() {
                 </p>
               </div>
 
-              {/* Address */}
-              <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow flex items-start">
-                <div className="bg-gray-100/30 p-3 rounded-full mr-6 text-brand-green-dark">
-                  <svg
-                    className="w-8 h-8"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2 text-brand-black">
-                    {t.contact.address}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-                    {t.contact.addressValue}
-                  </p>
-                </div>
-              </div>
-
               {/* Phone & Email */}
               <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow flex items-start">
                 <div className="bg-gray-100/30 p-3 rounded-full mr-6 text-brand-green-dark">
@@ -228,7 +195,7 @@ export default function Contact() {
                       <span className="font-semibold text-brand-black">
                         {t.contact.emailLabel}
                       </span>{" "}
-                      aopthailand2538@gmail.com
+                      {lang === "en" ? "Awaiting official email" : "กำลังรออีเมล์อย่างเป็นทางการ"}
                     </p>
 
                   </div>
@@ -303,23 +270,6 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gray-100 rounded-3xl overflow-hidden h-96 relative shadow-inner">
-            <iframe
-              title={lang === "en" ? "AOP Office Location" : "สมาคมวิถีชนบท (สวช.) Location"}
-              src="https://maps.google.com/maps?q=13.716631479200355,100.50643457980348&t=&z=16&ie=UTF8&iwloc=&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

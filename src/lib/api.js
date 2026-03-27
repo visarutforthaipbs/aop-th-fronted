@@ -91,8 +91,8 @@ export async function getCampaignBySlug(slug) {
 }
 
 // Fetch all articles (optionally filtered by category)
-export async function getAllArticles(token, categoryId = null) {
-  let endpoint = "/wp/v2/articles?per_page=100&_embed";
+export async function getAllArticles(token, categoryId = null, perPage = 100) {
+  let endpoint = `/wp/v2/articles?per_page=${perPage}&_embed`;
   if (categoryId) {
     endpoint += `&categories=${categoryId}`;
   }
@@ -103,6 +103,16 @@ export async function getAllArticles(token, categoryId = null) {
 // Fetch article categories (using standard WordPress categories)
 export async function getArticleCategories() {
   const result = await fetchFromApi("/wp/v2/categories?per_page=100");
+  return result || [];
+}
+
+// Fetch articles by category slug
+export async function getArticlesByCategorySlug(categorySlug, perPage = 6) {
+  // First resolve slug to category ID
+  const categories = await fetchFromApi(`/wp/v2/categories?slug=${encodeURIComponent(categorySlug)}`);
+  if (!categories || categories.length === 0) return [];
+  const categoryId = categories[0].id;
+  const result = await fetchFromApi(`/wp/v2/articles?categories=${categoryId}&per_page=${perPage}&_embed`);
   return result || [];
 }
 

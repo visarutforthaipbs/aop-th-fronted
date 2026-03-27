@@ -17,7 +17,7 @@ export const metadata = {
   description:
     "เว็บไซต์สมัชชาคนจน องค์กรเครือข่ายประชาชนเพื่อการต่อสู้เพื่อความยุติธรรม",
   icons: {
-    icon: "/logos/favicon.svg",
+    icon: "/logos/favicon-white.svg",
   },
 };
 
