@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/context/LanguageContext";
 import LangSync from "@/components/LangSync";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://assemblyofthepoor.org";
+
 const notoSansThaiLooped = Noto_Sans_Thai_Looped({
   subsets: ["thai", "latin"],
   weight: ["400", "700"],
@@ -13,9 +15,53 @@ const notoSansThaiLooped = Noto_Sans_Thai_Looped({
 });
 
 export const metadata = {
-  title: "สมัชชาคนจน - Assembly of the Poor",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "สมัชชาคนจน - Assembly of the Poor",
+    template: "%s | สมัชชาคนจน",
+  },
   description:
     "เว็บไซต์สมัชชาคนจน องค์กรเครือข่ายประชาชนเพื่อการต่อสู้เพื่อความยุติธรรม",
+  keywords: [
+    "สมัชชาคนจน",
+    "Assembly of the Poor",
+    "สิทธิชุมชน",
+    "ความยุติธรรมทางสังคม",
+    "ประชาธิปไตย",
+    "ชาวบ้าน",
+    "ภาคประชาชน",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "th_TH",
+    url: "/",
+    siteName: "สมัชชาคนจน - Assembly of the Poor",
+    title: "สมัชชาคนจน - Assembly of the Poor",
+    description:
+      "เว็บไซต์สมัชชาคนจน องค์กรเครือข่ายประชาชนเพื่อการต่อสู้เพื่อความยุติธรรม",
+    images: [
+      {
+        url: "/images/mobile-version-hero.jpg",
+        width: 1200,
+        height: 630,
+        alt: "สมัชชาคนจน - Assembly of the Poor",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "สมัชชาคนจน - Assembly of the Poor",
+    description:
+      "เว็บไซต์สมัชชาคนจน องค์กรเครือข่ายประชาชนเพื่อการต่อสู้เพื่อความยุติธรรม",
+    images: ["/images/mobile-version-hero.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: "/logos/favicon-white.svg",
   },
