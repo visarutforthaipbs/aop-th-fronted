@@ -186,15 +186,13 @@ export default function Media() {
 
                       <h3
                         className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight line-clamp-2"
-                      >
-                        {getTitle(item, lang)}
-                      </h3>
+                        dangerouslySetInnerHTML={{ __html: getTitle(item, lang) }}
+                      />
 
                       <div
                         className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
-                      >
-                        {getExcerpt(item, lang)}
-                      </div>
+                        dangerouslySetInnerHTML={{ __html: getExcerpt(item, lang) }}
+                      />
 
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                         <span className="text-brand-green-dark font-bold text-sm flex items-center group-hover:translate-x-1 transition-transform">

@@ -135,13 +135,17 @@ export default function Campaigns() {
                       </div>
                     )}
                     <div className="p-8 flex-1 flex flex-col">
-                      <h3 className="text-2xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight">
-                        {getTitle(campaign, lang)}
-                      </h3>
-                      <p className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm">
-                        {getExcerpt(campaign, lang) ||
-                          (campaign.content?.rendered || campaign.content || "").replace(/<[^>]+>/g, "").slice(0, 160) + "…"}
-                      </p>
+                      <h3 
+                        className="text-2xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight"
+                        dangerouslySetInnerHTML={{ __html: getTitle(campaign, lang) }}
+                      />
+                      <p 
+                        className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
+                        dangerouslySetInnerHTML={{ 
+                          __html: getExcerpt(campaign, lang) ||
+                          (campaign.content?.rendered || campaign.content || "").replace(/<[^>]+>/g, "").slice(0, 160) + "…"
+                        }}
+                      />
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                         {getCampaignTags(campaign).length > 0 ? (
                           <div className="flex flex-wrap gap-2">
@@ -210,12 +214,14 @@ export default function Campaigns() {
         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-green-dark/20 via-transparent to-transparent"></div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className={`text-3xl md:text-4xl font-bold ${t.campaigns.cta.body ? 'mb-6' : 'mb-10'}`}>
             {t.campaigns.cta.heading}
           </h2>
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            {t.campaigns.cta.body}
-          </p>
+          {t.campaigns.cta.body && (
+            <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+              {t.campaigns.cta.body}
+            </p>
+          )}
           <Link
             href="/get-involved"
             className="inline-block bg-brand-white hover:bg-white text-brand-black font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-brand-white/50 hover:-translate-y-1 text-lg"

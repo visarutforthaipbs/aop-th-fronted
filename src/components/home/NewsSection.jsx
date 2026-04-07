@@ -69,14 +69,14 @@ export default function NewsSection({ latestNews }) {
                                                 })
                                                 : ""}
                                         </div>
-                                        <h3 className="text-xl font-bold mb-4 text-brand-black group-hover:text-brand-green-dark transition-colors line-clamp-2">
-                                            {getTitle(item, lang)}
-                                        </h3>
+                                        <h3 
+                                            className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight line-clamp-2"
+                                            dangerouslySetInnerHTML={{ __html: getTitle(item, lang) }}
+                                        />
                                         <div
                                             className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
-                                        >
-                                            {getExcerpt(item, lang)}
-                                        </div>
+                                            dangerouslySetInnerHTML={{ __html: getExcerpt(item, lang) }}
+                                        />
                                         <Link
                                             href={`/media/articles/${item.slug}`}
                                             className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors mt-auto"

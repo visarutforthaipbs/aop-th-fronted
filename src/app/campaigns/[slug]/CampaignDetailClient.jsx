@@ -176,7 +176,7 @@ export default function CampaignDetailClient({ campaign, featuredImage }) {
                             <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
-                            {lang === "en" ? "Back to all campaigns" : "กลับไปยังหน้างานรณรงค์ทั้งหมด"}
+                            {lang === "en" ? "Back to all campaigns" : "กลับไปยังหน้างานของเราทั้งหมด"}
                         </a>
                     </div>
                 </div>

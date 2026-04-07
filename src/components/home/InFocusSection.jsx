@@ -89,12 +89,14 @@ export default function InFocusSection({ articles }) {
                                                 })
                                                 : ""}
                                         </div>
-                                        <h3 className="text-lg font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors line-clamp-2">
-                                            {getTitle(item, lang)}
-                                        </h3>
-                                        <div className="text-gray-600 mb-4 line-clamp-2 flex-1 leading-relaxed text-sm">
-                                            {getExcerpt(item, lang)}
-                                        </div>
+                                        <h3 
+                                            className="text-lg font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors line-clamp-2"
+                                            dangerouslySetInnerHTML={{ __html: getTitle(item, lang) }}
+                                        />
+                                        <div 
+                                            className="text-gray-600 mb-4 line-clamp-2 flex-1 leading-relaxed text-sm"
+                                            dangerouslySetInnerHTML={{ __html: getExcerpt(item, lang) }}
+                                        />
                                         <Link
                                             href={`/media/articles/${item.slug}`}
                                             className="inline-flex items-center text-brand-green-dark font-bold text-sm hover:text-brand-black transition-colors mt-auto"

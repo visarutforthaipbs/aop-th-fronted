@@ -30,7 +30,7 @@ export async function generateMetadata({ params }) {
 
   const title = stripHtml(campaign.title?.rendered || campaign.title || "Campaign");
   const description = stripHtml(campaign.excerpt?.rendered || campaign.content?.rendered || "").slice(0, 180)
-    || "ติดตามรายละเอียดงานรณรงค์ของสมัชชาคนจน";
+    || "ติดตามรายละเอียดงานของเราของสมัชชาคนจน";
   const featuredImage = campaign._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/images/mobile-version-hero.jpg";
   const url = `${SITE_URL}/campaigns/${campaign.slug}`;
 
