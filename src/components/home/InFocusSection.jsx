@@ -89,11 +89,11 @@ export default function InFocusSection({ articles }) {
                                                 })
                                                 : ""}
                                         </div>
-                                        <h3 
+                                        <h3
                                             className="text-lg font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors line-clamp-2"
                                             dangerouslySetInnerHTML={{ __html: getTitle(item, lang) }}
                                         />
-                                        <div 
+                                        <div
                                             className="text-gray-600 mb-4 line-clamp-2 flex-1 leading-relaxed text-sm"
                                             dangerouslySetInnerHTML={{ __html: getExcerpt(item, lang) }}
                                         />

@@ -69,7 +69,7 @@ export default function NewsSection({ latestNews }) {
                                                 })
                                                 : ""}
                                         </div>
-                                        <h3 
+                                        <h3
                                             className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight line-clamp-2"
                                             dangerouslySetInnerHTML={{ __html: getTitle(item, lang) }}
                                         />
