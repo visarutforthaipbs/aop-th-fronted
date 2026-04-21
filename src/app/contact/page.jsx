@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
-import { useLanguage } from "@/context/LanguageContext";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import { useTranslation } from "@/context/LanguageContext";
 
 export default function Contact() {
-  const { lang } = useLanguage();
-  const t = lang === "en" ? en : th;
+  const { lang, t } = useTranslation();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -16,21 +13,42 @@ export default function Contact() {
     subject: "",
     message: "",
   });
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const validate = () => {
+    const next = {};
+    if (!formData.name.trim()) next.name = lang === "en" ? "Name is required" : "กรุณาระบุชื่อ";
+    if (!formData.email.trim()) {
+      next.email = lang === "en" ? "Email is required" : "กรุณาระบุอีเมล";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      next.email = lang === "en" ? "Invalid email" : "อีเมลไม่ถูกต้อง";
+    }
+    if (!formData.subject.trim()) next.subject = lang === "en" ? "Subject is required" : "กรุณาระบุหัวข้อ";
+    if (!formData.message.trim()) next.message = lang === "en" ? "Message is required" : "กรุณาระบุข้อความ";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validate()) return;
+    setSubmitting(true);
+    // mailto fallback — no backend yet, but we show a realistic flow
     const mailtoLink = `mailto:aopthailand2538@gmail.com?subject=${lang === "en" ? "Contact from" : "ติดต่อจาก"} ${encodeURIComponent(formData.name)}: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`${lang === "en" ? "Name" : "ชื่อ"}: ${formData.name}\n${lang === "en" ? "Email" : "อีเมล"}: ${formData.email}\n\n${lang === "en" ? "Message" : "ข้อความ"}:\n${formData.message}`)}`;
     window.location.href = mailtoLink;
+    setSubmitting(false);
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setTimeout(() => setSubmitted(false), 5000);
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear error when user types
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: undefined });
+    }
   };
 
   return (
@@ -73,86 +91,83 @@ export default function Contact() {
                   <p>{t.contact.successDesc}</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-sm font-bold text-gray-700 mb-2"
-                      >
+                      <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">
                         {t.contact.name} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         id="name"
                         name="name"
-                        required
                         value={formData.name}
                         onChange={handleChange}
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? "name-error" : undefined}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
                         placeholder={t.contact.namePlaceholder}
                       />
+                      {errors.name && <p id="name-error" className="mt-1 text-sm text-red-600">{errors.name}</p>}
                     </div>
                     <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-bold text-gray-700 mb-2"
-                      >
+                      <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
                         {t.contact.email} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="email"
                         id="email"
                         name="email"
-                        required
                         value={formData.email}
                         onChange={handleChange}
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? "email-error" : undefined}
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
                         placeholder="name@example.com"
                       />
+                      {errors.email && <p id="email-error" className="mt-1 text-sm text-red-600">{errors.email}</p>}
                     </div>
                   </div>
                   <div>
-                    <label
-                      htmlFor="subject"
-                      className="block text-sm font-bold text-gray-700 mb-2"
-                    >
+                    <label htmlFor="subject" className="block text-sm font-bold text-gray-700 mb-2">
                       {t.contact.subject} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       id="subject"
                       name="subject"
-                      required
                       value={formData.subject}
                       onChange={handleChange}
+                      aria-invalid={!!errors.subject}
+                      aria-describedby={errors.subject ? "subject-error" : undefined}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
                       placeholder={t.contact.subjectPlaceholder}
                     />
+                    {errors.subject && <p id="subject-error" className="mt-1 text-sm text-red-600">{errors.subject}</p>}
                   </div>
                   <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-bold text-gray-700 mb-2"
-                    >
+                    <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">
                       {t.contact.message} <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       id="message"
                       name="message"
                       rows="6"
-                      required
                       value={formData.message}
                       onChange={handleChange}
+                      aria-invalid={!!errors.message}
+                      aria-describedby={errors.message ? "message-error" : undefined}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none resize-none"
                       placeholder={t.contact.messagePlaceholder}
                     />
+                    {errors.message && <p id="message-error" className="mt-1 text-sm text-red-600">{errors.message}</p>}
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-brand-green-dark/30 hover:-translate-y-1"
+                    disabled={submitting}
+                    className="w-full bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-brand-green-dark/30 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {t.contact.submit}
+                    {submitting ? (lang === "en" ? "Sending..." : "กำลังส่ง...") : t.contact.submit}
                   </button>
                 </form>
               )}
@@ -172,18 +187,8 @@ export default function Contact() {
               {/* Phone & Email */}
               <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow flex items-start">
                 <div className="bg-gray-100/30 p-3 rounded-full mr-6 text-brand-green-dark">
-                  <svg
-                    className="w-8 h-8"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div>
@@ -195,9 +200,10 @@ export default function Contact() {
                       <span className="font-semibold text-brand-black">
                         {t.contact.emailLabel}
                       </span>{" "}
-                      {lang === "en" ? "Awaiting official email" : "กำลังรออีเมล์อย่างเป็นทางการ"}
+                      <a href="mailto:aopthailand2538@gmail.com" className="text-brand-green-dark hover:underline">
+                        aopthailand2538@gmail.com
+                      </a>
                     </p>
-
                   </div>
                 </div>
               </div>
@@ -220,7 +226,7 @@ export default function Contact() {
                     </svg>
                   </a>
                   <a
-                    href="https://www.instagram.com/assemblyofthepoor.official?fbclid=IwY2xjawQFQOVleHRuA2FlbQIxMABicmlkETJUeEcwaXBEQko4aVhBZGp3c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHk5CMo8dmrasnTdnMvUiAJ5kxBp7iuWQwRVuBkw5zvOyaKUKWIzB09NeGqqA_aem_tBV-7Ma7FK9dNd6DRAiXBg"
+                    href="https://www.instagram.com/assemblyofthepoor.official"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-14 h-14 bg-brand-green-dark text-white rounded-full flex items-center justify-center transition-all duration-300 hover:bg-brand-black hover:scale-110 shadow-lg shadow-brand-green-dark/20"

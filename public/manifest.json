@@ -1,0 +1,16 @@
+{
+  "name": "สมัชชาคนจน - Assembly of the Poor",
+  "short_name": "AOP",
+  "description": "เว็บไซต์สมัชชาคนจน องค์กรเครือข่ายประชาชนเพื่อการต่อสู้เพื่อความยุติธรรม",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#009253",
+  "icons": [
+    {
+      "src": "/logos/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

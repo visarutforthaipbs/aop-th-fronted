@@ -3,21 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { StaggerContainer, StaggerItem, SlideUpFadeIn } from "@/components/animations/ScrollAnim";
-import { useLanguage } from "@/context/LanguageContext";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import { useTranslation } from "@/context/LanguageContext";
 import { getTitle, getExcerpt } from "@/lib/acf";
-
-// Helper function to extract first image from HTML content
-function extractFirstImage(htmlContent) {
-    if (!htmlContent) return null;
-    const imgMatch = htmlContent.match(/<img[^>]+src=["']([^"']+)["']/i);
-    return imgMatch ? imgMatch[1] : null;
-}
+import { extractFirstImage } from "@/lib/utils";
+import { formatLongDate } from "@/lib/date";
+import SafeHtml from "@/components/SafeHtml";
 
 export default function NewsSection({ latestNews }) {
-    const { lang } = useLanguage();
-    const t = lang === "en" ? en : th;
+    const { lang, dateLocale, t } = useTranslation();
 
     return (
         <section className="py-24 bg-white">
@@ -41,6 +34,7 @@ export default function NewsSection({ latestNews }) {
                     {latestNews.length > 0 ? (
                         latestNews.map((item) => {
                             const featuredImage = item.featured_image || extractFirstImage(item.content?.rendered) || '/hero-section-image.jpg';
+                            const plainTitle = getTitle(item, lang).replace(/<[^>]+>/g, "");
 
                             return (
                                 <StaggerItem
@@ -51,7 +45,7 @@ export default function NewsSection({ latestNews }) {
                                     <div className="relative h-48 overflow-hidden">
                                         <Image
                                             src={featuredImage}
-                                            alt={item.title?.rendered || "News thumbnail"}
+                                            alt={plainTitle}
                                             fill
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             sizes="(max-width: 768px) 100vw, 33vw"
@@ -60,22 +54,15 @@ export default function NewsSection({ latestNews }) {
                                     </div>
 
                                     <div className="p-8 flex-1 flex flex-col">
-                                        <div className="text-sm text-gray-400 mb-4 font-medium">
-                                            {item.date
-                                                ? new Date(item.date).toLocaleDateString(lang === "en" ? "en-US" : "th-TH", {
-                                                    year: "numeric",
-                                                    month: "long",
-                                                    day: "numeric",
-                                                })
-                                                : ""}
+                                        <div className="text-sm text-gray-500 mb-4 font-medium">
+                                            {item.date ? formatLongDate(item.date, dateLocale) : ""}
                                         </div>
-                                        <h3
-                                            className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight line-clamp-2"
-                                            dangerouslySetInnerHTML={{ __html: getTitle(item, lang) }}
-                                        />
-                                        <div
+                                        <h3 className="text-xl font-bold mb-3 text-brand-black group-hover:text-brand-green-dark transition-colors leading-tight line-clamp-2">
+                                            {plainTitle}
+                                        </h3>
+                                        <SafeHtml
+                                            html={getExcerpt(item, lang)}
                                             className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
-                                            dangerouslySetInnerHTML={{ __html: getExcerpt(item, lang) }}
                                         />
                                         <Link
                                             href={`/media/articles/${item.slug}`}

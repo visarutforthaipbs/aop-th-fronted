@@ -4,17 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useLanguage } from "@/context/LanguageContext";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import { useTranslation } from "@/context/LanguageContext";
+import { NAV_ITEMS } from "@/lib/constants";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef(null);
-  const { lang, setLang } = useLanguage();
-  const t = lang === "en" ? en : th;
+  const { lang, setLang, t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -43,12 +41,19 @@ export default function Navbar() {
     setSearchQuery("");
   };
 
+  const contactItem = { href: "/contact", key: "contact" };
+  const mainNavItems = NAV_ITEMS.filter((item) => item.key !== "contact");
+
   return (
     <nav className="bg-brand-green-dark/90 backdrop-blur-md text-brand-white shadow-lg sticky top-0 z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center flex-shrink-0">
+          <Link
+            href="/"
+            className="flex items-center flex-shrink-0"
+            aria-label={lang === "en" ? "Assembly of the Poor home" : "หน้าแรกสมัชชาคนจน"}
+          >
             <Image
               src="/logos/logo-2.svg"
               alt=""
@@ -56,6 +61,7 @@ export default function Navbar() {
               height={40}
               className="h-10 w-auto"
               priority
+              aria-hidden="true"
             />
             <Image
               src="/logos/logo-white.png"
@@ -115,20 +121,16 @@ export default function Navbar() {
               )}
             </div>
 
-            {[
-              { href: "/about", label: t.nav.about },
-              { href: "/campaigns", label: t.nav.campaigns },
-              { href: "/media", label: t.nav.media },
-              { href: "/get-involved", label: t.nav.getInvolved },
-            ].map(({ href, label }) => (
+            {mainNavItems.map(({ href, key }) => (
               <Link
                 key={href}
                 href={href}
+                aria-current={isActive(href) ? "page" : undefined}
                 className={`relative font-bold transition-colors py-1 group ${
                   isActive(href) ? "text-white" : "text-white/80 hover:text-white"
                 }`}
               >
-                {label}
+                {t.nav[key]}
                 <span
                   className={`absolute left-0 -bottom-1 h-0.5 bg-white rounded-full transition-all duration-300 ${
                     isActive(href) ? "w-full" : "w-0 group-hover:w-full"
@@ -137,10 +139,11 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              href="/contact"
+              href={contactItem.href}
+              aria-current={isActive(contactItem.href) ? "page" : undefined}
               className="px-5 py-2 bg-white text-brand-green-dark rounded-full font-bold hover:bg-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
-              {t.nav.contact}
+              {t.nav[contactItem.key]}
             </Link>
 
             {/* Language Switcher */}
@@ -156,10 +159,10 @@ export default function Navbar() {
           </div>
 
           {/* Mobile: Search + Language + Hamburger */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-1">
             <button
               onClick={() => { setIsOpen(false); setSearchOpen(!searchOpen); }}
-              className="p-2 rounded-full hover:bg-white/10 transition-colors"
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-full hover:bg-white/10 transition-colors"
               aria-label="Search"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -168,7 +171,7 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => setLang(lang === "th" ? "en" : "th")}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-white/30 text-sm font-bold"
+              className="flex items-center gap-1 px-2.5 py-2 min-h-[44px] rounded-full border border-white/30 text-sm font-bold"
               aria-label="Toggle language"
             >
               <span className={lang === "th" ? "opacity-100" : "opacity-40"}>TH</span>
@@ -177,7 +180,10 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => { setIsOpen(!isOpen); setSearchOpen(false); }}
-              className="focus:outline-none p-1"
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-full hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-white/50"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
             >
               <svg
                 className="h-6 w-6"
@@ -224,18 +230,18 @@ export default function Navbar() {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="lg:hidden bg-brand-green-dark/95 backdrop-blur-md border-t border-white/10">
+        <div
+          id="mobile-menu"
+          role="region"
+          aria-label="Mobile navigation"
+          className="lg:hidden bg-brand-green-dark/95 backdrop-blur-md border-t border-white/10"
+        >
           <div className="px-4 pt-4 pb-6 space-y-2">
-            {[
-              { href: "/about", label: t.nav.about },
-              { href: "/campaigns", label: t.nav.campaigns },
-              { href: "/media", label: t.nav.media },
-              { href: "/get-involved", label: t.nav.getInvolved },
-              { href: "/contact", label: t.nav.contact },
-            ].map(({ href, label }) => (
+            {NAV_ITEMS.map(({ href, key }) => (
               <Link
                 key={href}
                 href={href}
+                aria-current={isActive(href) ? "page" : undefined}
                 className={`block px-3 py-2 rounded-md transition-colors ${
                   isActive(href)
                     ? "bg-white/15 border-l-2 border-white font-bold"
@@ -243,7 +249,7 @@ export default function Navbar() {
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {label}
+                {t.nav[key]}
               </Link>
             ))}
           </div>

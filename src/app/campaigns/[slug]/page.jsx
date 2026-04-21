@@ -49,6 +49,8 @@ export async function generateMetadata({ params }) {
         {
           url: featuredImage,
           alt: title,
+          width: 1200,
+          height: 630,
         },
       ],
     },
@@ -72,7 +74,27 @@ export default async function CampaignDetail({ params }) {
   const featuredImage =
     campaign._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
 
+  const title = stripHtml(campaign.title?.rendered || campaign.title || "Campaign");
+  const description = stripHtml(campaign.excerpt?.rendered || campaign.content?.rendered || "").slice(0, 180)
+    || "ติดตามรายละเอียดงานของเราของสมัชชาคนจน";
+  const url = `${SITE_URL}/campaigns/${campaign.slug}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: title,
+    description: description,
+    image: featuredImage || "/images/mobile-version-hero.jpg",
+    url: url,
+  };
+
   return (
-    <CampaignDetailClient campaign={campaign} featuredImage={featuredImage} />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <CampaignDetailClient campaign={campaign} featuredImage={featuredImage} />
+    </>
   );
 }

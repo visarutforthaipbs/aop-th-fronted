@@ -1,14 +1,21 @@
 import { NextResponse } from "next/server";
-import { getAllCampaigns, getAuthToken } from "@/lib/api";
+import { getAllCampaigns } from "@/lib/api";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export async function GET() {
-    try {
-        // const token = await getAuthToken();
-        const campaigns = await getAllCampaigns(null); // passing null token
-        return NextResponse.json({ success: true, count: campaigns?.length, campaigns: campaigns?.slice(0, 1) });
-    } catch (err) {
-        return NextResponse.json({ success: false, error: err.stack || err.toString() });
-    }
+  try {
+    const campaigns = await getAllCampaigns();
+    return NextResponse.json({
+      success: true,
+      count: campaigns?.length,
+      campaigns: campaigns?.slice(0, 1),
+    });
+  } catch (err) {
+    console.error("Test API error:", err);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }

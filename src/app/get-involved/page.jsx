@@ -1,14 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Handshake, Coins, Share2 } from "lucide-react";
-import { useLanguage } from "@/context/LanguageContext";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import { Handshake, Share2 } from "lucide-react";
+import { useTranslation } from "@/context/LanguageContext";
 
 export default function GetInvolved() {
-  const { lang } = useLanguage();
-  const t = lang === "en" ? en : th;
+  const { lang, t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,21 +13,39 @@ export default function GetInvolved() {
     message: "",
     interest: "volunteer",
   });
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const validate = () => {
+    const next = {};
+    if (!formData.name.trim()) next.name = lang === "en" ? "Name is required" : "กรุณาระบุชื่อ";
+    if (!formData.email.trim()) {
+      next.email = lang === "en" ? "Email is required" : "กรุณาระบุอีเมล";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      next.email = lang === "en" ? "Invalid email" : "อีเมลไม่ถูกต้อง";
+    }
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission (would connect to backend)
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    if (!validate()) return;
+    setSubmitting(true);
+    // No backend yet — simulate submission delay
+    setTimeout(() => {
+      setSubmitting(false);
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 5000);
+    }, 800);
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: undefined });
+    }
   };
 
   return (
@@ -66,7 +81,7 @@ export default function GetInvolved() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="group bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 text-center">
               <div className="w-20 h-20 bg-gray-100/30 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
-                <Handshake className="w-10 h-10 text-brand-green-dark" />
+                <Handshake className="w-10 h-10 text-brand-green-dark" aria-hidden="true" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-green-dark transition-colors">
                 {t.getInvolved.volunteer}
@@ -78,7 +93,7 @@ export default function GetInvolved() {
 
             <div className="group bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 text-center">
               <div className="w-20 h-20 bg-brand-black/20 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
-                <Share2 className="w-10 h-10 text-brand-black" />
+                <Share2 className="w-10 h-10 text-brand-black" aria-hidden="true" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-brand-black group-hover:text-brand-black transition-colors">
                 {t.getInvolved.spread}
@@ -112,13 +127,10 @@ export default function GetInvolved() {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-bold text-gray-700 mb-2"
-                    >
+                    <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">
                       {t.getInvolved.name} <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -128,15 +140,15 @@ export default function GetInvolved() {
                       required
                       value={formData.name}
                       onChange={handleChange}
+                      aria-invalid={!!errors.name}
+                      aria-describedby={errors.name ? "name-error" : undefined}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
                       placeholder={t.getInvolved.namePlaceholder}
                     />
+                    {errors.name && <p id="name-error" className="mt-1 text-sm text-red-600">{errors.name}</p>}
                   </div>
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-bold text-gray-700 mb-2"
-                    >
+                    <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
                       {t.getInvolved.email} <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -146,18 +158,18 @@ export default function GetInvolved() {
                       required
                       value={formData.email}
                       onChange={handleChange}
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? "email-error" : undefined}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-green-dark focus:border-transparent transition-all outline-none"
                       placeholder="name@example.com"
                     />
+                    {errors.email && <p id="email-error" className="mt-1 text-sm text-red-600">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      htmlFor="phone"
-                      className="block text-sm font-bold text-gray-700 mb-2"
-                    >
+                    <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mb-2">
                       {t.getInvolved.phone}
                     </label>
                     <input
@@ -171,10 +183,7 @@ export default function GetInvolved() {
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="interest"
-                      className="block text-sm font-bold text-gray-700 mb-2"
-                    >
+                    <label htmlFor="interest" className="block text-sm font-bold text-gray-700 mb-2">
                       {t.getInvolved.interest}
                     </label>
                     <div className="relative">
@@ -190,18 +199,8 @@ export default function GetInvolved() {
                         <option value="other">{t.getInvolved.otherOption}</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </div>
                     </div>
@@ -209,10 +208,7 @@ export default function GetInvolved() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-bold text-gray-700 mb-2"
-                  >
+                  <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">
                     {t.getInvolved.additionalMsg}
                   </label>
                   <textarea
@@ -228,9 +224,10 @@ export default function GetInvolved() {
 
                 <button
                   type="submit"
-                  className="w-full bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-brand-green-dark/30 hover:-translate-y-1 text-lg"
+                  disabled={submitting}
+                  className="w-full bg-brand-green-dark hover:bg-brand-black text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-brand-green-dark/30 hover:-translate-y-1 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {t.getInvolved.submitForm}
+                  {submitting ? (lang === "en" ? "Sending..." : "กำลังส่ง...") : t.getInvolved.submitForm}
                 </button>
               </form>
             )}

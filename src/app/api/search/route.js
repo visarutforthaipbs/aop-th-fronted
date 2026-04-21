@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { fetchFromApi, searchContent } from "@/lib/api";
 
-// Force dynamic rendering since we use request.url
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
+
+const MAX_QUERY_LENGTH = 100;
 
 function decodeEntities(text = "") {
   return text
@@ -74,7 +75,6 @@ function extractSlug(url) {
     const segments = parsed.pathname.split("/").filter(Boolean);
     return segments[segments.length - 1] || "";
   } catch {
-    // Fallback for malformed URLs
     const cleaned = url.split("?")[0].replace(/\/+$/, "");
     const segments = cleaned.split("/").filter(Boolean);
     return segments[segments.length - 1] || "";
@@ -103,10 +103,17 @@ function toFrontendUrl(result) {
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const query = searchParams.get("q");
+  const query = searchParams.get("q")?.trim();
 
   if (!query) {
     return NextResponse.json([]);
+  }
+
+  if (query.length > MAX_QUERY_LENGTH || /[<>]/.test(query)) {
+    return NextResponse.json(
+      { error: "Invalid query" },
+      { status: 400 }
+    );
   }
 
   try {
@@ -114,7 +121,6 @@ export async function GET(request) {
     const normalizedResults = await Promise.all(
       (results || []).map(async (result) => {
         const enriched = await enrichResult(result);
-
         return {
           ...enriched,
           url: toFrontendUrl(result),
@@ -125,6 +131,9 @@ export async function GET(request) {
     return NextResponse.json(normalizedResults);
   } catch (error) {
     console.error("Search API error:", error);
-    return NextResponse.json([], { status: 500 });
+    return NextResponse.json(
+      { error: "Search failed" },
+      { status: 500 }
+    );
   }
 }

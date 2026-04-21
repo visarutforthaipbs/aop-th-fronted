@@ -4,15 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { Star, Circle, ExternalLink } from "lucide-react";
 import { timelineData as timeline } from "@/data/timeline";
-import { useLanguage } from "@/context/LanguageContext";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import { useTranslation } from "@/context/LanguageContext";
 
 export default function About() {
   const [selectedYear, setSelectedYear] = useState(1995);
 
-  const { lang } = useLanguage();
-  const t = lang === "en" ? en : th;
+  const { lang, t } = useTranslation();
 
   const selectedTimeline = timeline.find((t) => t.year === selectedYear);
 

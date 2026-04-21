@@ -1,13 +1,10 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import Link from "next/link";
+import { useTranslation } from "@/context/LanguageContext";
 
 export default function FAQ() {
-  const { lang } = useLanguage();
-  const t = lang === "en" ? en : th;
-
+  const { t } = useTranslation();
   const faqs = t.faq.questions;
 
   return (
@@ -50,12 +47,12 @@ export default function FAQ() {
           <p className="text-lg mb-6 text-gray-700">
             {t.faq.ctaDesc}
           </p>
-          <a
+          <Link
             href="/contact"
             className="inline-block bg-brand-green-dark hover:bg-brand-black text-brand-white font-semibold px-8 py-3 rounded-lg transition-colors"
           >
             {t.faq.ctaButton}
-          </a>
+          </Link>
         </div>
       </section>
     </div>

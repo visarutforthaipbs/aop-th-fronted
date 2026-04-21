@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllArticles, getArticleCategories } from "@/lib/api";
 
-// Force dynamic rendering since we use request.url
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 // Extract first image from HTML content as thumbnail fallback
 function extractFirstImage(htmlContent) {
@@ -15,6 +14,13 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const categoryId = searchParams.get("category");
+
+    if (categoryId && !/^\d+$/.test(categoryId)) {
+      return NextResponse.json(
+        { error: "Invalid category", articles: [], categories: [] },
+        { status: 400 }
+      );
+    }
 
     // Fetch articles (optionally filtered by category)
     const articles = await getAllArticles(null, categoryId);
@@ -42,6 +48,9 @@ export async function GET(request) {
     });
   } catch (error) {
     console.error("Error in articles API:", error);
-    return NextResponse.json({ articles: [], categories: [] }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch articles", articles: [], categories: [] },
+      { status: 500 }
+    );
   }
 }

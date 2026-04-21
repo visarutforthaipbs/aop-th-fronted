@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllCampaigns } from "@/lib/api";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export async function GET() {
   try {
@@ -9,6 +9,9 @@ export async function GET() {
     return NextResponse.json(campaigns || []);
   } catch (error) {
     console.error("Error in campaigns API:", error);
-    return NextResponse.json([], { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch campaigns", campaigns: [] },
+      { status: 500 }
+    );
   }
 }

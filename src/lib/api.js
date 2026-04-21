@@ -1,4 +1,14 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { cache } from "react";
+
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/, "");
+if (!API_URL) {
+  console.error("NEXT_PUBLIC_API_URL is not configured");
+}
+
+function buildUrl(endpoint) {
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  return `${API_URL}${cleanEndpoint}`;
+}
 
 // Function to get JWT token for authenticated requests
 export async function getAuthToken() {
@@ -11,13 +21,19 @@ export async function getAuthToken() {
   }
 
   try {
-    const response = await fetch(`${API_URL}/jwt-auth/v1/token`, {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+
+    const response = await fetch(buildUrl("/jwt-auth/v1/token"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
 
     if (!response.ok) {
       console.error(
@@ -46,21 +62,18 @@ export async function fetchFromApi(endpoint, token = null) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  try {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      headers,
-      next: { revalidate: 60 },
-    });
+  const response = await fetch(buildUrl(endpoint), {
+    headers,
+    next: { revalidate: 60 },
+  });
 
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.statusText}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching from API:", `${API_URL}${endpoint}`, error);
-    return null;
+  if (!response.ok) {
+    const error = new Error(`API request failed: ${response.statusText}`);
+    error.status = response.status;
+    throw error;
   }
+
+  return await response.json();
 }
 
 // Helper to extract tags from campaign
@@ -83,12 +96,12 @@ export async function getAllCampaigns() {
 }
 
 // Fetch single campaign by slug
-export async function getCampaignBySlug(slug) {
+export const getCampaignBySlug = cache(async (slug) => {
   const campaigns = await fetchFromApi(
     `/wp/v2/campaigns?slug=${encodeURIComponent(slug)}&_embed`
   );
   return campaigns && campaigns.length > 0 ? extractTags(campaigns[0]) : null;
-}
+});
 
 // Fetch all articles (optionally filtered by category)
 export async function getAllArticles(token, categoryId = null, perPage = 100) {
@@ -117,13 +130,13 @@ export async function getArticlesByCategorySlug(categorySlug, perPage = 6) {
 }
 
 // Fetch single article by slug
-export async function getArticleBySlug(slug, token) {
+export const getArticleBySlug = cache(async (slug, token) => {
   const articles = await fetchFromApi(
     `/wp/v2/articles?slug=${encodeURIComponent(slug)}&_embed`,
     token
   );
   return articles && articles.length > 0 ? articles[0] : null;
-}
+});
 
 // Fetch all news posts
 export async function getAllNews(page = 1, perPage = 10) {

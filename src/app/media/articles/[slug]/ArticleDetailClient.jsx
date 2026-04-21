@@ -1,18 +1,22 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Facebook, Twitter, Link as LinkIcon } from "lucide-react";
-import { useLanguage } from "@/context/LanguageContext";
+import { ArrowLeft, Facebook, Twitter, Link as LinkIcon, Check } from "lucide-react";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import SafeHtml from "@/components/SafeHtml";
+import { useTranslation } from "@/context/LanguageContext";
 import { getTitle, getContent } from "@/lib/acf";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import { stripHtml } from "@/lib/utils";
+import { formatLongDate } from "@/lib/date";
 
 export default function ArticleDetailClient({ article, relatedArticles }) {
-    const { lang } = useLanguage();
-    const t = lang === "en" ? en : th;
+    const { lang, dateLocale, t } = useTranslation();
+    const [copied, setCopied] = useState(false);
 
     const title = getTitle(article, lang);
+    const plainTitle = stripHtml(title);
     const content = getContent(article, lang);
 
     const featuredImage =
@@ -21,23 +25,53 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
     const authorName =
         article._embedded?.author?.[0]?.name || t.articleDetail.author;
 
-    const date = new Date(article.date).toLocaleDateString(
-        lang === "en" ? "en-US" : "th-TH",
-        { year: "numeric", month: "long", day: "numeric" }
-    );
+    const date = formatLongDate(article.date, dateLocale);
+
+    const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+    const shareText = plainTitle;
+
+    const handleShare = (platform) => {
+        const url = encodeURIComponent(shareUrl);
+        const text = encodeURIComponent(shareText);
+
+        if (platform === "facebook") {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank", "width=600,height=400");
+        } else if (platform === "twitter") {
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, "_blank", "width=600,height=400");
+        } else if (platform === "copy") {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                });
+            } else {
+                prompt("Copy this link:", shareUrl);
+            }
+        }
+    };
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900">
+            {/* Breadcrumbs */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <Breadcrumbs items={[
+                    { label: lang === "en" ? "Home" : "หน้าแรก", href: "/" },
+                    { label: lang === "en" ? "Media" : "ห้องสื่อ", href: "/media" },
+                    { label: plainTitle, href: "#" }
+                ]} />
+            </div>
+
             {/* Hero Section */}
             <section className="relative w-full h-[60vh] md:h-[70vh] min-h-[500px]">
                 {featuredImage ? (
                     <>
                         <Image
                             src={featuredImage}
-                            alt={title.replace(/<[^>]+>/g, "")}
+                            alt={plainTitle}
                             fill
                             className="object-cover"
                             priority
+                            sizes="100vw"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
                     </>
@@ -60,8 +94,9 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                         <h1
                             className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 shadow-sm"
                             style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)", lineHeight: "1.3" }}
-                            dangerouslySetInnerHTML={{ __html: title }}
-                        />
+                        >
+                            {plainTitle}
+                        </h1>
 
                         <div className="flex flex-wrap items-center gap-6 text-white/90 text-sm md:text-base font-light">
                             <div className="flex items-center gap-2">
@@ -80,7 +115,8 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
             {/* Content Container */}
             <main className="max-w-4xl mx-auto px-6 md:px-8 py-16 -mt-10 relative z-20 bg-white rounded-t-3xl shadow-xl md:shadow-none md:bg-transparent md:rounded-none md:mt-0 lg:py-24">
                 <div className="md:bg-white md:p-12 md:rounded-3xl md:shadow-xl">
-                    <article
+                    <SafeHtml
+                        html={content}
                         className="prose prose-lg md:prose-xl max-w-none 
               prose-headings:font-bold prose-headings:text-brand-black 
               prose-p:text-gray-700 prose-p:leading-8 prose-p:font-light 
@@ -89,7 +125,6 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
               prose-img:rounded-3xl prose-img:shadow-lg prose-img:my-10
               prose-blockquote:border-l-4 prose-blockquote:border-brand-white prose-blockquote:pl-6 prose-blockquote:italic
               [&>p]:mb-8 font-thai-sarabun"
-                        dangerouslySetInnerHTML={{ __html: content }}
                     />
 
                     {/* Tags / Share */}
@@ -100,15 +135,27 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                         </div>
 
                         <div className="flex items-center gap-4">
-                            <span className="text-gray-400 text-sm font-medium">{t.articleDetail.share}</span>
-                            <button className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300">
+                            <span className="text-gray-500 text-sm font-medium">{t.articleDetail.share}</span>
+                            <button
+                                onClick={() => handleShare("facebook")}
+                                className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
+                                aria-label="Share on Facebook"
+                            >
                                 <Facebook className="w-5 h-5" />
                             </button>
-                            <button className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300">
+                            <button
+                                onClick={() => handleShare("twitter")}
+                                className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
+                                aria-label="Share on X (Twitter)"
+                            >
                                 <Twitter className="w-5 h-5" />
                             </button>
-                            <button className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300">
-                                <LinkIcon className="w-5 h-5" />
+                            <button
+                                onClick={() => handleShare("copy")}
+                                className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
+                                aria-label="Copy link to article"
+                            >
+                                {copied ? <Check className="w-5 h-5" /> : <LinkIcon className="w-5 h-5" />}
                             </button>
                         </div>
                     </div>
@@ -124,41 +171,42 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {relatedArticles.map((relArticle) => (
-                            <Link key={relArticle.id} href={`/media/articles/${relArticle.slug}`} className="group">
-                                <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
-                                    <div className="h-48 relative overflow-hidden bg-gray-200">
-                                        {relArticle.featured_image ? (
-                                            <Image
-                                                src={relArticle.featured_image}
-                                                alt={getTitle(relArticle, lang).replace(/<[^>]+>/g, "")}
-                                                fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                            />
-                                        ) : (
-                                            <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
-                                        )}
-                                    </div>
-                                    <div className="p-6 flex flex-col flex-1">
-                                        <div className="flex items-center gap-2 mb-3 text-xs text-brand-green-dark font-semibold">
-                                            <span className="bg-brand-white/20 px-2 py-1 rounded-md">
-                                                {new Date(relArticle.date).toLocaleDateString(
-                                                    lang === "en" ? "en-US" : "th-TH"
-                                                )}
-                                            </span>
+                        {relatedArticles.map((relArticle) => {
+                            const relPlainTitle = getTitle(relArticle, lang).replace(/<[^>]+>/g, "");
+                            return (
+                                <Link key={relArticle.id} href={`/media/articles/${relArticle.slug}`} className="group">
+                                    <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
+                                        <div className="h-48 relative overflow-hidden bg-gray-200">
+                                            {relArticle.featured_image ? (
+                                                <Image
+                                                    src={relArticle.featured_image}
+                                                    alt={relPlainTitle}
+                                                    fill
+                                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                    sizes="(max-width: 768px) 100vw, 33vw"
+                                                />
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full text-gray-400">No Image</div>
+                                            )}
                                         </div>
-                                        <h3
-                                            className="text-lg font-bold mb-3 text-brand-black leading-tight group-hover:text-brand-green-dark transition-colors line-clamp-2"
-                                            dangerouslySetInnerHTML={{ __html: getTitle(relArticle, lang) }}
-                                        />
-                                        <div
-                                            className="text-gray-500 text-sm line-clamp-2 mt-auto"
-                                            dangerouslySetInnerHTML={{ __html: relArticle.excerpt?.rendered || relArticle.excerpt || "" }}
-                                        ></div>
+                                        <div className="p-6 flex flex-col flex-1">
+                                            <div className="flex items-center gap-2 mb-3 text-xs text-brand-green-dark font-semibold">
+                                                <span className="bg-brand-white/20 px-2 py-1 rounded-md">
+                                                    {formatLongDate(relArticle.date, dateLocale)}
+                                                </span>
+                                            </div>
+                                            <h3 className="text-lg font-bold mb-3 text-brand-black leading-tight group-hover:text-brand-green-dark transition-colors line-clamp-2">
+                                                {relPlainTitle}
+                                            </h3>
+                                            <SafeHtml
+                                                html={relArticle.excerpt?.rendered || relArticle.excerpt || ""}
+                                                className="text-gray-500 text-sm line-clamp-2 mt-auto"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             </section>

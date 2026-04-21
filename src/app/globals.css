@@ -99,3 +99,21 @@
     @apply p-0 m-0 before:content-none !important;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  nav, footer, .no-print {
+    display: none !important;
+  }
+  main {
+    margin: 0;
+    padding: 0;
+  }
+}

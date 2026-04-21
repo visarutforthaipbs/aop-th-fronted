@@ -12,7 +12,11 @@ module.exports = {
       },
       colors: {
         "brand-green-dark": "#009253",
+        "brand-green-medium": "#67be6a",
+        "brand-green-light": "#d9e8c5",
         "brand-primary": "#009253",
+        "brand-red": "#803432",
+        "brand-yellow": "#faf4a6",
         "brand-white": "#ffffff",
         "brand-black": "#231f20",
       },

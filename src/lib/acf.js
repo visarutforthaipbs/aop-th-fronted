@@ -1,3 +1,5 @@
+import { stripHtml } from "@/lib/utils";
+
 /**
  * ACF bilingual field helpers.
  *
@@ -16,6 +18,13 @@ export function getTitle(post, lang) {
         return post.acf.title_en;
     }
     return post?.title?.rendered || post?.title || "";
+}
+
+/**
+ * Returns the plain text title (no HTML).
+ */
+export function getPlainTitle(post, lang) {
+    return stripHtml(getTitle(post, lang));
 }
 
 /**

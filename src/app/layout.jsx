@@ -1,15 +1,16 @@
 import { Noto_Sans_Thai_Looped } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Footer from "@/components/FooterClient";
 import { LanguageProvider } from "@/context/LanguageContext";
 import LangSync from "@/components/LangSync";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://assemblyofthepoor.org";
 
 const notoSansThaiLooped = Noto_Sans_Thai_Looped({
   subsets: ["thai", "latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "700", "800"],
   variable: "--font-noto-sans-thai-looped",
   display: "swap",
 });
@@ -65,19 +66,29 @@ export const metadata = {
   icons: {
     icon: "/logos/favicon-white.svg",
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="th">
+    <html lang="th" suppressHydrationWarning className={notoSansThaiLooped.variable}>
       <body
         className={`${notoSansThaiLooped.variable} font-sans bg-brand-white text-brand-black`}
       >
         <LanguageProvider>
           <LangSync />
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:bg-brand-green-dark focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
+          >
+            Skip to main content
+          </a>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main id="main-content" className="min-h-screen" tabIndex={-1}>
+            {children}
+          </main>
           <Footer />
+          <ScrollToTop />
         </LanguageProvider>
       </body>
     </html>
