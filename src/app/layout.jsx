@@ -1,4 +1,5 @@
 import { Noto_Sans_Thai_Looped } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/FooterClient";
@@ -75,6 +76,15 @@ export default function RootLayout({ children }) {
       <body
         className={`${notoSansThaiLooped.variable} font-sans bg-brand-white text-brand-black`}
       >
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-RQ0371R96H" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-RQ0371R96H');
+          `}
+        </Script>
         <LanguageProvider>
           <LangSync />
           <a
