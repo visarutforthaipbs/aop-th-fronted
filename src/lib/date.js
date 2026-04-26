@@ -10,11 +10,17 @@
  */
 export function formatLongDate(dateString, locale = "th-TH") {
   if (!dateString) return "";
-  return new Date(dateString).toLocaleDateString(locale, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  try {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleDateString(locale, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  } catch (e) {
+    return "";
+  }
 }
 
 /**
@@ -25,9 +31,15 @@ export function formatLongDate(dateString, locale = "th-TH") {
  */
 export function formatShortDate(dateString, locale = "th-TH") {
   if (!dateString) return "";
-  return new Date(dateString).toLocaleDateString(locale, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  try {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleDateString(locale, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  } catch (e) {
+    return "";
+  }
 }

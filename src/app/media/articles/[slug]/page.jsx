@@ -7,7 +7,6 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://assemblyofthepoor.
 function stripHtml(text) {
   if (!text) return "";
   if (typeof text !== "string") {
-    // If it's the WP title object { rendered: "..." }
     if (text.rendered) return stripHtml(text.rendered);
     return "";
   }
@@ -16,7 +15,7 @@ function stripHtml(text) {
 
 export async function generateStaticParams() {
   try {
-    const articles = await getAllArticles(null);
+    const articles = await getAllArticles(null, null, 100);
     if (!articles || !Array.isArray(articles)) return [];
 
     return articles.map((article) => ({
@@ -34,37 +33,24 @@ export async function generateMetadata({ params }) {
     const article = await getArticleById(slug, null);
 
     if (!article) {
-      return {
-        title: "Article Not Found",
-        robots: { index: false, follow: false },
-      };
+      return { title: "Article Not Found" };
     }
 
     const title = stripHtml(article.title?.rendered || article.title || "Article");
-    const description = stripHtml(article.excerpt?.rendered || article.content?.rendered || "").slice(0, 180)
-      || "อ่านบทความและแถลงการณ์จากสมัชชาคนจน";
+    const description = stripHtml(article.excerpt?.rendered || article.content?.rendered || "").slice(0, 180);
     const featuredImage = article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/images/mobile-version-hero.jpg";
     const url = `${SITE_URL}/media/articles/${article.id}`;
 
     return {
       title,
       description,
-      alternates: {
-        canonical: url,
-      },
+      alternates: { canonical: url },
       openGraph: {
         type: "article",
         url,
         title,
         description,
-        images: [
-          {
-            url: featuredImage,
-            alt: title,
-            width: 1200,
-            height: 630,
-          },
-        ],
+        images: [{ url: featuredImage, width: 1200, height: 630 }],
       },
       twitter: {
         card: "summary_large_image",
@@ -81,17 +67,18 @@ export async function generateMetadata({ params }) {
 export default async function ArticleDetail({ params }) {
   const { slug } = params;
   
-  const article = await getArticleById(slug, null).catch(() => null);
+  // Use numeric ID directly
+  const article = await getArticleById(slug, null);
 
   if (!article) {
     notFound();
   }
 
-  // Fetch related articles - wrap in try/catch to prevent page 500 if this fails
+  // Fetch only 10 recent articles for "Related" instead of 100 to prevent timeouts
   let relatedArticles = [];
   try {
-    const allArticles = await getAllArticles(null);
-    relatedArticles = (allArticles || [])
+    const recentArticles = await getAllArticles(null, null, 10);
+    relatedArticles = (recentArticles || [])
       .filter((a) => a.id !== article.id)
       .map((a) => ({
         ...a,
@@ -112,8 +99,7 @@ export default async function ArticleDetail({ params }) {
   }
 
   const title = stripHtml(article.title?.rendered || article.title || "");
-  const description = stripHtml(article.excerpt?.rendered || article.content?.rendered || "").slice(0, 180)
-    || "อ่านบทความและแถลงการณ์จากสมัชชาคนจน";
+  const description = stripHtml(article.excerpt?.rendered || article.content?.rendered || "").slice(0, 180);
   const featuredImage = article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/images/mobile-version-hero.jpg";
   const url = `${SITE_URL}/media/articles/${article.id}`;
 
@@ -125,10 +111,7 @@ export default async function ArticleDetail({ params }) {
     image: featuredImage,
     datePublished: article.date,
     dateModified: article.modified || article.date,
-    author: {
-      "@type": "Organization",
-      name: "สมัชชาคนจน",
-    },
+    author: { "@type": "Organization", name: "สมัชชาคนจน" },
     publisher: {
       "@type": "Organization",
       name: "สมัชชาคนจน",
