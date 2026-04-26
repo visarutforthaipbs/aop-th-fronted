@@ -158,7 +158,7 @@ export default function Media() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {paginatedArticles.map((item) => {
-                  const plainTitle = stripHtml(getTitle(item, lang));
+                  const plainTitle = stripHtml(getTitle(item, lang) || "");
                   return (
                     <Link
                       key={item.id}

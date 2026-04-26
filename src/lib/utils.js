@@ -8,17 +8,25 @@
  * @returns {string|null}
  */
 export function extractFirstImage(htmlContent) {
-  if (!htmlContent) return null;
+  if (!htmlContent || typeof htmlContent !== "string") return null;
   const imgMatch = htmlContent.match(/<img[^>]+src=["']([^"']+)["']/i);
   return imgMatch ? imgMatch[1] : null;
 }
 
 /**
- * Strips HTML tags from a string.
- * @param {string} html
+ * Safely removes HTML tags from a string or WordPress object.
+ * @param {any} html
  * @returns {string}
  */
-export function stripHtml(html = "") {
+export function stripHtml(html) {
+  if (!html) return "";
+  
+  // Handle WordPress title/content objects
+  if (typeof html !== "string") {
+    if (html.rendered) return stripHtml(html.rendered);
+    return String(html);
+  }
+
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
@@ -28,6 +36,7 @@ export function stripHtml(html = "") {
  * @returns {string}
  */
 export function decodeHtmlEntities(text = "") {
+  if (typeof text !== "string") return "";
   return text
     .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(Number(dec)))
     .replace(/&quot;/g, '"')

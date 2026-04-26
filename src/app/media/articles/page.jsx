@@ -72,7 +72,7 @@ export default function Articles() {
           ) : articles.length > 0 ? (
             <div className="space-y-12">
               {articles.map((article) => {
-                const plainTitle = stripHtml(article.title?.rendered || article.title);
+                const plainTitle = stripHtml(article.title?.rendered || article.title || "");
                 return (
                   <Link
                     key={article.id}
