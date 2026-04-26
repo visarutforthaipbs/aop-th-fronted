@@ -76,16 +76,35 @@ if (typeof DOMPurify !== "undefined" && DOMPurify !== null) {
     installHooks();
 }
 
+// Lightweight fallback sanitizer for SSR if DOMPurify/jsdom crashes
+function basicSanitize(html) {
+  if (!html || typeof html !== "string") return "";
+  // Strip script/style tags and event handlers
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+    .replace(/\s+on\w+="[^"]*"/gi, "")
+    .replace(/\s+on\w+='[^']*'/gi, "");
+}
+
 export default function SafeHtml({ html, className = "", as: Tag = "div" }) {
-  // Fallback for when DOMPurify might not be available during initial server render if bundling fails
-  const clean = (DOMPurify && typeof DOMPurify.sanitize === "function")
-    ? DOMPurify.sanitize(html || "", {
+  let clean = "";
+
+  if (DOMPurify && typeof DOMPurify.sanitize === "function") {
+    try {
+      clean = DOMPurify.sanitize(html || "", {
         ALLOWED_TAGS,
         ALLOWED_ATTR,
         ALLOW_DATA_ATTR: true,
         ADD_TAGS: ["iframe"],
-      })
-    : (html || "");
+      });
+    } catch (err) {
+      console.error("DOMPurify sanitize failed, using basic fallback:", err);
+      clean = basicSanitize(html);
+    }
+  } else {
+    clean = basicSanitize(html);
+  }
 
   return <Tag className={className} dangerouslySetInnerHTML={{ __html: clean }} />;
 }

@@ -1,5 +1,3 @@
-import { cache } from "react";
-
 const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/, "");
 
 function buildUrl(endpoint) {
@@ -14,7 +12,7 @@ export async function fetchFromApi(endpoint, token = null, options = {}) {
     throw new Error("NEXT_PUBLIC_API_URL is not configured.");
   }
 
-  const { tags = [], revalidate = 60 } = options;
+  const { tags = [], revalidate = 60, timeoutMs = 8000 } = options;
 
   const headers = {
     "Content-Type": "application/json",
@@ -24,11 +22,17 @@ export async function fetchFromApi(endpoint, token = null, options = {}) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const response = await fetch(buildUrl(endpoint), {
       headers,
       next: { revalidate, tags },
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
 
     if (!response.ok) {
       return null;
@@ -36,6 +40,7 @@ export async function fetchFromApi(endpoint, token = null, options = {}) {
 
     return await response.json();
   } catch (error) {
+    clearTimeout(timeout);
     console.error(`Fetch failed for ${endpoint}:`, error);
     return null;
   }
@@ -66,7 +71,7 @@ export async function getAllCampaigns() {
 }
 
 // Fetch single campaign by ID
-export const getCampaignById = cache(async (id) => {
+export async function getCampaignById(id) {
   if (!id) return null;
   const campaign = await fetchFromApi(
     `/wp/v2/campaigns/${id}?_embed`,
@@ -74,7 +79,7 @@ export const getCampaignById = cache(async (id) => {
     { tags: ["campaigns"] }
   );
   return campaign ? extractTags(campaign) : null;
-});
+}
 
 // Fetch all articles (optionally filtered by category)
 export async function getAllArticles(token, categoryId = null, perPage = 100) {
@@ -115,7 +120,7 @@ export async function getArticlesByCategorySlug(categorySlug, perPage = 6) {
 }
 
 // Fetch single article by ID
-export const getArticleById = cache(async (id, token) => {
+export async function getArticleById(id, token) {
   if (!id) return null;
   const article = await fetchFromApi(
     `/wp/v2/articles/${id}?_embed`,
@@ -123,7 +128,7 @@ export const getArticleById = cache(async (id, token) => {
     { tags: ["articles"] }
   );
   return article || null;
-});
+}
 
 // Fetch all news posts
 export async function getAllNews(page = 1, perPage = 10) {
