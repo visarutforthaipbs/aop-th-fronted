@@ -1,11 +1,9 @@
 "use client";
 
-import * as DOMPurifyModule from "isomorphic-dompurify";
+// Pure-JS HTML sanitizer — no jsdom/DOMPurify dependencies.
+// Prevents the ERR_REQUIRE_ESM crash that isomorphic-dompurify causes on Vercel.
 
-// Handle different import styles for isomorphic-dompurify to ensure compatibility with Next.js 14 SSR
-const DOMPurify = DOMPurifyModule.default || DOMPurifyModule;
-
-const ALLOWED_TAGS = [
+const ALLOWED_TAGS = new Set([
   "p", "br", "hr", "strong", "b", "em", "i", "u", "s", "small", "mark", "del", "ins",
   "code", "pre", "kbd", "samp", "var", "abbr", "cite", "q", "time",
   "h1", "h2", "h3", "h4", "h5", "h6",
@@ -17,9 +15,9 @@ const ALLOWED_TAGS = [
   "iframe",
   "table", "thead", "tbody", "tfoot", "tr", "td", "th", "caption", "colgroup", "col",
   "sub", "sup", "details", "summary",
-];
+]);
 
-const ALLOWED_ATTR = [
+const ALLOWED_ATTRS = new Set([
   "href", "title", "alt", "src", "class", "target", "rel", "width", "height",
   "style", "id", "name", "lang", "dir", "tabindex", "role", "download",
   "srcset", "sizes", "loading", "decoding",
@@ -30,7 +28,7 @@ const ALLOWED_ATTR = [
   "open",
   "aria-label", "aria-labelledby", "aria-describedby", "aria-hidden",
   "aria-controls", "aria-expanded", "aria-current",
-];
+]);
 
 const ALLOWED_IFRAME_HOSTS = new Set([
   "www.youtube.com", "youtube.com",
@@ -46,65 +44,161 @@ const ALLOWED_IFRAME_HOSTS = new Set([
   "open.spotify.com",
 ]);
 
-let hooksInstalled = false;
-function installHooks() {
-  if (hooksInstalled || !DOMPurify || typeof DOMPurify.addHook !== "function") return;
-  hooksInstalled = true;
+const VOID_TAGS = new Set([
+  "area", "base", "br", "col", "embed", "hr", "img", "input",
+  "link", "meta", "param", "source", "track", "wbr",
+]);
 
-  DOMPurify.addHook("uponSanitizeElement", (node, data) => {
-    if (data.tagName !== "iframe") return;
-    const src = node.getAttribute("src") || "";
-    try {
-      const url = new URL(src);
-      if (url.protocol !== "https:" || !ALLOWED_IFRAME_HOSTS.has(url.hostname)) {
-        node.parentNode?.removeChild(node);
-      }
-    } catch {
-      node.parentNode?.removeChild(node);
-    }
-  });
+/**
+ * Parse a simple list of attributes from an opening tag string.
+ * Returns { attrs: Map<string,string>, hasDangerousContent: boolean }.
+ */
+function parseAttrs(attrString) {
+  const attrs = new Map();
+  let hasDangerousContent = false;
 
-  DOMPurify.addHook("afterSanitizeAttributes", (node) => {
-    if (node.tagName === "A" && node.getAttribute("target") === "_blank") {
-      node.setAttribute("rel", "noopener noreferrer");
+  // Regex to match attributes: name="value" or name='value' or name=value or just name
+  const attrRe = /([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]*)))?/g;
+  let m;
+  while ((m = attrRe.exec(attrString)) !== null) {
+    const name = m[1].toLowerCase().trim();
+    const value = m[2] ?? m[3] ?? m[4] ?? "";
+
+    // Block event handlers
+    if (name.startsWith("on")) {
+      hasDangerousContent = true;
+      continue;
     }
-  });
+    // Block javascript: URLs
+    const lowerVal = value.toLowerCase().trim();
+    if ((name === "href" || name === "src" || name === "action") && lowerVal.startsWith("javascript:")) {
+      hasDangerousContent = true;
+      continue;
+    }
+    // Block data: URLs on certain attributes
+    if ((name === "href" || name === "src") && lowerVal.startsWith("data:")) {
+      hasDangerousContent = true;
+      continue;
+    }
+
+    if (ALLOWED_ATTRS.has(name)) {
+      attrs.set(name, value);
+    }
+  }
+
+  return { attrs, hasDangerousContent };
 }
 
-// Only install hooks if DOMPurify is available
-if (typeof DOMPurify !== "undefined" && DOMPurify !== null) {
-    installHooks();
+function buildAttrString(attrs) {
+  const parts = [];
+  for (const [name, value] of attrs) {
+    if (value === "") {
+      parts.push(name);
+    } else {
+      const escaped = value.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+      parts.push(`${name}="${escaped}"`);
+    }
+  }
+  return parts.length ? " " + parts.join(" ") : "";
 }
 
-// Lightweight fallback sanitizer for SSR if DOMPurify/jsdom crashes
-function basicSanitize(html) {
+function isAllowedIframeSrc(src) {
+  if (!src) return false;
+  try {
+    const url = new URL(src, "https://example.com");
+    return url.protocol === "https:" && ALLOWED_IFRAME_HOSTS.has(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Walk through raw HTML and rebuild only allowed tags/attributes.
+ * Strips <script>, <style>, and dangerous attributes entirely.
+ */
+function sanitizeHtml(html) {
   if (!html || typeof html !== "string") return "";
-  // Strip script/style tags and event handlers
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
-    .replace(/\s+on\w+="[^"]*"/gi, "")
-    .replace(/\s+on\w+='[^']*'/gi, "");
+
+  const result = [];
+  let i = 0;
+
+  while (i < html.length) {
+    const lt = html.indexOf("<", i);
+    if (lt === -1) {
+      // No more tags — append remaining text
+      result.push(html.slice(i).replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+      break;
+    }
+
+    // Append text before the tag
+    if (lt > i) {
+      result.push(html.slice(i, lt).replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+    }
+
+    const gt = html.indexOf(">", lt);
+    if (gt === -1) {
+      // Malformed — treat rest as text
+      result.push(html.slice(lt).replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+      break;
+    }
+
+    const tagContent = html.slice(lt + 1, gt);
+    i = gt + 1;
+
+    // Comment
+    if (tagContent.startsWith("!--")) {
+      // Skip comments
+      continue;
+    }
+
+    // Closing tag
+    if (tagContent.startsWith("/")) {
+      const tagName = tagContent.slice(1).split(/\s/)[0].toLowerCase();
+      if (ALLOWED_TAGS.has(tagName)) {
+        result.push(`</${tagName}>`);
+      }
+      continue;
+    }
+
+    // Opening / self-closing tag
+    const spaceIdx = tagContent.search(/\s/);
+    const tagName = (spaceIdx === -1 ? tagContent : tagContent.slice(0, spaceIdx)).toLowerCase();
+    const attrString = spaceIdx === -1 ? "" : tagContent.slice(spaceIdx + 1);
+
+    if (!ALLOWED_TAGS.has(tagName)) {
+      // Disallowed tag — drop it entirely
+      continue;
+    }
+
+    const { attrs, hasDangerousContent } = parseAttrs(attrString);
+
+    // Special handling for iframes
+    if (tagName === "iframe") {
+      const src = attrs.get("src") || "";
+      if (!isAllowedIframeSrc(src)) {
+        continue; // drop iframe with bad src
+      }
+      // Force sandbox attributes for safety
+      attrs.set("loading", "lazy");
+    }
+
+    // Add rel="noopener noreferrer" for external links
+    if (tagName === "a" && attrs.get("target") === "_blank") {
+      attrs.set("rel", "noopener noreferrer");
+    }
+
+    const selfClose = html[gt - 1] === "/" || VOID_TAGS.has(tagName);
+    if (selfClose) {
+      result.push(`<${tagName}${buildAttrString(attrs)} />`);
+    } else {
+      result.push(`<${tagName}${buildAttrString(attrs)}>`);
+    }
+  }
+
+  return result.join("");
 }
 
 export default function SafeHtml({ html, className = "", as: Tag = "div" }) {
-  let clean = "";
-
-  if (DOMPurify && typeof DOMPurify.sanitize === "function") {
-    try {
-      clean = DOMPurify.sanitize(html || "", {
-        ALLOWED_TAGS,
-        ALLOWED_ATTR,
-        ALLOW_DATA_ATTR: true,
-        ADD_TAGS: ["iframe"],
-      });
-    } catch (err) {
-      console.error("DOMPurify sanitize failed, using basic fallback:", err);
-      clean = basicSanitize(html);
-    }
-  } else {
-    clean = basicSanitize(html);
-  }
-
+  const clean = sanitizeHtml(html);
   return <Tag className={className} dangerouslySetInnerHTML={{ __html: clean }} />;
 }
