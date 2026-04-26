@@ -126,6 +126,44 @@ export const getCampaignById = cache(async (id) => {
   }
 });
 
+// Fetch all articles (optionally filtered by category)
+export async function getAllArticles(token, categoryId = null, perPage = 100) {
+  let endpoint = `/wp/v2/articles?per_page=${perPage}&_embed`;
+  if (categoryId) {
+    endpoint += `&categories=${categoryId}`;
+  }
+  const result = await fetchFromApi(endpoint, token, { tags: ["articles"] });
+  return result || [];
+}
+
+// Fetch article categories (using standard WordPress categories)
+export async function getArticleCategories() {
+  const result = await fetchFromApi(
+    "/wp/v2/categories?per_page=100",
+    null,
+    { tags: ["categories", "articles"] }
+  );
+  return result || [];
+}
+
+// Fetch articles by category slug
+export async function getArticlesByCategorySlug(categorySlug, perPage = 6) {
+  // First resolve slug to category ID
+  const categories = await fetchFromApi(
+    `/wp/v2/categories?slug=${encodeURIComponent(categorySlug)}`,
+    null,
+    { tags: ["categories"] }
+  );
+  if (!categories || categories.length === 0) return [];
+  const categoryId = categories[0].id;
+  const result = await fetchFromApi(
+    `/wp/v2/articles?categories=${categoryId}&per_page=${perPage}&_embed`,
+    null,
+    { tags: ["articles"] }
+  );
+  return result || [];
+}
+
 // Fetch single article by slug
 export const getArticleBySlug = cache(async (slug, token) => {
   const articles = await fetchFromApi(
