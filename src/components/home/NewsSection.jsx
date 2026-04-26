@@ -65,7 +65,7 @@ export default function NewsSection({ latestNews }) {
                                             className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
                                         />
                                         <Link
-                                            href={`/media/articles/${item.slug}`}
+                                            href={`/media/articles/${item.id}`}
                                             className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors mt-auto"
                                         >
                                             {t.homeNews.readMore}{" "}

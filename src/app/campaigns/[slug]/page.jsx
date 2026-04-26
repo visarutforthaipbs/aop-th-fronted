@@ -1,5 +1,5 @@
 import {
-  getCampaignBySlug,
+  getCampaignById,
   getAllCampaigns,
 } from "@/lib/api";
 import { notFound } from "next/navigation";
@@ -15,28 +15,15 @@ export async function generateStaticParams() {
   const campaigns = await getAllCampaigns();
   if (!campaigns) return [];
   
-  const params = [];
-  campaigns.forEach((campaign) => {
-    if (campaign.slug) {
-      params.push({ slug: campaign.slug });
-      try {
-        const decoded = decodeURIComponent(campaign.slug);
-        if (decoded !== campaign.slug) {
-          params.push({ slug: decoded });
-        }
-      } catch (e) {
-        // Ignore
-      }
-    }
-  });
-
-  return params;
+  // Use IDs for stable URLs on Vercel
+  return campaigns.map((campaign) => ({
+    slug: campaign.id.toString(),
+  }));
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = params;
-  const decodedSlug = decodeURIComponent(slug);
-  const campaign = await getCampaignBySlug(decodedSlug);
+  const { slug } = params; // slug here is actually the ID
+  const campaign = await getCampaignById(slug);
 
   if (!campaign) {
     return {
@@ -49,7 +36,7 @@ export async function generateMetadata({ params }) {
   const description = stripHtml(campaign.excerpt?.rendered || campaign.content?.rendered || "").slice(0, 180)
     || "ติดตามรายละเอียดงานของเราของสมัชชาคนจน";
   const featuredImage = campaign._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/images/mobile-version-hero.jpg";
-  const url = `${SITE_URL}/campaigns/${campaign.slug}`;
+  const url = `${SITE_URL}/campaigns/${campaign.id}`;
 
   return {
     title,
@@ -81,9 +68,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function CampaignDetail({ params }) {
-  const { slug } = params;
-  const decodedSlug = decodeURIComponent(slug);
-  const campaign = await getCampaignBySlug(decodedSlug);
+  const { slug } = params; // slug here is actually the ID
+  const campaign = await getCampaignById(slug);
 
   if (!campaign) {
     notFound();
@@ -95,7 +81,7 @@ export default async function CampaignDetail({ params }) {
   const title = stripHtml(campaign.title?.rendered || campaign.title || "Campaign");
   const description = stripHtml(campaign.excerpt?.rendered || campaign.content?.rendered || "").slice(0, 180)
     || "ติดตามรายละเอียดงานของเราของสมัชชาคนจน";
-  const url = `${SITE_URL}/campaigns/${campaign.slug}`;
+  const url = `${SITE_URL}/campaigns/${campaign.id}`;
 
   const jsonLd = {
     "@context": "https://schema.org",

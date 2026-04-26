@@ -162,7 +162,7 @@ export default function Media() {
                   return (
                     <Link
                       key={item.id}
-                      href={`/media/articles/${item.slug}`}
+                      href={`/media/articles/${item.id}`}
                       className="group"
                     >
                       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">

@@ -1,4 +1,4 @@
-import { getArticleBySlug, getAllArticles } from "@/lib/api";
+import { getArticleById, getAllArticles } from "@/lib/api";
 import { notFound } from "next/navigation";
 import ArticleDetailClient from "./ArticleDetailClient";
 
@@ -13,29 +13,15 @@ export async function generateStaticParams() {
 
   if (!articles) return [];
 
-  // Important: Return both decoded and encoded slugs to ensure stability with Thai characters on Vercel
-  const params = [];
-  articles.forEach((article) => {
-    if (article.slug) {
-      params.push({ slug: article.slug });
-      try {
-        const decoded = decodeURIComponent(article.slug);
-        if (decoded !== article.slug) {
-          params.push({ slug: decoded });
-        }
-      } catch (e) {
-        // Ignore decoding errors
-      }
-    }
-  });
-
-  return params;
+  // Use IDs for stable URLs on Vercel
+  return articles.map((article) => ({
+    slug: article.id.toString(),
+  }));
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = params;
-  const decodedSlug = decodeURIComponent(slug);
-  const article = await getArticleBySlug(decodedSlug, null);
+  const { slug } = params; // slug here is actually the ID
+  const article = await getArticleById(slug, null);
 
   if (!article) {
     return {
@@ -48,7 +34,7 @@ export async function generateMetadata({ params }) {
   const description = stripHtml(article.excerpt?.rendered || article.content?.rendered || "").slice(0, 180)
     || "อ่านบทความและแถลงการณ์จากสมัชชาคนจน";
   const featuredImage = article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/images/mobile-version-hero.jpg";
-  const url = `${SITE_URL}/media/articles/${article.slug}`;
+  const url = `${SITE_URL}/media/articles/${article.id}`;
 
   return {
     title,
@@ -80,15 +66,14 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ArticleDetail({ params }) {
-  const { slug } = params;
-  const decodedSlug = decodeURIComponent(slug);
-  const article = await getArticleBySlug(decodedSlug, null);
+  const { slug } = params; // slug here is actually the ID
+  const article = await getArticleById(slug, null);
 
   if (!article) {
     notFound();
   }
 
-  // Fetch related articles sorted by shared categories first, then recency
+  // Fetch related articles
   const allArticles = await getAllArticles(null);
   const relatedArticles = (allArticles || [])
     .filter((a) => a.id !== article.id)
@@ -109,7 +94,7 @@ export default async function ArticleDetail({ params }) {
   const description = stripHtml(article.excerpt?.rendered || article.content?.rendered || "").slice(0, 180)
     || "อ่านบทความและแถลงการณ์จากสมัชชาคนจน";
   const featuredImage = article._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/images/mobile-version-hero.jpg";
-  const url = `${SITE_URL}/media/articles/${article.slug}`;
+  const url = `${SITE_URL}/media/articles/${article.id}`;
 
   const jsonLd = {
     "@context": "https://schema.org",

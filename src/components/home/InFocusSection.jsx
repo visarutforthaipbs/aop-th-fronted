@@ -86,12 +86,12 @@ export default function InFocusSection({ articles }) {
                                             className="text-gray-600 mb-4 line-clamp-2 flex-1 leading-relaxed text-sm"
                                         />
                                         <Link
-                                            href={`/media/articles/${item.slug}`}
+                                            href={`/media/articles/${item.id}`}
                                             className="inline-flex items-center text-brand-green-dark font-bold text-sm hover:text-brand-black transition-colors mt-auto"
                                         >
                                             {t.inFocus.readMore}{" "}
                                             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                             </svg>
                                         </Link>
                                     </div>

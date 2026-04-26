@@ -23,8 +23,11 @@ export async function POST(request) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { type, slug, action } = payload || {};
+  const { type, slug, id, action } = payload || {};
   const revalidated = [];
+
+  // Use ID if available, otherwise fallback to slug
+  const identifier = id || slug;
 
   switch (type) {
     case "campaigns": {
@@ -32,9 +35,9 @@ export async function POST(request) {
       revalidatePath("/campaigns");
       revalidatePath("/");
       revalidated.push("tag:campaigns", "/campaigns", "/");
-      if (slug) {
-        revalidatePath(`/campaigns/${slug}`);
-        revalidated.push(`/campaigns/${slug}`);
+      if (identifier) {
+        revalidatePath(`/campaigns/${identifier}`);
+        revalidated.push(`/campaigns/${identifier}`);
       }
       break;
     }
@@ -44,9 +47,9 @@ export async function POST(request) {
       revalidatePath("/media/articles");
       revalidatePath("/");
       revalidated.push("tag:articles", "/media", "/media/articles", "/");
-      if (slug) {
-        revalidatePath(`/media/articles/${slug}`);
-        revalidated.push(`/media/articles/${slug}`);
+      if (identifier) {
+        revalidatePath(`/media/articles/${identifier}`);
+        revalidated.push(`/media/articles/${identifier}`);
       }
       break;
     }

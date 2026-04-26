@@ -174,7 +174,7 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                         {relatedArticles.map((relArticle) => {
                             const relPlainTitle = getTitle(relArticle, lang).replace(/<[^>]+>/g, "");
                             return (
-                                <Link key={relArticle.id} href={`/media/articles/${relArticle.slug}`} className="group">
+                                <Link key={relArticle.id} href={`/media/articles/${relArticle.id}`} className="group">
                                     <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-2">
                                         <div className="h-48 relative overflow-hidden bg-gray-200">
                                             {relArticle.featured_image ? (

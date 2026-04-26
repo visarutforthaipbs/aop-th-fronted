@@ -76,7 +76,7 @@ export default function Articles() {
                 return (
                   <Link
                     key={article.id}
-                    href={`/media/articles/${article.slug}`}
+                    href={`/media/articles/${article.id}`}
                     className="block group"
                   >
                     <div className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:-translate-y-1">
