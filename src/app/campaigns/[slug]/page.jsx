@@ -14,12 +14,29 @@ function stripHtml(text = "") {
 export async function generateStaticParams() {
   const campaigns = await getAllCampaigns();
   if (!campaigns) return [];
-  return campaigns.map((campaign) => ({ slug: campaign.slug }));
+  
+  const params = [];
+  campaigns.forEach((campaign) => {
+    if (campaign.slug) {
+      params.push({ slug: campaign.slug });
+      try {
+        const decoded = decodeURIComponent(campaign.slug);
+        if (decoded !== campaign.slug) {
+          params.push({ slug: decoded });
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+  });
+
+  return params;
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = params;
-  const campaign = await getCampaignBySlug(slug);
+  const decodedSlug = decodeURIComponent(slug);
+  const campaign = await getCampaignBySlug(decodedSlug);
 
   if (!campaign) {
     return {
@@ -65,7 +82,8 @@ export async function generateMetadata({ params }) {
 
 export default async function CampaignDetail({ params }) {
   const { slug } = params;
-  const campaign = await getCampaignBySlug(slug);
+  const decodedSlug = decodeURIComponent(slug);
+  const campaign = await getCampaignBySlug(decodedSlug);
 
   if (!campaign) {
     notFound();

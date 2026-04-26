@@ -13,20 +13,28 @@ export async function generateStaticParams() {
 
   if (!articles) return [];
 
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
+  // Important: Return both decoded and encoded slugs to ensure stability with Thai characters on Vercel
+  const params = [];
+  articles.forEach((article) => {
+    if (article.slug) {
+      params.push({ slug: article.slug });
+      try {
+        const decoded = decodeURIComponent(article.slug);
+        if (decoded !== article.slug) {
+          params.push({ slug: decoded });
+        }
+      } catch (e) {
+        // Ignore decoding errors
+      }
+    }
+  });
+
+  return params;
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = params;
-  let decodedSlug;
-  try {
-    decodedSlug = decodeURIComponent(slug);
-  } catch {
-    notFound();
-  }
-
+  const decodedSlug = decodeURIComponent(slug);
   const article = await getArticleBySlug(decodedSlug, null);
 
   if (!article) {
@@ -73,13 +81,7 @@ export async function generateMetadata({ params }) {
 
 export default async function ArticleDetail({ params }) {
   const { slug } = params;
-  let decodedSlug;
-  try {
-    decodedSlug = decodeURIComponent(slug);
-  } catch {
-    notFound();
-  }
-
+  const decodedSlug = decodeURIComponent(slug);
   const article = await getArticleBySlug(decodedSlug, null);
 
   if (!article) {
@@ -88,7 +90,7 @@ export default async function ArticleDetail({ params }) {
 
   // Fetch related articles sorted by shared categories first, then recency
   const allArticles = await getAllArticles(null);
-  const relatedArticles = allArticles
+  const relatedArticles = (allArticles || [])
     .filter((a) => a.id !== article.id)
     .map((a) => ({
       ...a,
