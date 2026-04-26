@@ -106,7 +106,7 @@ export const getCampaignBySlug = cache(async (slug) => {
   const campaigns = await fetchFromApi(
     `/wp/v2/campaigns?slug=${encodeURIComponent(slug)}&_embed`,
     null,
-    { tags: ["campaigns", `campaign-${slug}`] }
+    { tags: ["campaigns"] }
   );
   return campaigns && campaigns.length > 0 ? extractTags(campaigns[0]) : null;
 });
@@ -154,7 +154,7 @@ export const getArticleBySlug = cache(async (slug, token) => {
   const articles = await fetchFromApi(
     `/wp/v2/articles?slug=${encodeURIComponent(slug)}&_embed`,
     token,
-    { tags: ["articles", `article-${slug}`] }
+    { tags: ["articles"] }
   );
   return articles && articles.length > 0 ? articles[0] : null;
 });
@@ -181,7 +181,7 @@ export async function getNewsBySlug(slug) {
   const posts = await fetchFromApi(
     `/wp/v2/posts?slug=${encodeURIComponent(slug)}`,
     null,
-    { tags: ["posts", `post-${slug}`] }
+    { tags: ["posts"] }
   );
   return posts && posts.length > 0 ? posts[0] : null;
 }
@@ -191,7 +191,7 @@ export async function getPageBySlug(slug) {
   const pages = await fetchFromApi(
     `/wp/v2/pages?slug=${encodeURIComponent(slug)}`,
     null,
-    { tags: ["pages", `page-${slug}`] }
+    { tags: ["pages"] }
   );
   return pages && pages.length > 0 ? pages[0] : null;
 }

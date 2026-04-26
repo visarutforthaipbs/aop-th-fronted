@@ -33,9 +33,8 @@ export async function POST(request) {
       revalidatePath("/");
       revalidated.push("tag:campaigns", "/campaigns", "/");
       if (slug) {
-        revalidateTag(`campaign-${slug}`);
         revalidatePath(`/campaigns/${slug}`);
-        revalidated.push(`tag:campaign-${slug}`, `/campaigns/${slug}`);
+        revalidated.push(`/campaigns/${slug}`);
       }
       break;
     }
@@ -46,9 +45,8 @@ export async function POST(request) {
       revalidatePath("/");
       revalidated.push("tag:articles", "/media", "/media/articles", "/");
       if (slug) {
-        revalidateTag(`article-${slug}`);
         revalidatePath(`/media/articles/${slug}`);
-        revalidated.push(`tag:article-${slug}`, `/media/articles/${slug}`);
+        revalidated.push(`/media/articles/${slug}`);
       }
       break;
     }
@@ -56,19 +54,14 @@ export async function POST(request) {
       revalidateTag("posts");
       revalidatePath("/");
       revalidated.push("tag:posts", "/");
-      if (slug) {
-        revalidateTag(`post-${slug}`);
-        revalidated.push(`tag:post-${slug}`);
-      }
       break;
     }
     case "pages": {
       revalidateTag("pages");
       revalidated.push("tag:pages");
       if (slug) {
-        revalidateTag(`page-${slug}`);
         revalidatePath(`/${slug}`);
-        revalidated.push(`tag:page-${slug}`, `/${slug}`);
+        revalidated.push(`/${slug}`);
       }
       break;
     }
