@@ -1,6 +1,9 @@
 "use client";
 
-import DOMPurify from "isomorphic-dompurify";
+import * as DOMPurifyModule from "isomorphic-dompurify";
+
+// Handle different import styles for isomorphic-dompurify to ensure compatibility with Next.js 14 SSR
+const DOMPurify = DOMPurifyModule.default || DOMPurifyModule;
 
 const ALLOWED_TAGS = [
   "p", "br", "hr", "strong", "b", "em", "i", "u", "s", "small", "mark", "del", "ins",
@@ -45,7 +48,7 @@ const ALLOWED_IFRAME_HOSTS = new Set([
 
 let hooksInstalled = false;
 function installHooks() {
-  if (hooksInstalled) return;
+  if (hooksInstalled || !DOMPurify || typeof DOMPurify.addHook !== "function") return;
   hooksInstalled = true;
 
   DOMPurify.addHook("uponSanitizeElement", (node, data) => {
@@ -68,14 +71,21 @@ function installHooks() {
   });
 }
 
-installHooks();
+// Only install hooks if DOMPurify is available
+if (typeof DOMPurify !== "undefined" && DOMPurify !== null) {
+    installHooks();
+}
 
 export default function SafeHtml({ html, className = "", as: Tag = "div" }) {
-  const clean = DOMPurify.sanitize(html || "", {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOW_DATA_ATTR: true,
-    ADD_TAGS: ["iframe"],
-  });
+  // Fallback for when DOMPurify might not be available during initial server render if bundling fails
+  const clean = (DOMPurify && typeof DOMPurify.sanitize === "function")
+    ? DOMPurify.sanitize(html || "", {
+        ALLOWED_TAGS,
+        ALLOWED_ATTR,
+        ALLOW_DATA_ATTR: true,
+        ADD_TAGS: ["iframe"],
+      })
+    : (html || "");
+
   return <Tag className={className} dangerouslySetInnerHTML={{ __html: clean }} />;
 }
