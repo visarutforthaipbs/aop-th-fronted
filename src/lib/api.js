@@ -53,7 +53,9 @@ export async function getAuthToken() {
 }
 
 // Generic function to fetch from WordPress API
-export async function fetchFromApi(endpoint, token = null) {
+export async function fetchFromApi(endpoint, token = null, options = {}) {
+  const { tags = [], revalidate = 60 } = options;
+
   const headers = {
     "Content-Type": "application/json",
   };
@@ -64,7 +66,7 @@ export async function fetchFromApi(endpoint, token = null) {
 
   const response = await fetch(buildUrl(endpoint), {
     headers,
-    next: { revalidate: 60 },
+    next: { revalidate, tags },
   });
 
   if (!response.ok) {
@@ -90,7 +92,11 @@ const extractTags = (campaign) => {
 
 // Fetch all campaigns
 export async function getAllCampaigns() {
-  const result = await fetchFromApi("/wp/v2/campaigns?per_page=100&_embed");
+  const result = await fetchFromApi(
+    "/wp/v2/campaigns?per_page=100&_embed",
+    null,
+    { tags: ["campaigns"] }
+  );
   if (!result) return [];
   return result.map(extractTags);
 }
@@ -98,7 +104,9 @@ export async function getAllCampaigns() {
 // Fetch single campaign by slug
 export const getCampaignBySlug = cache(async (slug) => {
   const campaigns = await fetchFromApi(
-    `/wp/v2/campaigns?slug=${encodeURIComponent(slug)}&_embed`
+    `/wp/v2/campaigns?slug=${encodeURIComponent(slug)}&_embed`,
+    null,
+    { tags: ["campaigns", `campaign-${slug}`] }
   );
   return campaigns && campaigns.length > 0 ? extractTags(campaigns[0]) : null;
 });
@@ -109,23 +117,35 @@ export async function getAllArticles(token, categoryId = null, perPage = 100) {
   if (categoryId) {
     endpoint += `&categories=${categoryId}`;
   }
-  const result = await fetchFromApi(endpoint, token);
+  const result = await fetchFromApi(endpoint, token, { tags: ["articles"] });
   return result || [];
 }
 
 // Fetch article categories (using standard WordPress categories)
 export async function getArticleCategories() {
-  const result = await fetchFromApi("/wp/v2/categories?per_page=100");
+  const result = await fetchFromApi(
+    "/wp/v2/categories?per_page=100",
+    null,
+    { tags: ["categories", "articles"] }
+  );
   return result || [];
 }
 
 // Fetch articles by category slug
 export async function getArticlesByCategorySlug(categorySlug, perPage = 6) {
   // First resolve slug to category ID
-  const categories = await fetchFromApi(`/wp/v2/categories?slug=${encodeURIComponent(categorySlug)}`);
+  const categories = await fetchFromApi(
+    `/wp/v2/categories?slug=${encodeURIComponent(categorySlug)}`,
+    null,
+    { tags: ["categories"] }
+  );
   if (!categories || categories.length === 0) return [];
   const categoryId = categories[0].id;
-  const result = await fetchFromApi(`/wp/v2/articles?categories=${categoryId}&per_page=${perPage}&_embed`);
+  const result = await fetchFromApi(
+    `/wp/v2/articles?categories=${categoryId}&per_page=${perPage}&_embed`,
+    null,
+    { tags: ["articles"] }
+  );
   return result || [];
 }
 
@@ -133,14 +153,19 @@ export async function getArticlesByCategorySlug(categorySlug, perPage = 6) {
 export const getArticleBySlug = cache(async (slug, token) => {
   const articles = await fetchFromApi(
     `/wp/v2/articles?slug=${encodeURIComponent(slug)}&_embed`,
-    token
+    token,
+    { tags: ["articles", `article-${slug}`] }
   );
   return articles && articles.length > 0 ? articles[0] : null;
 });
 
 // Fetch all news posts
 export async function getAllNews(page = 1, perPage = 10) {
-  const result = await fetchFromApi(`/wp/v2/posts?page=${page}&per_page=${perPage}&_embed`);
+  const result = await fetchFromApi(
+    `/wp/v2/posts?page=${page}&per_page=${perPage}&_embed`,
+    null,
+    { tags: ["posts"] }
+  );
 
   if (!result) return [];
 
@@ -154,7 +179,9 @@ export async function getAllNews(page = 1, perPage = 10) {
 // Fetch single news post by slug
 export async function getNewsBySlug(slug) {
   const posts = await fetchFromApi(
-    `/wp/v2/posts?slug=${encodeURIComponent(slug)}`
+    `/wp/v2/posts?slug=${encodeURIComponent(slug)}`,
+    null,
+    { tags: ["posts", `post-${slug}`] }
   );
   return posts && posts.length > 0 ? posts[0] : null;
 }
@@ -162,7 +189,9 @@ export async function getNewsBySlug(slug) {
 // Fetch page by slug
 export async function getPageBySlug(slug) {
   const pages = await fetchFromApi(
-    `/wp/v2/pages?slug=${encodeURIComponent(slug)}`
+    `/wp/v2/pages?slug=${encodeURIComponent(slug)}`,
+    null,
+    { tags: ["pages", `page-${slug}`] }
   );
   return pages && pages.length > 0 ? pages[0] : null;
 }
