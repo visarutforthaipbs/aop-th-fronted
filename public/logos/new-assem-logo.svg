@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 582.73 188.03">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #004332;
+      }
+
+      .cls-2 {
+        font-size: 102.74px;
+      }
+
+      .cls-3 {
+        font-size: 102.99px;
+      }
+
+      .cls-4 {
+        font-family: NotoSansThaiLooped-ExtraBold, 'Noto Sans Thai Looped';
+        font-size: 45.37px;
+        font-variation-settings: 'wght' 800, 'wdth' 100;
+        font-weight: 700;
+      }
+
+      .cls-4, .cls-5 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        font-family: NotoSansThaiLooped-SemiBold, 'Noto Sans Thai Looped';
+        font-variation-settings: 'wght' 600, 'wdth' 100;
+        font-weight: 600;
+      }
+    </style>
+  </defs>
+  <g id="web">
+    <g>
+      <text class="cls-5" transform="translate(17.94 88.26)"><tspan class="cls-2" x="0" y="0">สมัชชา</tspan><tspan class="cls-3" x="291.17" y="0">คนจน</tspan></text>
+      <rect class="cls-1" y="117.29" width="582.73" height="68.02"/>
+      <text class="cls-4" transform="translate(17.94 166.52)"><tspan x="0" y="0">ASSEMBLY OF THE POOR</tspan></text>
+    </g>
+  </g>
+</svg>

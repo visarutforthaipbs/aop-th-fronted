@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslation } from "@/context/LanguageContext";
 import { SOCIAL_LINKS } from "@/lib/constants";
 
@@ -41,9 +42,16 @@ export default function FooterClient() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* About Section */}
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-bold mb-6 text-white">
-              {lang === "en" ? "Assembly of the Poor" : "สมัชชาคนจน"}
-            </h3>
+            <div className="mb-6">
+              <Image
+                src="/images/logo.svg"
+                alt={lang === "en" ? "Assembly of the Poor" : "สมัชชาคนจน"}
+                width={180}
+                height={72}
+                className="h-14 w-auto"
+                priority
+              />
+            </div>
             <p className="text-gray-400 leading-relaxed mb-6 max-w-md">
               {t.footer.description}
             </p>

@@ -64,7 +64,7 @@ export default function Navbar() {
               aria-hidden="true"
             />
             <Image
-              src="/logos/logo-white.png"
+              src="/logos/new-assem-logo.svg"
               alt={lang === "en" ? "Assembly of the Poor" : "สมัชชาคนจน"}
               width={120}
               height={40}
