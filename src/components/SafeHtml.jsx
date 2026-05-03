@@ -49,6 +49,82 @@ const VOID_TAGS = new Set([
   "link", "meta", "param", "source", "track", "wbr",
 ]);
 
+const DIRECT_VIDEO_EXTENSIONS = new Set(["mp4", "webm", "ogg", "mov", "m4v", "ogv"]);
+
+function isDirectVideoUrl(src) {
+  if (!src) return false;
+  try {
+    const url = new URL(src);
+    const ext = url.pathname.split(".").pop().toLowerCase();
+    return DIRECT_VIDEO_EXTENSIONS.has(ext);
+  } catch {
+    return false;
+  }
+}
+
+// Returns { url: string, vertical: boolean } or null
+function getSocialVideoEmbedUrl(src) {
+  if (!src) return null;
+  try {
+    const url = new URL(src);
+    const host = url.hostname.replace(/^www\./, "");
+
+    // Facebook
+    if (host === "facebook.com" || host === "web.facebook.com") {
+      // Reels: /reel/VIDEO_ID/ — vertical (9:16)
+      const reelMatch = url.pathname.match(/^\/reel\/(\d+)/);
+      if (reelMatch) {
+        const canonicalUrl = `https://www.facebook.com/reel/${reelMatch[1]}/`;
+        return { url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(canonicalUrl)}&show_text=false`, vertical: true };
+      }
+      // Regular video page: /watch/?v=VIDEO_ID
+      const watchId = url.searchParams.get("v");
+      if (watchId) {
+        const canonicalUrl = `https://www.facebook.com/watch/?v=${watchId}`;
+        return { url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(canonicalUrl)}&show_text=false`, vertical: false };
+      }
+      // /videos/VIDEO_ID/
+      const videoMatch = url.pathname.match(/\/videos?\/(\d+)/);
+      if (videoMatch) {
+        const canonicalUrl = `https://www.facebook.com/watch/?v=${videoMatch[1]}`;
+        return { url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(canonicalUrl)}&show_text=false`, vertical: false };
+      }
+      // Share links (/share/v/...) — pass as-is (best effort)
+      return { url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(src)}&show_text=false`, vertical: false };
+    }
+    // fb.watch short links
+    if (host === "fb.watch") {
+      return { url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(src)}&show_text=false`, vertical: false };
+    }
+    // YouTube watch links
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      // YouTube Shorts: /shorts/VIDEO_ID — vertical
+      const shortsMatch = url.pathname.match(/^\/shorts\/([\w-]+)/);
+      if (shortsMatch) return { url: `https://www.youtube-nocookie.com/embed/${shortsMatch[1]}`, vertical: true };
+      const videoId = url.searchParams.get("v");
+      if (videoId) return { url: `https://www.youtube-nocookie.com/embed/${videoId}`, vertical: false };
+    }
+    // YouTube short links (youtu.be)
+    if (host === "youtu.be") {
+      const videoId = url.pathname.slice(1);
+      if (videoId) return { url: `https://www.youtube-nocookie.com/embed/${videoId}`, vertical: false };
+    }
+    // TikTok — always vertical
+    if (host === "tiktok.com" || host === "vm.tiktok.com") {
+      const videoMatch = url.pathname.match(/\/video\/(\d+)/);
+      if (videoMatch) return { url: `https://www.tiktok.com/embed/v2/${videoMatch[1]}`, vertical: true };
+    }
+    // Vimeo
+    if (host === "vimeo.com") {
+      const videoId = url.pathname.split("/").filter(Boolean)[0];
+      if (videoId) return { url: `https://player.vimeo.com/video/${videoId}`, vertical: false };
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 /**
  * Parse a simple list of attributes from an opening tag string.
  * Returns { attrs: Map<string,string>, hasDangerousContent: boolean }.
@@ -171,6 +247,29 @@ function sanitizeHtml(html) {
     }
 
     const { attrs, hasDangerousContent } = parseAttrs(attrString);
+
+    // Special handling for video with social-media src (e.g. Facebook share links)
+    if (tagName === "video") {
+      const src = attrs.get("src") || "";
+      if (src && !isDirectVideoUrl(src)) {
+        const embed = getSocialVideoEmbedUrl(src);
+        if (embed) {
+          const safeUrl = embed.url.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+          const aspectRatio = embed.vertical ? "9/16" : "16/9";
+          const maxWidth = embed.vertical ? "max-width:420px;margin:0 auto;" : "";
+          result.push(
+            `<div style="width:100%;${maxWidth}">` +
+            `<iframe src="${safeUrl}" style="aspect-ratio:${aspectRatio};width:100%;border:none;display:block;" ` +
+            `allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen loading="lazy" frameborder="0"></iframe>` +
+            `</div>`
+          );
+          // Skip to after the closing </video> to avoid emitting a dangling close tag
+          const closeIdx = html.toLowerCase().indexOf("</video>", i);
+          if (closeIdx !== -1) i = closeIdx + 8;
+          continue;
+        }
+      }
+    }
 
     // Special handling for iframes
     if (tagName === "iframe") {
