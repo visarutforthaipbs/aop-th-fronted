@@ -172,9 +172,8 @@ export default function Media() {
                             <Image
                               src={item.featured_image}
                               alt={plainTitle}
-                              width={400}
-                              height={224}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              fill
+                              className="object-cover group-hover:scale-110 transition-transform duration-500"
                               sizes="(max-width: 768px) 100vw, 33vw"
                             />
                           </div>
