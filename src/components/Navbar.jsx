@@ -55,20 +55,11 @@ export default function Navbar() {
             aria-label={lang === "en" ? "Assembly of the Poor home" : "หน้าแรกสมัชชาคนจน"}
           >
             <Image
-              src="/logos/logo-2.svg"
-              alt=""
-              width={40}
-              height={40}
-              className="h-10 w-auto"
-              priority
-              aria-hidden="true"
-            />
-            <Image
-              src="/logos/new-assem-logo.svg"
+              src="/logos/logo-png.png"
               alt={lang === "en" ? "Assembly of the Poor" : "สมัชชาคนจน"}
-              width={120}
+              width={180}
               height={40}
-              className="h-10 w-auto"
+              className="h-7 sm:h-8 md:h-9 lg:h-10 w-auto max-w-[130px] sm:max-w-[150px] md:max-w-[170px] lg:max-w-[190px]"
               priority
             />
           </Link>
