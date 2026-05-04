@@ -111,7 +111,7 @@ const th = {
         },
         contactHeading: "ติดต่อเรา",
         address: "99/99 ถนนราชดำเนิน\nแขวงบวรนิเวศ เขตพระนคร\nกรุงเทพมหานคร 10200",
-        copyright: "สมัชชาคนจน - Assembly of the Poor. All rights reserved.",
+        copyright: "สมัชชาคนจน สงวนลิขสิทธิ์",
     },
     common: {
         loading: "กำลังโหลด...",

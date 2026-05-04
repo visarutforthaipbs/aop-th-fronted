@@ -59,7 +59,7 @@ export default function Navbar() {
               alt={lang === "en" ? "Assembly of the Poor" : "สมัชชาคนจน"}
               width={180}
               height={40}
-              className="h-7 sm:h-8 md:h-9 lg:h-10 w-auto max-w-[130px] sm:max-w-[150px] md:max-w-[170px] lg:max-w-[190px]"
+              className="w-[130px] sm:w-[150px] md:w-[170px] lg:w-[190px] h-auto"
               priority
             />
           </Link>

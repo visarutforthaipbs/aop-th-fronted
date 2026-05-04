@@ -111,7 +111,7 @@ const en = {
         },
         contactHeading: "Contact Us",
         address: "99/99 Ratchadamnoen Rd.\nBowonniwet, Phra Nakhon\nBangkok 10200",
-        copyright: "Assembly of the Poor. All rights reserved.",
+        copyright: "สมัชชาคนจน สงวนลิขสิทธิ์",
     },
     common: {
         loading: "Loading...",

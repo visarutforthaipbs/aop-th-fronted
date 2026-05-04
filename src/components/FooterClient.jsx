@@ -38,8 +38,49 @@ export default function FooterClient() {
 
   return (
     <footer className="bg-brand-black text-white border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+        {/* Minimal mobile footer */}
+        <div className="md:hidden space-y-6">
+          <div className="flex items-center justify-between gap-4">
+            <Image
+              src="/images/logo.svg"
+              alt={lang === "en" ? "Assembly of the Poor" : "สมัชชาคนจน"}
+              width={130}
+              height={52}
+              className="h-10 w-auto"
+              priority
+            />
+            <Link
+              href="/contact"
+              className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-sm font-medium transition-colors"
+            >
+              {lang === "en" ? "Contact" : "ติดต่อ"}
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {SOCIAL_LINKS.map(({ name, href }) => (
+              <a
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-brand-black transition-all duration-300"
+                aria-label={name}
+              >
+                {SOCIAL_ICONS[name]}
+              </a>
+            ))}
+          </div>
+
+          <div className="pt-4 border-t border-white/10 text-xs text-gray-500">
+            <p>
+              &copy; {new Date().getFullYear()} {t.footer.copyright}
+            </p>
+          </div>
+        </div>
+
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* About Section */}
           <div className="md:col-span-2">
             <div className="mb-6">
@@ -111,7 +152,7 @@ export default function FooterClient() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-16 pt-8 text-center text-gray-500 text-sm">
+        <div className="hidden md:block border-t border-white/10 mt-16 pt-8 text-center text-gray-500 text-sm">
           <p>
             &copy; {new Date().getFullYear()} {t.footer.copyright}
           </p>
