@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Facebook, Twitter, Link as LinkIcon, Check } from "lucide-react";
+
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SafeHtml from "@/components/SafeHtml";
 import { useTranslation } from "@/context/LanguageContext";
@@ -62,7 +62,7 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
             </div>
 
             {/* Hero Section */}
-            <section className="relative w-full h-[60vh] md:h-[70vh] min-h-[500px]">
+            <section className="relative w-full h-[50vh] md:h-[60vh] min-h-[400px]">
                 {featuredImage ? (
                     <>
                         <Image
@@ -73,7 +73,7 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                             priority
                             sizes="100vw"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-brand-accent via-brand-accent/40 to-transparent opacity-90"></div>
                     </>
                 ) : (
                     <div className="absolute inset-0 bg-brand-green-dark">
@@ -81,50 +81,52 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                     </div>
                 )}
 
-                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-20 z-10">
+                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-16 z-10">
                     <div className="max-w-4xl mx-auto">
                         <Link
                             href="/media"
-                            className="inline-flex items-center text-white/80 hover:text-brand-white mb-6 transition-colors font-medium backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full"
+                            className="inline-flex items-center text-white/90 hover:text-brand-white mb-6 transition-colors font-bold backdrop-blur-md bg-white/20 px-5 py-2.5 rounded-full text-sm"
                         >
-                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
                             {t.articleDetail.backToMedia}
                         </Link>
 
                         <h1
-                            className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 shadow-sm"
-                            style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)", lineHeight: "1.3" }}
+                            className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-8 leading-tight tracking-tighter"
+                            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
                         >
                             {plainTitle}
                         </h1>
 
-                        <div className="flex flex-wrap items-center gap-6 text-white/90 text-sm md:text-base font-light">
-                            <div className="flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-full bg-brand-white text-brand-black flex items-center justify-center font-bold text-lg">
+                        <div className="flex flex-wrap items-center gap-6 text-white text-sm md:text-lg">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-full bg-brand-yellow text-brand-black flex items-center justify-center font-black text-xl shadow-lg">
                                     {authorName.charAt(0)}
                                 </div>
-                                <span className="font-medium">{authorName}</span>
+                                <span className="font-bold">{authorName}</span>
                             </div>
-                            <span className="hidden md:inline w-1 h-1 bg-white/50 rounded-full"></span>
-                            <span>{date}</span>
+                            <span className="hidden md:inline w-1.5 h-1.5 bg-brand-yellow rounded-full"></span>
+                            <span className="font-medium text-white/90">{date}</span>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Content Container */}
-            <main className="max-w-4xl mx-auto px-6 md:px-8 py-16 -mt-10 relative z-20 bg-white rounded-t-3xl shadow-xl md:shadow-none md:bg-transparent md:rounded-none md:mt-0 lg:py-24">
-                <div className="md:bg-white md:p-12 md:rounded-3xl md:shadow-xl">
+            <main className="max-w-4xl mx-auto px-4 md:px-8 py-12 -mt-20 relative z-20">
+                <div className="bg-white p-6 md:p-16 rounded-[2.5rem] shadow-2xl border border-gray-100">
                     <SafeHtml
                         html={content}
                         className="prose prose-lg md:prose-xl max-w-none 
-              prose-headings:font-bold prose-headings:text-brand-black 
-              prose-p:text-gray-700 prose-p:leading-8 prose-p:font-light 
+              prose-headings:font-black prose-headings:text-brand-black prose-headings:tracking-tight
+              prose-p:text-gray-800 prose-p:leading-relaxed prose-p:mb-8
               prose-a:text-brand-green-dark prose-a:font-bold hover:prose-a:text-brand-black prose-a:no-underline hover:prose-a:underline
-              prose-strong:font-bold prose-strong:text-brand-green-dark
-              prose-img:rounded-3xl prose-img:shadow-lg prose-img:my-10
-              prose-blockquote:border-l-4 prose-blockquote:border-brand-white prose-blockquote:pl-6 prose-blockquote:italic
-              [&>p]:mb-8 font-thai-sarabun"
+              prose-strong:font-bold prose-strong:text-brand-accent
+              prose-img:rounded-3xl prose-img:shadow-xl prose-img:my-12
+              prose-blockquote:border-l-8 prose-blockquote:border-brand-yellow prose-blockquote:bg-gray-50 prose-blockquote:p-8 prose-blockquote:rounded-r-3xl prose-blockquote:italic
+              font-sans"
                     />
 
                     {/* Tags / Share */}
@@ -141,21 +143,33 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                                 className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
                                 aria-label="Share on Facebook"
                             >
-                                <Facebook className="w-5 h-5" />
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                </svg>
                             </button>
                             <button
                                 onClick={() => handleShare("twitter")}
                                 className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
                                 aria-label="Share on X (Twitter)"
                             >
-                                <Twitter className="w-5 h-5" />
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                </svg>
                             </button>
                             <button
                                 onClick={() => handleShare("copy")}
                                 className="w-10 h-10 rounded-full bg-gray-100 text-brand-black flex items-center justify-center hover:bg-brand-green-dark hover:text-white transition-all duration-300"
                                 aria-label="Copy link to article"
                             >
-                                {copied ? <Check className="w-5 h-5" /> : <LinkIcon className="w-5 h-5" />}
+                                {copied ? (
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                ) : (
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                  </svg>
+                                )}
                             </button>
                         </div>
                     </div>
@@ -198,10 +212,9 @@ export default function ArticleDetailClient({ article, relatedArticles }) {
                                             <h3 className="text-lg font-bold mb-3 text-brand-black leading-tight group-hover:text-brand-green-dark transition-colors line-clamp-2">
                                                 {relPlainTitle}
                                             </h3>
-                                            <SafeHtml
-                                                html={relArticle.excerpt?.rendered || relArticle.excerpt || ""}
-                                                className="text-gray-500 text-sm line-clamp-2 mt-auto"
-                                            />
+                                            <p className="text-gray-500 text-sm line-clamp-2 mt-auto">
+                                                {stripHtml(relArticle.excerpt?.rendered || relArticle.excerpt || "")}
+                                            </p>
                                         </div>
                                     </div>
                                 </Link>

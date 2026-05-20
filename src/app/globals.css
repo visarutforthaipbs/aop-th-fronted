@@ -6,6 +6,7 @@
   body {
     font-family: var(--font-noto-sans-thai-looped), sans-serif;
     font-weight: 400; /* Regular for paragraphs */
+    @apply antialiased text-brand-black bg-white;
   }
 
   h1,
@@ -16,8 +17,36 @@
   h6 {
     font-family: var(--font-noto-sans-thai-looped), sans-serif;
     font-weight: 700; /* Bold for headings */
+    @apply tracking-tight;
+  }
+
+  /* Premium Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-50;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-green-dark/30 rounded-full border-2 border-gray-50;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-green-dark/60;
+  }
+
+  /* Selection Color */
+  ::selection {
+    @apply bg-brand-green-dark text-white;
   }
 }
+
+/* Scroll Progress Utility */
+@property --scroll-progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 
 @layer components {
   /* WordPress Gallery Styles - Scoped to prose to override typography defaults */

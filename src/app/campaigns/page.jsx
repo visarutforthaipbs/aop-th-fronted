@@ -106,9 +106,9 @@ export default function Campaigns() {
                 key={theme.id}
                 onClick={() => setFilter(theme.id)}
                 aria-pressed={filter === theme.id}
-                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 text-sm md:text-base ${filter === theme.id
+                className={`px-6 py-3 rounded-full font-bold transition-all duration-300 text-sm md:text-base min-h-[44px] whitespace-nowrap ${filter === theme.id
                   ? "bg-brand-green-dark text-brand-white shadow-md transform scale-105"
-                  : "bg-gray-100 text-gray-600 hover:bg-brand-white hover:text-brand-green-dark"
+                  : "bg-gray-100 text-gray-600 hover:bg-brand-cream hover:text-brand-green-dark"
                   }`}
               >
                 {t.campaigns.tagMap?.[theme.name] || theme.name}
@@ -173,7 +173,7 @@ export default function Campaigns() {
                           </h3>
                           <SafeHtml
                             html={getExcerpt(campaign, lang) || (campaign.content?.rendered || "").replace(/<[^>]+>/g, "").slice(0, 160) + "…"}
-                            className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
+                            className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-base"
                           />
                           <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                             {getCampaignTags(campaign).length > 0 ? (
@@ -289,7 +289,7 @@ export default function Campaigns() {
           )}
           <Link
             href="/get-involved"
-            className="inline-block bg-brand-white hover:bg-white text-brand-black font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-brand-white/50 hover:-translate-y-1 text-lg"
+            className="inline-block bg-brand-yellow hover:bg-white text-brand-black font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-brand-yellow/50 hover:-translate-y-1 text-lg"
           >
             {t.campaigns.cta.button}
           </Link>

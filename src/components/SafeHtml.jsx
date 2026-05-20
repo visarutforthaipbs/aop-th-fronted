@@ -35,7 +35,7 @@ const ALLOWED_IFRAME_HOSTS = new Set([
   "www.youtube-nocookie.com", "youtube-nocookie.com",
   "youtu.be", "www.youtu.be",
   "player.vimeo.com", "vimeo.com", "www.vimeo.com",
-  "www.facebook.com", "facebook.com", "web.facebook.com",
+  "www.facebook.com", "facebook.com", "m.facebook.com", "web.facebook.com",
   "www.tiktok.com", "tiktok.com",
   "www.instagram.com", "instagram.com",
   "platform.twitter.com", "twitter.com", "x.com",

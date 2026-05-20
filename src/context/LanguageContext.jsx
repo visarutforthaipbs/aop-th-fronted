@@ -14,7 +14,12 @@ export function LanguageProvider({ children }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("aop_lang");
-    if (saved === "en" || saved === "th") setLangState(saved);
+    if (saved === "en" || saved === "th") {
+      setLangState(saved);
+    } else {
+      setLangState("th");
+      localStorage.setItem("aop_lang", "th");
+    }
   }, []);
 
   const setLang = useCallback((l) => {

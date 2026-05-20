@@ -39,7 +39,7 @@ export default function NewsSection({ latestNews }) {
                             return (
                                 <StaggerItem
                                     key={item.id}
-                                    className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full group"
+                                    className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full group"
                                 >
                                     {/* Thumbnail Image */}
                                     <div className="relative h-48 overflow-hidden">
@@ -62,7 +62,7 @@ export default function NewsSection({ latestNews }) {
                                         </h3>
                                         <SafeHtml
                                             html={getExcerpt(item, lang)}
-                                            className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-sm"
+                                            className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed text-base"
                                         />
                                         <Link
                                             href={`/media/articles/${item.id}`}

@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "@/context/LanguageContext";
 import { NAV_ITEMS } from "@/lib/constants";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,8 @@ export default function Navbar() {
   const { lang, setLang, t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
+
+
 
   const isActive = (href) => {
     if (href === "/") return pathname === "/";
@@ -45,9 +48,12 @@ export default function Navbar() {
   const mainNavItems = NAV_ITEMS.filter((item) => item.key !== "contact");
 
   return (
-    <nav className="bg-brand-green-dark/90 backdrop-blur-md text-brand-white shadow-lg sticky top-0 z-50 transition-all duration-300">
+    <nav className="bg-brand-green-dark/95 backdrop-blur-md text-brand-white shadow-lg sticky top-0 z-50 transition-all duration-300">
+      {/* Scroll Progress Bar removed temporarily to debug hydration issue */}
+
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
           <Link
             href="/"
@@ -220,32 +226,61 @@ export default function Navbar() {
       )}
 
       {/* Mobile Navigation */}
-      {isOpen && (
-        <div
-          id="mobile-menu"
-          role="region"
-          aria-label="Mobile navigation"
-          className="lg:hidden bg-brand-green-dark/95 backdrop-blur-md border-t border-white/10"
-        >
-          <div className="px-4 pt-4 pb-6 space-y-2">
-            {NAV_ITEMS.map(({ href, key }) => (
-              <Link
-                key={href}
-                href={href}
-                aria-current={isActive(href) ? "page" : undefined}
-                className={`block px-3 py-2 rounded-md transition-colors ${
-                  isActive(href)
-                    ? "bg-white/15 border-l-2 border-white font-bold"
-                    : "hover:bg-white/10"
-                }`}
-                onClick={() => setIsOpen(false)}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id="mobile-menu"
+            role="region"
+            aria-label="Mobile navigation"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="lg:hidden bg-brand-green-dark/98 backdrop-blur-xl border-t border-white/10 overflow-hidden"
+          >
+            <div className="px-6 pt-4 pb-8 space-y-2">
+              {NAV_ITEMS.map(({ href, key }, index) => (
+                <motion.div
+                  key={href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <Link
+                    href={href}
+                    aria-current={isActive(href) ? "page" : undefined}
+                    className={`block px-4 py-4 rounded-2xl transition-all duration-200 text-lg ${
+                      isActive(href)
+                        ? "bg-white/20 border-l-4 border-white font-black pl-6"
+                        : "hover:bg-white/10 font-bold"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {t.nav[key]}
+                  </Link>
+                </motion.div>
+              ))}
+              
+              {/* Language Switcher for Mobile */}
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: NAV_ITEMS.length * 0.05 }}
+                className="pt-4 flex justify-between items-center px-4"
               >
-                {t.nav[key]}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+                 <button
+                  onClick={() => setLang(lang === "th" ? "en" : "th")}
+                  className="flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl border border-white/20 font-bold bg-white/5"
+                >
+                   <span className={lang === "th" ? "text-white" : "text-white/40"}>ภาษาไทย</span>
+                   <span className="text-white/20">|</span>
+                   <span className={lang === "en" ? "text-white" : "text-white/40"}>English</span>
+                </button>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

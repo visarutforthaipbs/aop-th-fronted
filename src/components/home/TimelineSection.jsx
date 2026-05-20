@@ -1,64 +1,109 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
-import { StaggerContainer, StaggerItem, SlideUpFadeIn } from "@/components/animations/ScrollAnim";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { SlideUpFadeIn } from "@/components/animations/ScrollAnim";
 import { timelineData } from "@/data/timeline";
-import { useLanguage } from "@/context/LanguageContext";
-import th from "@/locales/th";
-import en from "@/locales/en";
+import { useTranslation } from "@/context/LanguageContext";
 
 export default function TimelineSection() {
-    const { lang } = useLanguage();
-    const t = lang === "en" ? en : th;
+    const { lang, t } = useTranslation();
+    const containerRef = useRef(null);
 
-    // Select specific years to feature on the homepage
+    // Filter events based on SOP/Design (1995, 1997, 2023)
     const featuredYears = [1995, 1997, 2023];
     const featuredEvents = featuredYears.map(year => timelineData.find(item => item.year === year));
 
-    return (
-        <section className="py-24 bg-gray-50 relative overflow-hidden">
-            {/* Decorative elements */}
-            <div className="absolute top-0 left-0 w-64 h-64 bg-gray-100/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"]
+    });
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <SlideUpFadeIn className="text-center mb-16">
-                    <h2 className="text-4xl font-bold text-[#004232] mb-4">
+    const scaleY = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    return (
+        <section className="py-32 bg-white relative overflow-hidden" ref={containerRef}>
+            {/* Hand-drawn Pattern Background (Subtle) */}
+            <div 
+                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                style={{ backgroundImage: "url('/pattern/pattern-green.svg')", backgroundSize: '400px' }}
+            ></div>
+
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <SlideUpFadeIn className="text-center mb-24">
+                    <h2 className="text-5xl font-extrabold text-brand-black mb-6 tracking-tighter">
                         {t.timeline.heading}
                     </h2>
-                    <div className="w-20 h-1.5 bg-brand-green-dark mx-auto rounded-full"></div>
+                    <div className="w-24 h-2 bg-brand-green-dark mx-auto rounded-full"></div>
                 </SlideUpFadeIn>
 
-                <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                    {featuredEvents.map((event, index) => (
-                        <StaggerItem key={index} className="bg-brand-green-dark text-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-brand-green-dark/30 hover:-translate-y-2 group relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
-                            <div className="text-6xl font-bold text-white/10 mb-6 group-hover:text-white/20 transition-colors absolute top-4 right-4">
-                                {event.year}
-                            </div>
-                            <div className="relative z-10 mt-8">
-                                <span className="inline-block px-3 py-1 bg-white text-brand-black border border-white/50 rounded-full text-sm font-bold mb-4 uppercase tracking-wide">
-                                    {t.timeline.labels[index]}
-                                </span>
-                                <h3 className="text-2xl font-bold mb-3 text-white">
-                                    {lang === "en" && event.titleEn ? event.titleEn : event.title}
-                                </h3>
-                                <p className="text-white/80 leading-relaxed line-clamp-4">
-                                    {lang === "en" && event.descriptionEn ? event.descriptionEn : event.description}
-                                </p>
-                            </div>
-                        </StaggerItem>
-                    ))}
-                </StaggerContainer>
+                <div className="relative">
+                    {/* The Connecting Line */}
+                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gray-100 -translate-x-1/2">
+                        <motion.div 
+                            className="absolute top-0 left-0 right-0 bg-brand-green-dark origin-top"
+                            style={{ scaleY, height: '100%' }}
+                        />
+                    </div>
 
-                <SlideUpFadeIn className="text-center mt-16">
+                    {/* Events */}
+                    <div className="space-y-24">
+                        {featuredEvents.map((event, index) => (
+                            <div key={index} className={`relative flex flex-col md:flex-row items-center ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                                {/* Marker */}
+                                <motion.div 
+                                    initial={{ scale: 0 }}
+                                    whileInView={{ scale: 1 }}
+                                    viewport={{ once: true, margin: "-100px" }}
+                                    className="absolute left-4 md:left-1/2 w-8 h-8 bg-white border-4 border-brand-green-dark rounded-full -translate-x-1/2 z-20 flex items-center justify-center shadow-lg"
+                                >
+                                    <div className="w-2 h-2 bg-brand-green-dark rounded-full"></div>
+                                </motion.div>
+
+                                {/* Content Card */}
+                                <div className="w-full md:w-[45%] ml-12 md:ml-0">
+                                    <motion.div 
+                                        initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true, margin: "-100px" }}
+                                        transition={{ duration: 0.8, ease: "easeOut" }}
+                                        className="bg-gray-50 p-8 rounded-[2rem] border border-gray-100 hover:border-brand-green-dark/20 hover:shadow-2xl transition-all duration-500 group"
+                                    >
+                                        <div className="text-4xl font-black text-brand-green-dark/20 mb-4 group-hover:text-brand-green-dark/40 transition-colors">
+                                            {event.year}
+                                        </div>
+                                        <span className="inline-block px-4 py-1.5 bg-brand-yellow text-brand-black rounded-full text-xs font-bold mb-4 uppercase tracking-widest shadow-sm">
+                                            {t.timeline.labels[index]}
+                                        </span>
+                                        <h3 className="text-2xl font-bold mb-4 text-brand-black">
+                                            {lang === "en" && event.titleEn ? event.titleEn : event.title}
+                                        </h3>
+                                        <p className="text-gray-600 leading-relaxed text-lg">
+                                            {lang === "en" && event.descriptionEn ? event.descriptionEn : event.description}
+                                        </p>
+                                    </motion.div>
+                                </div>
+                                
+                                {/* Spacer for desktop */}
+                                <div className="hidden md:block w-[45%]"></div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <SlideUpFadeIn className="text-center mt-24">
                     <Link
                         href="/campaigns"
-                        className="inline-flex items-center text-brand-green-dark font-bold hover:text-brand-black transition-colors text-lg group"
+                        className="inline-flex items-center px-10 py-4 bg-brand-green-dark text-white rounded-full font-bold hover:bg-brand-black transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 group"
                     >
                         {t.timeline.cta}
                         <svg
-                            className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
+                            className="w-5 h-5 ml-3 transform group-hover:translate-x-1 transition-transform"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -66,7 +111,7 @@ export default function TimelineSection() {
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                strokeWidth="2"
+                                strokeWidth="2.5"
                                 d="M17 8l4 4m0 0l-4 4m4-4H3"
                             ></path>
                         </svg>

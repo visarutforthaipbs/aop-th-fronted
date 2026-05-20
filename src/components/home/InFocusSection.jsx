@@ -18,7 +18,7 @@ export default function InFocusSection({ articles }) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <SlideUpFadeIn className="flex justify-between items-end mb-12">
                     <div>
-                        <div className="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-brand-green-dark/10 text-brand-green-dark text-sm font-bold tracking-wider mb-4">
+                        <div className="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-brand-cream text-brand-black text-sm font-bold tracking-wider mb-4 border border-brand-yellow/50">
                             <Eye className="w-4 h-4" strokeWidth={2.5} aria-hidden="true" />
                             <span>IN FOCUS</span>
                         </div>
@@ -44,7 +44,7 @@ export default function InFocusSection({ articles }) {
                             return (
                                 <StaggerItem
                                     key={item.id}
-                                    className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full group"
+                                    className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full group"
                                 >
                                     {featuredImage ? (
                                         <div className="relative h-52 overflow-hidden">
@@ -83,7 +83,7 @@ export default function InFocusSection({ articles }) {
                                         </h3>
                                         <SafeHtml
                                             html={getExcerpt(item, lang)}
-                                            className="text-gray-600 mb-4 line-clamp-2 flex-1 leading-relaxed text-sm"
+                                            className="text-gray-600 mb-4 line-clamp-2 flex-1 leading-relaxed text-base"
                                         />
                                         <Link
                                             href={`/media/articles/${item.id}`}
